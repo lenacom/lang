@@ -1,0 +1,86 @@
+{
+  "étre": {
+    "infinitif": "étre",
+    "indicatif": {
+      "présent": ["suis", "es", "est", "sommes", "êtes", "sont"],
+      "imparfait": ["étais", "étais", "était", "étions", "étiez", "étaient"],
+      "passé simple": ["fus", "fus", "fut", "fûmes", "fûtes", "furent"],
+      "futur simple": ["serai", "seras", "sera", "serons", "serez", "seront"]
+    },
+    "subjonctif": {
+      "présent": ["sois", "sois", "soit", "soyons", "soyez", "soient"],
+      "imparfait": ["fusse", "fusses", "fût", "fussions", "fussiez", "fussent"]
+    },
+    "conditionnel": {
+      "présent": ["serais", "serais", "serait", "serions", "seriez", "seraient"]
+    },
+    "imperatif": ["sois", "soyons", "soyez"],
+    "participe": {
+      "présent": "étant",
+      "passé": "été"
+    }
+  },
+  "avoir": {
+    "infinitif": "avoir",
+    "indicatif": {
+      "présent": ["ai", "as", "a", "avons", "avez", "ont"],
+      "imparfait": ["avais", "avais", "avait", "avions", "aviez", "avaient"],
+      "passé simple": ["eus", "eus", "eut", "eûmes", "eûtes", "eurent"],
+      "futur simple": ["aurai", "auras", "aura", "aurons", "aurez", "auront"]
+    },
+    "subjonctif": {
+      "présent": ["aie", "aies", "ait", "ayons", "ayez", "aient"],
+      "imparfait": ["eusse", "eusses", "eût", "eussions", "eussiez", "eussent"]
+    },
+    "conditionnel": {
+      "présent": ["aurais", "aurais", "aurait", "aurions", "auriez", "auraient"]
+    },
+    "imperatif": ["aie", "ayons", "ayez"],
+    "participe": {
+      "présent": "ayant",
+      "passé": "eu"
+    }
+  },
+  "aller": {
+    "infinitif": "aller",
+    "indicatif": {
+      "présent": ["vais", "vas", "va", "allons", "allez", "vont"],
+      "imparfait": ["allais", "allais", "allait", "allions", "alliez", "allaient"],
+      "passé simple": ["allai", "allas", "alla", "allâmes", "allâtes", "allèrent"],
+      "futur simple": ["irai", "iras", "ira", "irons", "irez", "iront"]
+    },
+    "subjonctif": {
+      "présent": ["aille", "ailles", "aille", "allions", "alliez", "aillent"],
+      "imparfait": ["allasse", "allasses", "allât", "allassions", "allassiez", "allassent"]
+    },
+    "conditionnel": {
+      "présent": ["irais", "irais", "irait", "irions", "iriez", "iraient"]
+    },
+    "imperatif": ["va", "allons", "allez"],
+    "participe": {
+      "présent": "allant",
+      "passé": "allé"
+    }
+  },
+  "faire": {
+    "infinitif": "faire",
+    "indicatif": {
+      "présent": ["fais", "fais", "fait", "faisons", "faites", "font"],
+      "imparfait": ["faisais", "faisais", "faisait", "faisions", "faisiez", "faisaient"],
+      "passé simple": ["fis", "fis", "fit", "fîmes", "fîtes", "firent"],
+      "futur simple": ["ferai", "feras", "fera", "ferons", "ferez", "feront"]
+    },
+    "subjonctif": {
+      "présent": ["fasse", "fasses", "fasse", "fassions", "fassiez", "fassent"],
+      "imparfait": ["fisse", "fisses", "fît", "fissions", "fissiez", "fissent"]
+    },
+    "conditionnel": {
+      "présent": ["ferais", "ferais", "ferait", "ferions", "feriez", "feraient"]
+    },
+    "imperatif": ["fais", "faisons", "faites"],
+    "participe": {
+      "présent": "faisant",
+      "passé": "fait"
+    }
+  }
+}

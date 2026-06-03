@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"/>
+    <link rel="stylesheet" href="css/mini-default.min.css"/>
+		<script src="js/script.js"></script>
+    <title>[TITLE]</title>
+  </head>
+  <body>
+    <main class="container">
+      <script>
+        const recent = getCookie("recent");
+        if (recent) {
+          const html = `<div><a href="${recent}">Недавнее</a></div>`;
+          document.write(html);
+        }
+      </script>
+      [BODY]
+    </main>
+  </body>
+</html>
