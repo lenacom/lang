@@ -6,11 +6,28 @@
     <meta name="color-scheme" content="light dark"/>
     <link rel="stylesheet" href="../../css/mini-default.min.css"/>
 		<script src="../../js/script.js"></script>
+		<script src="../../js/[LANG]_irregular_verbs.js"></script>
     <title>[TITLE]</title>
 		<script>
+			function stringify(array, ids) {
+				return ids.map(it => array[it]).join("");
+			}
+
 			document.addEventListener("selectionchange", () => {
 				const actions = document.getElementById("actions");
-    		actions.style.display = getSelectedText().length ? "block" : "none";
+				const text = getSelectedText();
+				if (text.length) {
+					const infinitiveIds = formToInfinitives[text];
+					let conjugationText = "Спряжение";
+					if (infinitiveIds !== undefined) {
+						const tenseIds = formToTenses[text];
+						conjugationText = `${stringify(infinitives, infinitiveIds)}: ${stringify(tenses, tenseIds)}`; 
+					}
+					const btnConjugation = document.getElementById("btnConjugation");
+					btnConjugation.value = conjugationText;
+				}
+				
+    		actions.style.display = text.length ? "block" : "none";
 			});
 
 			const path = `[SELF_PATH]`;
@@ -27,7 +44,7 @@
       [BODY]
 			<div id="actions" style="position: fixed; bottom: 0; display: none;">
 				<input onClick='translation(getSelectedText(), "[LANG]", "ru")' type="button" value="Перевод" class="secondary rounded"/>
-				<input onClick="conjugation(getSelectedText())" type="button" value="Спряжение" class="secondary rounded"/>
+				<input id="btnConjugation" onClick="conjugation(getSelectedText())" type="button" value="Спряжение" class="secondary rounded"/>
 			</div>
 		</main>
   </body>
