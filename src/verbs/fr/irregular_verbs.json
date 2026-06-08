@@ -82,5 +82,971 @@
       "présent": "faisant",
       "passé": "fait"
     }
-  }
+  },
+  "dire": {
+    "infinitif": "dire",
+    "indicatif": {
+      "présent": ["dis", "dis", "dit", "disons", "dites", "disent"],
+      "imparfait": ["disais", "disais", "disait", "disions", "disiez", "disaient"],
+      "passé simple": ["dis", "dis", "dit", "dîmes", "dîtes", "dirent"],
+      "futur simple": ["dirai", "diras", "dira", "dirons", "direz", "diront"]
+    },
+    "subjonctif": {
+      "présent": ["dise", "dises", "dise", "disions", "disiez", "disent"],
+      "imparfait": ["disse", "disses", "dît", "dissions", "dissiez", "dissent"]
+    },
+    "conditionnel": {
+      "présent": ["dirais", "dirais", "dirait", "dirions", "diriez", "diraient"]
+    },
+    "imperatif": ["dis", "disons", "dites"],
+    "participe": {
+      "présent": "disant",
+      "passé": "dit"
+    }
+  },
+  "voir": {
+    "infinitif": "voir",
+    "indicatif": {
+      "présent": ["vois", "vois", "voit", "voyons", "voyez", "voient"],
+      "imparfait": ["voyais", "voyais", "voyait", "voyions", "voyiez", "voyaient"],
+      "passé simple": ["vis", "vis", "vit", "vîmes", "vîtes", "virent"],
+      "futur simple": ["verrai", "verras", "verra", "verrons", "verrez", "verront"]
+    },
+    "subjonctif": {
+      "présent": ["voie", "voies", "voie", "voyions", "voyiez", "voient"],
+      "imparfait": ["visse", "visses", "vît", "vissions", "vissiez", "vissent"]
+    },
+    "conditionnel": {
+      "présent": ["verrais", "verrais", "verrait", "verrions", "verriez", "verraient"]
+    },
+    "imperatif": ["vois", "voyons", "voyez"],
+    "participe": {
+      "présent": "voyant",
+      "passé": "vu"
+    }
+  },
+  "prendre": {
+    "infinitif": "prendre",
+    "indicatif": {
+      "présent": ["prends", "prends", "prend", "prenons", "prenez", "prennent"],
+      "imparfait": ["prenais", "prenais", "prenait", "prenions", "preniez", "prenaient"],
+      "passé simple": ["pris", "pris", "prit", "prîmes", "prîtes", "prirent"],
+      "futur simple": ["prendrai", "prendras", "prendra", "prendrons", "prendrez", "prendront"]
+    },
+    "subjonctif": {
+      "présent": ["prenne", "prennes", "prenne", "prenions", "preniez", "prennent"],
+      "imparfait": ["prisse", "prisses", "prît", "prissions", "prissiez", "prissent"]
+    },
+    "conditionnel": {
+      "présent": ["prendrais", "prendrais", "prendrait", "prendrions", "prendriez", "prendraient"]
+    },
+    "imperatif": ["prends", "prenons", "prenez"],
+    "participe": {
+      "présent": "prenant",
+      "passé": "pris"
+    }
+  },
+  "vouloir": {
+    "infinitif": "vouloir",
+    "indicatif": {
+      "présent": ["veux", "veux", "veut", "voulons", "voulez", "veulent"],
+      "imparfait": ["voulais", "voulais", "voulait", "voulions", "vouliez", "voulaient"],
+      "passé simple": ["voulus", "voulus", "voulut", "voulûmes", "voulûtes", "voulurent"],
+      "futur simple": ["voudrai", "voudras", "voudra", "voudrons", "voudrez", "voudront"]
+    },
+    "subjonctif": {
+      "présent": ["veuille", "veuilles", "veuille", "voulions", "vouliez", "veuillent"],
+      "imparfait": ["voulusse", "voulusses", "voulût", "voulussions", "voulussiez", "voulussent"]
+    },
+    "conditionnel": {
+      "présent": ["voudrais", "voudrais", "voudrait", "voudrions", "voudriez", "voudraient"]
+    },
+    "imperatif": ["veuille", "voulons", "veuillez"],
+    "participe": {
+      "présent": "voulant",
+      "passé": "voulu"
+    }
+  },
+  "savoir": {
+    "infinitif": "savoir",
+    "indicatif": {
+      "présent": ["sais", "sais", "sait", "savons", "savez", "savent"],
+      "imparfait": ["savais", "savais", "savait", "savions", "saviez", "savaient"],
+      "passé simple": ["sus", "sus", "sut", "sûmes", "sûtes", "surent"],
+      "futur simple": ["saurai", "sauras", "saura", "saurons", "saurez", "sauront"]
+    },
+    "subjonctif": {
+      "présent": ["sache", "saches", "sache", "sachions", "sachiez", "sachent"],
+      "imparfait": ["susse", "susses", "sût", "sussions", "sussiez", "sussent"]
+    },
+    "conditionnel": {
+      "présent": ["saurais", "saurais", "saurait", "saurions", "sauriez", "sauraient"]
+    },
+    "imperatif": ["sache", "sachons", "sachez"],
+    "participe": {
+      "présent": "sachant",
+      "passé": "su"
+    } 
+  },
+  "venir": {
+    "infinitif": "venir",
+    "indicatif": {
+      "présent": ["viens", "viens", "vient", "venons", "venez", "viennent"],
+      "imparfait": ["venais", "venais", "venait", "venions", "veniez", "venaient"],
+      "passé simple": ["vins", "vins", "vint", "vînmes", "vîntes", "vinrent"],
+      "futur simple": ["viendrai", "viendras", "viendra", "viendrons", "viendrez", "viendront"]
+    },
+    "subjonctif": {
+      "présent": ["vienne", "viennes", "vienne", "venions", "veniez", "viennent"],
+      "imparfait": ["vinsse", "vinsses", "vînt", "vinssions", "vinssiez", "vinssent"]
+    },
+    "conditionnel": {
+      "présent": ["viendrais", "viendrais", "viendrait", "viendrions", "viendriez", "viendraient"]
+    },
+    "imperatif": ["viens", "venons", "venez"],
+    "participe": {
+      "présent": "venant",
+      "passé": "venu"
+    }
+  },
+  "ouvrir": {
+    "infinitif": "ouvrir",
+    "indicatif": {
+      "présent": ["ouvre", "ouvres", "ouvre", "ouvrons", "ouvrez", "ouvrent"],
+      "imparfait": ["ouvrais", "ouvrais", "ouvrait", "ouvrions", "ouvriez", "ouvraient"], 
+      "passé simple": ["ouvris", "ouvris", "ouvrit", "ouvrîmes", "ouvrîtes", "ouvrirent"],
+      "futur simple": ["ouvrirai", "ouvriras", "ouvrira", "ouvrirons", "ouvrirez", "ouvriront"]
+    },
+    "subjonctif": {
+      "présent": ["ouvre", "ouvres", "ouvre", "ouvrions", "ouvriez", "ouvrent"],
+      "imparfait": ["ouvrisse", "ouvrisses", "ouvrît", "ouvrissions", "ouvrissiez", "ouvrissent"]
+    },
+    "conditionnel": {
+      "présent": ["ouvrirais", "ouvrirais", "ouvrirait", "ouvririons", "ouvririez", "ouvriraient"]
+    },
+    "imperatif": ["ouvre", "ouvrons", "ouvrez"],
+    "participe": {
+      "présent": "ouvrant",
+      "passé": "ouvert"
+    }
+  },
+  "boire": {
+    "infinitif": "boire",
+    "indicatif": {
+      "présent": ["bois", "bois", "boit", "buvons", "buvez", "boivent"],
+      "imparfait": ["buvais", "buvais", "buvait", "buvions", "buviez", "buvaient"],
+      "passé simple": ["bus", "bus", "but", "bûmes", "bûtes", "burent"],
+      "futur simple": ["boirai", "boiras", "boira", "boirons", "boirez", "boiront"]
+    },
+    "subjonctif": {
+      "présent": ["boive", "boives", "boive", "buvions", "buviez", "boivent"],
+      "imparfait": ["busse", "busses", "bût", "bussions", "bussiez", "bussent"]
+    },
+    "conditionnel": {
+      "présent": ["boirais", "boirais", "boirait", "boirions", "boiriez", "boiraient"]
+    },
+    "imperatif": ["bois", "buvons", "buvez"],
+    "participe": {
+      "présent": "buvant",
+      "passé": "bu"
+    }
+  },
+  "suffire": {
+    "infinitif": "suffire",
+    "indicatif": {
+      "présent": ["suffis", "suffis", "suffit", "suffisons", "suffisez", "suffisent"],
+      "imparfait": ["suffisais", "suffisais", "suffisait", "suffisions", "suffisiez", "suffisaient"],
+      "passé simple": ["suffis", "suffis", "suffit", "suffîmes", "suffîtes", "suffirent"],
+      "futur simple": ["suffirai", "suffiras", "suffira", "suffirons", "suffirez", "suffiront"]
+    },
+    "subjonctif": {
+      "présent": ["suffise", "suffises", "suffise", "suffisions", "suffisiez", "suffisent"],
+      "imparfait": ["suffisse", "suffisses", "suffît", "suffissions", "suffissiez", "suffissent"]
+    },
+    "conditionnel": {
+      "présent": ["suffirais", "suffirais", "suffirait", "suffirions", "suffiriez", "suffiraient"]
+    },
+    "imperatif": ["suffis", "suffisons", "suffisez"],
+    "participe": {
+      "présent": "suffisant",
+      "passé": "suffi"
+    }
+  },
+  "courir": {
+    "infinitif": "courir",
+    "indicatif": {
+      "présent": ["cours", "cours", "court", "courons", "courez", "courent"],
+      "imparfait": ["courais", "courais", "courait", "courions", "couriez", "couraient"],
+      "passé simple": ["courus", "courus", "courut", "courûmes", "courûtes", "coururent"],
+      "futur simple": ["courrai", "courras", "courra", "courrons", "courrez", "courront"]
+    },
+    "subjonctif": {
+      "présent": ["coure", "coures", "coure", "courions", "couriez", "courent"],
+      "imparfait": ["courusse", "courusses", "courût", "courussions", "courussiez", "courussent"]
+    },
+    "conditionnel": {
+      "présent": ["courrais", "courrais", "courrait", "courrions", "courriez", "courraient"]
+    },
+    "imperatif": ["cours", "courons", "courez"],
+    "participe": {
+      "présent": "courant",
+      "passé": "couru"
+    }
+  },
+  "falloir": {
+    "infinitif": "falloir",
+    "indicatif": {
+      "présent": ["", "", "faut", "", "", ""],
+      "imparfait": ["", "", "fallait", "", "", ""],
+      "passé simple": ["", "", "fallut", "", "", ""],
+      "futur simple": ["", "", "faudra", "", "", ""]
+    },
+    "subjonctif": {
+      "présent": ["", "", "faille", "", "", ""],
+      "imparfait": ["", "", "fallût", "", "", ""]
+    },
+    "conditionnel": {
+      "présent": ["", "", "faudrait", "", "", ""]
+    },
+    "imperatif": [],
+    "participe": {
+      "présent": "",
+      "passé": "fallu"
+    }
+  },
+  "lire": {
+    "infinitif": "lire",
+    "indicatif": {
+      "présent": ["lis", "lis", "lit", "lisons", "lisez", "lisent"],
+      "imparfait": ["lisais", "lisais", "lisait", "lisions", "lisiez", "lisaient"],
+      "passé simple": ["lus", "lus", "lut", "lûmes", "lûtes", "lurent"],
+      "futur simple": ["lirai", "liras", "lira", "lirons", "lirez", "liront"]
+    },
+    "subjonctif": {
+      "présent": ["lise", "lises", "lise", "lisions", "lisiez", "lisent"],
+      "imparfait": ["lusse", "lusses", "lût", "lussions", "lussiez", "lussent"]
+    },
+    "conditionnel": {
+      "présent": ["lirais", "lirais", "lirait", "lirions", "liriez", "liraient"]
+    },
+    "imperatif": ["lis", "lisons", "lisez"],
+    "participe": {
+      "présent": "lisant",
+      "passé": "lu"
+    }
+  },
+  "connaître": {
+    "infinitif": "connaître",
+    "indicatif": {
+      "présent": ["connais", "connais", "connaît", "connaissons", "connaissez", "connaissent"],
+      "imparfait": ["connaissais", "connaissais", "connaissait", "connaissions", "connaissiez", "connaissaient"],
+      "passé simple": ["connus", "connus", "connut", "connûmes", "connûtes", "connurent"],
+      "futur simple": ["connaîtrai", "connaîtras", "connaîtra", "connaîtrons", "connaîtrez", "connaîtront"]
+    },
+    "subjonctif": {
+      "présent": ["connaisse", "connaisses", "connaisse", "connaissions", "connaissiez", "connaissent"],
+      "imparfait": ["connusse", "connusses", "connût", "connussions", "connussiez", "connussent"]
+    },
+    "conditionnel": {
+      "présent": ["connaîtrais", "connaîtrais", "connaîtrait", "connaîtrions", "connaîtriez", "connaîtraient"]
+    },
+    "imperatif": ["connais", "connaissons", "connaissez"],
+    "participe": {
+      "présent": "connaissant",
+      "passé": "connu"
+    }
+  },
+  "souffrir": {
+    "infinitif": "souffrir",
+    "indicatif": {
+      "présent": ["souffre", "souffres", "souffre", "souffrons", "souffrez", "souffrent"],
+      "imparfait": ["souffrais", "souffrais", "souffrait", "souffrions", "souffriez", "souffraient"],
+      "passé simple": ["souffris", "souffris", "souffrit", "souffrîmes", "souffrîtes", "souffrirent"],
+      "futur simple": ["souffrirai", "souffriras", "souffrira", "souffrirons", "souffrirez", "souffriront"]
+    },
+    "subjonctif": {
+      "présent": ["souffre", "souffres", "souffre", "souffrions", "souffriez", "souffrent"],
+      "imparfait": ["souffrisse", "souffrisses", "souffrît", "souffrissions", "souffrissiez", "souffrissent"]
+    },
+    "conditionnel": {
+      "présent": ["souffrirais", "souffrirais", "souffrirait", "souffririons", "souffririez", "souffriraient"]
+    },
+    "imperatif": ["souffre", "souffrons", "souffrez"],
+    "participe": {
+      "présent": "souffrant",
+      "passé": "souffert"
+    }
+  },
+  "croire": {
+    "infinitif": "croire",
+    "indicatif": {
+      "présent": ["crois", "crois", "croit", "croyons", "croyez", "croient"],
+      "imparfait": ["croyais", "croyais", "croyait", "croyions", "croyiez", "croyaient"],
+      "passé simple": ["crus", "crus", "crut", "crûmes", "crûtes", "crurent"],
+      "futur simple": ["croirai", "croiras", "croira", "croirons", "croirez", "croiront"]
+    },
+    "subjonctif": {
+      "présent": ["croie", "croies", "croie", "croyions", "croyiez", "croient"],
+      "imparfait": ["crusse", "crusses", "crût", "crussions", "crussiez", "crussent"]
+    },
+    "conditionnel": {
+      "présent": ["croirais", "croirais", "croirait", "croirions", "croiriez", "croiraient"]
+    },
+    "imperatif": ["crois", "croyons", "croyez"],
+    "participe": {
+      "présent": "croyant",
+      "passé": "cru"
+    }
+  },
+  "asseoir": {
+    "infinitif": "asseoir",
+    "indicatif": {
+      "présent": ["assieds", "assieds", "assied", "asseyons", "asseyez", "asseyent"],
+      "imparfait": ["asseyais", "asseyais", "asseyait", "asseyions", "asseyiez", "asseyaient"],
+      "passé simple": ["assis", "assis", "assit", "assîmes", "assîtes", "assirent"],
+      "futur simple": ["assiérai", "assiéras", "assiéra", "assiérons", "assiérez", "assiéront"]
+    },
+    "subjonctif": {
+      "présent": ["asseye", "asseyes", "asseye", "asseyions", "asseyiez", "asseyent"],
+      "imparfait": ["assisse", "assisses", "assît", "assissions", "assissiez", "assissent"]
+    },
+    "conditionnel": {
+      "présent": ["assiérais", "assiérais", "assiérait", "assiérions", "assiériez", "assiéraient"]
+    },
+    "imperatif": ["assieds", "asseyons", "asseyez"],
+    "participe": {
+      "présent": "asseyant",
+      "passé": "assis"
+    }
+  },
+  "couvrir": {
+    "infinitif": "couvrir",
+    "indicatif": {
+      "présent": ["couvre", "couvres", "couvre", "couvrons", "couvrez", "couvrent"],
+      "imparfait": ["couvrais", "couvrais", "couvrait", "couvrions", "couvriez", "couvraient"],
+      "passé simple": ["couvris", "couvris", "couvrit", "couvrîmes", "couvrîtes", "couvrirent"],
+      "futur simple": ["couvrirai", "couvriras", "couvrira", "couvrirons", "couvrirez", "couvriront"]
+    },
+    "subjonctif": {
+      "présent": ["couvre", "couvres", "couvre", "couvrions", "couvriez", "couvrent"],
+      "imparfait": ["couvrisse", "couvrisses", "couvrît", "couvrissions", "couvrissiez", "couvrissent"]
+    },
+    "conditionnel": {
+      "présent": ["couvrirais", "couvrirais", "couvrirait", "couvririons", "couvririez", "couvriraient"]
+    },
+    "imperatif": ["couvre", "couvrons", "couvrez"],
+    "participe": {
+      "présent": "couvrant",
+      "passé": "couvert"
+    }
+  },
+  "produire": {
+    "infinitif": "produire",
+    "indicatif": {
+      "présent": ["produis", "produis", "produit", "produisons", "produisez", "produisent"],
+      "imparfait": ["produisais", "produisais", "produisait", "produisions", "produisiez", "produisaient"],
+      "passé simple": ["produisis", "produisis", "produisit", "produisîmes", "produisîtes", "produisirent"],
+      "futur simple": ["produirai", "produiras", "produira", "produirons", "produirez", "produiront"]
+    },
+    "subjonctif": {
+      "présent": ["produise", "produises", "produise", "produisions", "produisiez", "produisent"],
+      "imparfait": ["produisisse", "produisisses", "produisît", "produisissions", "produisissiez", "produisissent"]
+    },
+    "conditionnel": {
+      "présent": ["produirais", "produirais", "produirait", "produirions", "produiriez", "produiraient"]
+    },
+    "imperatif": ["produis", "produisons", "produisez"],
+    "participe": {
+      "présent": "produisant",
+      "passé": "produit"
+    }
+  },
+  "devoir": {
+    "infinitif": "devoir",
+    "indicatif": {
+      "présent": ["dois", "dois", "doit", "devons", "devez", "doivent"],
+      "imparfait": ["devais", "devais", "devait", "devions", "deviez", "devaient"],
+      "passé simple": ["dus", "dus", "dut", "dûmes", "dûtes", "durent"],
+      "futur simple": ["devrai", "devras", "devra", "devrons", "devrez", "devront"]
+    },
+    "subjonctif": {
+      "présent": ["doive", "doives", "doive", "devions", "deviez", "doivent"],
+      "imparfait": ["dusse", "dusses", "dût", "dussions", "dussiez", "dussent"]
+    },
+    "conditionnel": {
+      "présent": ["devrais", "devrais", "devrait", "devrions", "devriez", "devraient"]
+    },
+    "imperatif": ["dois", "devons", "devez"],
+    "participe": {
+      "présent": "devant",
+      "passé": "dû"
+    }
+  },
+  "écrire": {
+    "infinitif": "écrire",
+    "indicatif": {
+      "présent": ["écris", "écris", "écrit", "écrivons", "écrivez", "écrivent"],
+      "imparfait": ["écrivais", "écrivais", "écrivait", "écrivions", "écriviez", "écrivaient"],
+      "passé simple": ["écrivis", "écrivis", "écrivit", "écrivîmes", "écrivîtes", "écrivirent"],
+      "futur simple": ["écrirai", "écriras", "écrira", "écrirons", "écrirez", "écriront"]
+    },
+    "subjonctif": {
+      "présent": ["écrive", "écrives", "écrive", "écrivions", "écriviez", "écrivent"],
+      "imparfait": ["écrivisse", "écrivisses", "écrivît", "écrivissions", "écrivissiez", "écrivissent"]
+    },
+    "conditionnel": {
+      "présent": ["écrirais", "écrirais", "écrirait", "écririons", "écririez", "écriraient"]
+    },
+    "imperatif": ["écris", "écrivons", "écrivez"],
+    "participe": {
+      "présent": "écrivant",
+      "passé": "écrit"
+    }
+  },
+  "traduire": {
+    "infinitif": "traduire",
+    "indicatif": {
+      "présent": ["traduis", "traduis", "traduit", "traduisons", "traduisez", "traduisent"],
+      "imparfait": ["traduisais", "traduisais", "traduisait", "traduisions", "traduisiez", "traduisaient"],
+      "passé simple": ["traduisis", "traduisis", "traduisit", "traduisîmes", "traduisîtes", "traduisirent"],
+      "futur simple": ["traduirai", "traduiras", "traduira", "traduirons", "traduirez", "traduiront"]
+    },
+    "subjonctif": {
+      "présent": ["traduise", "traduises", "traduise", "traduisions", "traduisiez", "traduisent"],
+      "imparfait": ["traduisisse", "traduisisses", "traduisît", "traduisissions", "traduisissiez", "traduisissent"]
+    },
+    "conditionnel": {
+      "présent": ["traduirais", "traduirais", "traduirait", "traduirions", "traduiriez", "traduiraient"]
+    },
+    "imperatif": ["traduis", "traduisons", "traduisez"],
+    "participe": {
+      "présent": "traduisant",
+      "passé": "traduit"
+    }
+  },
+  "construire": {
+    "infinitif": "construire",
+    "indicatif": {
+      "présent": ["construis", "construis", "construit", "construisons", "construisez", "construisent"],
+      "imparfait": ["construisais", "construisais", "construisait", "construisions", "construisiez", "construisaient"],
+      "passé simple": ["construisis", "construisis", "construisit", "construisîmes", "construisîtes", "construisirent"],
+      "futur simple": ["construirai", "construiras", "construira", "construirons", "construirez", "construiront"]
+    },
+    "subjonctif": {
+      "présent": ["construise", "construises", "construise", "construisions", "construisiez", "construisent"],
+      "imparfait": ["construisisse", "construisisses", "construisît", "construisissions", "construisissiez", "construisissent"]
+    },
+    "conditionnel": {
+      "présent": ["construirais", "construirais", "construirait", "construirions", "construiriez", "construiraient"]
+    },
+    "imperatif": ["construis", "construisons", "construisez"],
+    "participe": {
+      "présent": "construisant",
+      "passé": "construit"
+    }
+  },
+  "détruire": {
+    "infinitif": "détruire",
+    "indicatif": {
+      "présent": ["détruis", "détruis", "détruit", "détruisons", "détruisez", "détruisent"],
+      "imparfait": ["détruisais", "détruisais", "détruisait", "détruisions", "détruisiez", "détruisaient"],
+      "passé simple": ["détruisis", "détruisis", "détruisit", "détruisîmes", "détruisîtes", "détruisirent"],
+      "futur simple": ["détruirai", "détruiras", "détruira", "détruirons", "détruirez", "détruiront"]
+    },
+    "subjonctif": {
+      "présent": ["détruise", "détruises", "détruise", "détruisions", "détruisiez", "détruisent"],
+      "imparfait": ["détruisisse", "détruisisses", "détruisît", "détruisissions", "détruisissiez", "détruisissent"]
+    },
+    "conditionnel": {
+      "présent": ["détruirais", "détruirais", "détruirait", "détruirions", "détruiriez", "détruiraient"]
+    },
+    "imperatif": ["détruis", "détruisons", "détruisez"],
+    "participe": {
+      "présent": "détruisant",
+      "passé": "détruit"
+    }
+  },
+  "dormir": {
+    "infinitif": "dormir",
+    "indicatif": {
+      "présent": ["dors", "dors", "dort", "dormons", "dormez", "dorment"],
+      "imparfait": ["dormais", "dormais", "dormait", "dormions", "dormiez", "dormaient"],
+      "passé simple": ["dormis", "dormis", "dormit", "dormîmes", "dormîtes", "dormirent"],
+      "futur simple": ["dormirai", "dormiras", "dormira", "dormirons", "dormirez", "dormiront"]
+    },
+    "subjonctif": {
+      "présent": ["dorme", "dormes", "dorme", "dormions", "dormiez", "dorment"],
+      "imparfait": ["dormisse", "dormisses", "dormît", "dormissions", "dormissiez", "dormissent"]
+    },
+    "conditionnel": {
+      "présent": ["dormirais", "dormirais", "dormirait", "dormirions", "dormiriez", "dormiraient"]
+    },
+    "imperatif": ["dors", "dormons", "dormez"],
+    "participe": {
+      "présent": "dormant",
+      "passé": "dormi"
+    }
+  },  
+  "plaire": {
+    "infinitif": "plaire",
+    "indicatif": {
+      "présent": ["plais", "plais", "plaît", "plaisons", "plaisez", "plaisent"],
+      "imparfait": ["plaisais", "plaisais", "plaisait", "plaisions", "plaisiez", "plaisaient"],
+      "passé simple": ["plus", "plus", "plut", "plûmes", "plûtes", "plurent"],
+      "futur simple": ["plairai", "plairas", "plaira", "plairons", "plairez", "plairont"]
+    },
+    "subjonctif": {
+      "présent": ["plaise", "plaises", "plaise", "plaisions", "plaisiez", "plaisent"],
+      "imparfait": ["plusse", "plusses", "plût", "plussions", "plussiez", "plussent"]
+    },
+    "conditionnel": {
+      "présent": ["plairais", "plairais", "plairait", "plairions", "plairiez", "plairaient"]
+    },
+    "imperatif": ["plais", "plaisons", "plaisez"],
+    "participe": {
+      "présent": "plaisant",
+      "passé": "plu"
+    }
+  },
+  "rire": {
+    "infinitif": "rire",
+    "indicatif": {
+      "présent": ["ris", "ris", "rit", "rions", "riez", "rient"],
+      "imparfait": ["riais", "riais", "riait", "riions", "riiez", "riaient"],
+      "passé simple": ["ris", "ris", "rit", "rîmes", "rîtes", "rirent"],
+      "futur simple": ["rirai", "riras", "rira", "rirons", "rirez", "riront"]
+    },
+    "subjonctif": {
+      "présent": ["rie", "ries", "rie", "riions", "riiez", "rient"],
+      "imparfait": ["risse", "risses", "rît", "rissions", "rissiez", "rissent"]
+    },
+    "conditionnel": {
+      "présent": ["rirais", "rirais", "rirait", "ririons", "ririez", "riraient"]
+    },
+    "imperatif": ["ris", "rions", "riez"],
+    "participe": {
+      "présent": "riant",
+      "passé": "ri"
+    }
+  },
+  "sourire": {
+    "infinitif": "sourire",
+    "indicatif": {
+      "présent": ["souris", "souris", "sourit", "sourions", "souriez", "sourient"],
+      "imparfait": ["souriais", "souriais", "souriait", "souriions", "souriiez", "souriaient"],
+      "passé simple": ["souris", "souris", "sourit", "sourîmes", "sourîtes", "sourirent"],
+      "futur simple": ["sourirai", "souriras", "sourira", "sourirons", "sourirez", "souriront"]
+    },
+    "subjonctif": {
+      "présent": ["sourie", "souries", "sourie", "souriions", "souriiez", "sourient"],
+      "imparfait": ["sourisse", "sourisses", "sourît", "sourissions", "sourissiez", "sourissent"]
+    },
+    "conditionnel": {
+      "présent": ["sourirais", "sourirais", "sourirait", "souririons", "souririez", "souriraient"]
+    },
+    "imperatif": ["souris", "sourions", "souriez"],
+    "participe": {
+      "présent": "souriant",
+      "passé": "souri"
+    }
+  },  
+  "sentir": {
+    "infinitif": "sentir",
+    "indicatif": {
+      "présent": ["sens", "sens", "sent", "sentons", "sentez", "sentent"],
+      "imparfait": ["sentais", "sentais", "sentait", "sentions", "sentiez", "sentaient"],
+      "passé simple": ["sentis", "sentis", "sentit", "sentîmes", "sentîtes", "sentirent"],
+      "futur simple": ["sentirai", "sentiras", "sentira", "sentirons", "sentirez", "sentiront"]
+    },
+    "subjonctif": {
+      "présent": ["sente", "sentes", "sente", "sentions", "sentiez", "sentent"],
+      "imparfait": ["sentisse", "sentisses", "sentît", "sentissions", "sentissiez", "sentissent"]
+    },
+    "conditionnel": {
+      "présent": ["sentirais", "sentirais", "sentirait", "sentirions", "sentiriez", "sentiraient"]
+    },
+    "imperatif": ["sens", "sentons", "sentez"],
+    "participe": {
+      "présent": "sentant",
+      "passé": "senti"
+    }
+  },
+  "sortir": {
+    "infinitif": "sortir",
+    "indicatif": {
+      "présent": ["sors", "sors", "sort", "sortons", "sortez", "sortent"],
+      "imparfait": ["sortais", "sortais", "sortait", "sortions", "sortiez", "sortaient"],
+      "passé simple": ["sortis", "sortis", "sortit", "sortîmes", "sortîtes", "sortirent"],
+      "futur simple": ["sortirai", "sortiras", "sortira", "sortirons", "sortirez", "sortiront"]
+    },
+    "subjonctif": {
+      "présent": ["sorte", "sortes", "sorte", "sortions", "sortiez", "sortent"],
+      "imparfait": ["sortisse", "sortisses", "sortît", "sortissions", "sortissiez", "sortissent"]
+    },
+    "conditionnel": {
+      "présent": ["sortirais", "sortirais", "sortirait", "sortirions", "sortiriez", "sortiraient"]
+    },
+    "imperatif": ["sors", "sortons", "sortez"],
+    "participe": {
+      "présent": "sortant",
+      "passé": "sorti"
+    }
+  },
+  "vivre": {
+    "infinitif": "vivre",
+    "indicatif": {
+      "présent": ["vis", "vis", "vit", "vivons", "vivez", "vivent"],
+      "imparfait": ["vivais", "vivais", "vivait", "vivions", "viviez", "vivaient"],
+      "passé simple": ["vécus", "vécus", "vécut", "vécûmes", "vécûtes", "vécurent"],
+      "futur simple": ["vivrai", "vivras", "vivra", "vivrons", "vivrez", "vivront"]
+    },
+    "subjonctif": {
+      "présent": ["vive", "vives", "vive", "vivions", "viviez", "vivent"],
+      "imparfait": ["vécusse", "vécusses", "vécût", "vécussions", "vécussiez", "vécussent"]
+    },
+    "conditionnel": {
+      "présent": ["vivrais", "vivrais", "vivrait", "vivrions", "vivriez", "vivraient"]
+    },
+    "imperatif": ["vis", "vivons", "vivez"],
+    "participe": {
+      "présent": "vivant",
+      "passé": "vécu"
+    }
+  },
+  "reconnaître": {
+    "infinitif": "reconnaître",
+    "indicatif": {
+      "présent": ["reconnais", "reconnais", "reconnaît", "reconnaissons", "reconnaissez", "reconnaissent"],
+      "imparfait": ["reconnaissais", "reconnaissais", "reconnaissait", "reconnaissions", "reconnaissiez", "reconnaissaient"],
+      "passé simple": ["reconnus", "reconnus", "reconnut", "reconnûmes", "reconnûtes", "reconnurent"],
+      "futur simple": ["reconnaîtrai", "reconnaîtras", "reconnaîtra", "reconnaîtrons", "reconnaîtrez", "reconnaîtront"]
+    },
+    "subjonctif": {
+      "présent": ["reconnaisse", "reconnaisses", "reconnaisse", "reconnaissions", "reconnaissiez", "reconnaissent"],
+      "imparfait": ["reconnusse", "reconnusses", "reconnût", "reconnussions", "reconnussiez", "reconnussent"]
+    },
+    "conditionnel": {
+      "présent": ["reconnaîtrais", "reconnaîtrais", "reconnaîtrait", "reconnaîtrions", "reconnaîtriez", "reconnaîtraient"]
+    },
+    "imperatif": ["reconnais", "reconnaissons", "reconnaissez"],
+    "participe": {
+      "présent": "reconnaissant",
+      "passé": "reconnu"
+    }
+  },
+  "paraître": {
+    "infinitif": "paraître",
+    "indicatif": {
+      "présent": ["parais", "parais", "paraît", "paraissons", "paraissez", "paraissent"],
+      "imparfait": ["paraissais", "paraissais", "paraissait", "paraissions", "paraissiez", "paraissaient"],
+      "passé simple": ["parus", "parus", "parut", "parûmes", "parûtes", "parurent"],
+      "futur simple": ["paraîtrai", "paraîtras", "paraîtra", "paraîtrons", "paraîtrez", "paraîtront"]
+    },
+    "subjonctif": {
+      "présent": ["paraisse", "paraisses", "paraisse", "paraissions", "paraissiez", "paraissent"],
+      "imparfait": ["parusse", "parusses", "parût", "parussions", "parussiez", "parussent"]
+    },
+    "conditionnel": {
+      "présent": ["paraîtrais", "paraîtrais", "paraîtrait", "paraîtrions", "paraîtriez", "paraîtraient"]
+    },
+    "imperatif": ["parais", "paraissons", "paraissez"],
+    "participe": {
+      "présent": "paraissant",
+      "passé": "paru"
+    }
+  },
+  "offrir": {
+    "infinitif": "offrir",
+    "indicatif": {
+      "présent": ["offre", "offres", "offre", "offrons", "offrez", "offrent"],
+      "imparfait": ["offrais", "offrais", "offrait", "offrions", "offriez", "offraient"],
+      "passé simple": ["offris", "offris", "offrit", "offrîmes", "offrîtes", "offrirent"],
+      "futur simple": ["offrirai", "offriras", "offrira", "offrirons", "offrirez", "offriront"]
+    },
+    "subjonctif": {
+      "présent": ["offre", "offres", "offre", "offrions", "offriez", "offrent"],
+      "imparfait": ["offrisse", "offrisses", "offrît", "offrissions", "offrissiez", "offrissent"]
+    },
+    "conditionnel": {
+      "présent": ["offrirais", "offrirais", "offrirait", "offririons", "offririez", "offriraient"]
+    },
+    "imperatif": ["offre", "offrons", "offrez"],
+    "participe": {
+      "présent": "offrant",
+      "passé": "offert"
+    }
+  },
+  "craindre": {
+    "infinitif": "craindre",
+    "indicatif": {
+      "présent": ["crains", "crains", "craint", "craignons", "craignez", "craignent"],
+      "imparfait": ["craignais", "craignais", "craignait", "craignions", "craigniez", "craignaient"],
+      "passé simple": ["craignis", "craignis", "craignit", "craignîmes", "craignîtes", "craignirent"],
+      "futur simple": ["craindrai", "craindras", "craindra", "craindrons", "craindrez", "craindront"]
+    },
+    "subjonctif": {
+      "présent": ["craigne", "craignes", "craigne", "craignions", "craigniez", "craignent"],
+      "imparfait": ["craignisse", "craignisses", "craignît", "craignissions", "craignissiez", "craignissent"]
+    },
+    "conditionnel": {
+      "présent": ["craindrais", "craindrais", "craindrait", "craindrions", "craindriez", "craindraient"]
+    },
+    "imperatif": ["crains", "craignons", "craignez"],
+    "participe": {
+      "présent": "craignant",
+      "passé": "craint"
+    }
+  },  
+  "séduire": {
+    "infinitif": "séduire",
+    "indicatif": {
+      "présent": ["séduis", "séduis", "séduit", "séduisons", "séduisez", "séduisent"],
+      "imparfait": ["séduisais", "séduisais", "séduisait", "séduisions", "séduisiez", "séduisaient"],
+      "passé simple": ["séduisis", "séduisis", "séduisit", "séduisîmes", "séduisîtes", "séduisirent"],
+      "futur simple": ["séduirai", "séduiras", "séduira", "séduirons", "séduirez", "séduiront"]
+    },
+    "subjonctif": {
+      "présent": ["séduise", "séduises", "séduise", "séduisions", "séduisiez", "séduisent"],
+      "imparfait": ["séduisisse", "séduisisses", "séduisît", "séduisissions", "séduisissiez", "séduisissent"]
+    },
+    "conditionnel": {
+      "présent": ["séduirais", "séduirais", "séduirait", "séduirions", "séduiriez", "séduiraient"]
+    },
+    "imperatif": ["séduis", "séduisons", "séduisez"],
+    "participe": {
+      "présent": "séduisant",
+      "passé": "séduit"
+    }
+  },
+  "fuir": {
+    "infinitif": "fuir",
+    "indicatif": {
+      "présent": ["fuis", "fuis", "fuit", "fuyons", "fuyez", "fuient"],
+      "imparfait": ["fuyais", "fuyais", "fuyait", "fuyions", "fuyiez", "fuyaient"],
+      "passé simple": ["fuis", "fuis", "fuit", "fuîmes", "fuîtes", "fuirent"],
+      "futur simple": ["fuirai", "fuiras", "fuira", "fuirons", "fuirez", "fuiront"]
+    },
+    "subjonctif": {
+      "présent": ["fuie", "fuies", "fuie", "fuyions", "fuyiez", "fuient"],
+      "imparfait": ["fuisse", "fuisses", "fuît", "fuissions", "fuissiez", "fuissent"]
+    },
+    "conditionnel": {
+      "présent": ["fuirais", "fuirais", "fuirait", "fuirions", "fuiriez", "fuiraient"]
+    },
+    "imperatif": ["fuis", "fuyons", "fuyez"],
+    "participe": {
+      "présent": "fuyant",
+      "passé": "fui"
+    }
+  },
+  "mentir": {
+    "infinitif": "mentir",
+    "indicatif": {
+      "présent": ["mens", "mens", "ment", "mentons", "mentez", "mentent"],
+      "imparfait": ["mentais", "mentais", "mentait", "mentions", "mentiez", "mentaient"],
+      "passé simple": ["mentis", "mentis", "mentit", "mentîmes", "mentîtes", "mentirent"],
+      "futur simple": ["mentirai", "mentiras", "mentira", "mentirons", "mentirez", "mentiront"]
+    },
+    "subjonctif": {
+      "présent": ["mente", "mentes", "mente", "mentions", "mentiez", "mentent"],
+      "imparfait": ["mentisse", "mentisses", "mentît", "mentissions", "mentissiez", "mentissent"]
+    },
+    "conditionnel": {
+      "présent": ["mentirais", "mentirais", "mentirait", "mentirions", "mentiriez", "mentiraient"]
+    },
+    "imperatif": ["mens", "mentons", "mentez"],
+    "participe": {
+      "présent": "mentant",
+      "passé": "menti"
+    }
+  },
+  "devenir": {
+    "infinitif": "devenir",
+    "indicatif": {
+      "présent": ["deviens", "deviens", "devient", "devenons", "devenez", "deviennent"],
+      "imparfait": ["devenais", "devenais", "devenait", "devenions", "deveniez", "devenaient"],
+      "passé simple": ["devins", "devins", "devint", "devînmes", "devîntes", "devinrent"],
+      "futur simple": ["deviendrai", "deviendras", "deviendra", "deviendrons", "deviendrez", "deviendront"]
+    },
+    "subjonctif": {
+      "présent": ["devienne", "deviennes", "devienne", "devenions", "deveniez", "deviennent"],
+      "imparfait": ["devinsse", "devinsses", "devînt", "devinssions", "devinssiez", "devinssent"]
+    },
+    "conditionnel": {
+      "présent": ["deviendrais", "deviendrais", "deviendrait", "deviendrions", "deviendriez", "deviendraient"]
+    },
+    "imperatif": ["deviens", "devenons", "devenez"],
+    "participe": {
+      "présent": "devenant",
+      "passé": "devenu"
+    }
+  }, 
+  "partir": {
+    "infinitif": "partir",
+    "indicatif": {
+      "présent": ["pars", "pars", "part", "partons", "partez", "partent"],
+      "imparfait": ["partais", "partais", "partait", "partions", "partiez", "partaient"],
+      "passé simple": ["partis", "partis", "partit", "partîmes", "partîtes", "partirent"],
+      "futur simple": ["partirai", "partiras", "partira", "partirons", "partirez", "partiront"]
+    },
+    "subjonctif": {
+      "présent": ["parte", "partes", "parte", "partions", "partiez", "partent"],
+      "imparfait": ["partisse", "partisses", "partît", "partissions", "partissiez", "partissent"]
+    },
+    "conditionnel": {
+      "présent": ["partirais", "partirais", "partirait", "partirions", "partiriez", "partiraient"]
+    },
+    "imperatif": ["pars", "partons", "partez"],
+    "participe": {
+      "présent": "partant",
+      "passé": "parti"
+    }
+  },
+  "apparaître": {
+    "infinitif": "apparaître",
+    "indicatif": {
+      "présent": ["apparais", "apparais", "apparaît", "apparaissons", "apparaissez", "apparaissent"],
+      "imparfait": ["apparaissais", "apparaissais", "apparaissait", "apparaissions", "apparaissiez", "apparaissaient"],
+      "passé simple": ["apparus", "apparus", "apparut", "apparûmes", "apparûtes", "apparurent"],
+      "futur simple": ["apparaîtrai", "apparaîtras", "apparaîtra", "apparaîtrons", "apparaîtrez", "apparaîtront"]
+    },
+    "subjonctif": {
+      "présent": ["apparaisse", "apparaisses", "apparaisse", "apparaissions", "apparaissiez", "apparaissent"],
+      "imparfait": ["apparusse", "apparusses", "apparût", "apparussions", "apparussiez", "apparussent"]
+    },
+    "conditionnel": {
+      "présent": ["apparaîtrais", "apparaîtrais", "apparaîtrait", "apparaîtrions", "apparaîtriez", "apparaîtraient"]
+    },
+    "imperatif": ["apparais", "apparaissons", "apparaissez"],
+    "participe": {
+      "présent": "apparaissant",
+      "passé": "apparu"
+    }
+  },
+  "permettre": {
+    "infinitif": "permettre",
+    "indicatif": {
+      "présent": ["permets", "permets", "permet", "permettons", "permettez", "permettent"],
+      "imparfait": ["permettais", "permettais", "permettait", "permettions", "permettiez", "permettaient"],
+      "passé simple": ["permis", "permis", "permit", "permîmes", "permîtes", "permirent"],
+      "futur simple": ["permettrai", "permettras", "permettra", "permettrons", "permettrez", "permettront"]
+    },
+    "subjonctif": {
+      "présent": ["permette", "permettes", "permette", "permettions", "permettiez", "permettent"],
+      "imparfait": ["permisse", "permisses", "permît", "permissions", "permissiez", "permissent"]
+    },
+    "conditionnel": {
+      "présent": ["permettrais", "permettrais", "permettrait", "permettrions", "permettriez", "permettraient"]
+    },
+    "imperatif": ["permets", "permettons", "permettez"],
+    "participe": {
+      "présent": "permettant",
+      "passé": "permis"
+    }
+  },
+  "promettre": {
+    "infinitif": "promettre",
+    "indicatif": {
+      "présent": ["promets", "promets", "promet", "promettons", "promettez", "promettent"],
+      "imparfait": ["promettais", "promettais", "promettait", "promettions", "promettiez", "promettaient"],
+      "passé simple": ["promis", "promis", "promit", "promîmes", "promîtes", "promirent"],
+      "futur simple": ["promettrai", "promettras", "promettra", "promettrons", "promettrez", "promettront"]
+    },
+    "subjonctif": {
+      "présent": ["promette", "promettes", "promette", "promettions", "promettiez", "promettent"],
+      "imparfait": ["promisse", "promisses", "promît", "promissions", "promissiez", "promissent"]
+    },
+    "conditionnel": {
+      "présent": ["promettrais", "promettrais", "promettrait", "promettrions", "promettriez", "promettraient"]
+    },
+    "imperatif": ["promets", "promettons", "promettez"],
+    "participe": {
+      "présent": "promettant",
+      "passé": "promis"
+    }
+  }, 
+  "mourir": {
+    "infinitif": "mourir",
+    "indicatif": {
+      "présent": ["meurs", "meurs", "meurt", "mourons", "mourez", "meurent"],
+      "imparfait": ["mourais", "mourais", "mourait", "mourions", "mouriez", "mouraient"],
+      "passé simple": ["mourus", "mourus", "mourut", "mourûmes", "mourûtes", "moururent"],
+      "futur simple": ["mourrai", "mourras", "mourra", "mourrons", "mourrez", "mourront"]
+    },
+    "subjonctif": {
+      "présent": ["meure", "meures", "meure", "mourions", "mouriez", "meurent"],
+      "imparfait": ["mourusse", "mourusses", "mourût", "mourussions", "mourussiez", "mourussent"]
+    },
+    "conditionnel": {
+      "présent": ["mourrais", "mourrais", "mourrait", "mourrions", "mourriez", "mourraient"]
+    },
+    "imperatif": ["meurs", "mourons", "mourez"],
+    "participe": {
+      "présent": "mourant",
+      "passé": "mort"
+    }
+  },
+  "mouvoir": {
+    "infinitif": "mouvoir",
+    "indicatif": {
+      "présent": ["meus", "meus", "meut", "mouvons", "mouvez", "meuvent"],
+      "imparfait": ["mouvais", "mouvais", "mouvait", "mouvions", "mouviez", "mouvaient"],
+      "passé simple": ["mus", "mus", "mut", "mûmes", "mûtes", "murent"],
+      "futur simple": [""]
+    },
+    "subjonctif": {
+      "présent": [""],
+      "imparfait": [""]
+    },
+    "conditionnel": {
+      "présent": [""]
+    },
+    "imperatif": [""],
+    "participe": {
+      "présent": "",
+      "passé": ""
+    }
+  },
+  "": {
+    "infinitif": "",
+    "indicatif": {
+      "présent": [""],
+      "imparfait": [""],
+      "passé simple": [""],
+      "futur simple": [""]
+    },
+    "subjonctif": {
+      "présent": [""],
+      "imparfait": [""]
+    },
+    "conditionnel": {
+      "présent": [""]
+    },
+    "imperatif": [""],
+    "participe": {
+      "présent": "",
+      "passé": ""
+    }
+  },
+  "": {
+    "infinitif": "",
+    "indicatif": {
+      "présent": [""],
+      "imparfait": [""],
+      "passé simple": [""],
+      "futur simple": [""]
+    },
+    "subjonctif": {
+      "présent": [""],
+      "imparfait": [""]
+    },
+    "conditionnel": {
+      "présent": [""]
+    },
+    "imperatif": [""],
+    "participe": {
+      "présent": "",
+      "passé": ""
+    }
+  }         
 }

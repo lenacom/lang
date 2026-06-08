@@ -16,7 +16,7 @@ fs.cpSync(`${SRC}/js`, `${DEST}/js`, { recursive: true });
 
 function createFileContent(fileName, title, body, selfPath, lang) {
 	const content = bookTemplate.replace("[TITLE]", title).replace("[BODY]", body + counter)
-	  .replace("[SELF_PATH]", selfPath).replace("[LANG]", lang);
+	  .replaceAll("[SELF_PATH]", selfPath).replaceAll("[LANG]", lang);
 	fs.writeFileSync(fileName, content);
 }
 

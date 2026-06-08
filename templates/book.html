@@ -10,7 +10,7 @@
     <title>[TITLE]</title>
 		<script>
 			function stringify(array, ids) {
-				return ids.map(it => array[it]).join("");
+				return ids.map(it => array[it]).join(", ");
 			}
 
 			document.addEventListener("selectionchange", () => {
