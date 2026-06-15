@@ -7,7 +7,7 @@ const SRC = "./src";
 const DEST = "./dest";
 const bookTemplate = fs.readFileSync("templates/book.html", "utf8");
 const indexTemplate = fs.readFileSync("templates/index.html", "utf8");
-const counter = fs.readFileSync("yandex_counter.html", "utf8");
+const counter = fs.readFileSync("templates/yandex_counter.html", "utf8");
 
 fs.rmSync(`${DEST}`, { recursive: true, force: true });
 fs.mkdirSync(DEST);

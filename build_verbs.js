@@ -4,7 +4,6 @@ const SRC = "./src";
 const DEST = "./dest";
 
 const irregularVerbs = JSON.parse(fs.readFileSync(`${SRC}/verbs/fr/irregular_verbs.json`, "utf8"));
-const sorted = Object.values(irregularVerbs).sort((a, b) => a.infinitif > b.infinitif ? 1 : -1); 
 
 const infinitives = [];
 const tenses = [];
@@ -32,25 +31,16 @@ function addMultipleValue(map, key, value) {
 function processForms(forms, infinitive, tense) {
   const infinitiveId = getId(infinitives, infinitive);
   const tenseId = getId(tenses, tense);
-  for (const form of forms) {
+  for (const form of (Array.isArray(forms)? forms : [forms])) {
     addMultipleValue(formToInfinitives, form, infinitiveId);
     addMultipleValue(formToTenses, form, tenseId);
   }
 }
 
-function processMood(verb, mood, addMoodToTense) {
-  for (const [tense, forms] of Object.entries(verb[mood])) {
-    processForms(Array.isArray(forms)? forms : [forms], 
-      verb.infinitif, (addMoodToTense? mood + " " : "") + tense);
+for (const [verb, tenses] of Object.entries(irregularVerbs)) {
+  for (const [tense, forms] of Object.entries(tenses)) {
+    processForms(forms, verb, tense);
   }
-}
-
-for (const verb of sorted) {
-  processMood(verb, "indicatif", false);
-  processMood(verb, "subjonctif", true);
-  processMood(verb, "conditionnel", true);
-  processMood(verb, "participe", true);
-  processForms(verb.imperatif, verb.infinitif, "imperatif");
 }
 
 let content = `const infinitives = ${JSON.stringify(infinitives)};`;
