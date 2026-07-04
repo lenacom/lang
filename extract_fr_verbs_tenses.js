@@ -8,7 +8,7 @@
   'dépourvoir',     'désaprendre',
   'se ressouvenir', 'revaloir'
  */
-const verbs = ["absoudre", "dissoudre", "acquérir", "conquérir", "quérir", "reconquérir", 
+const irregularVerbs = ["absoudre", "dissoudre", "acquérir", "conquérir", "quérir", "reconquérir", 
   "requérir", "aller", "assaillir", "saillir", "tressaillir", "asseoir", "rasseoir", "avoir", "battre", 
   "abattre", "combattre", "débattre", "s'ébattre", "embattre", "rabattre", "rebattre", "boire", "bouillir", 
   "choir", "déchoir", "échoir", "clore", "résoudre", "contre-battre", "emboire", "débouillir", "rebouillir",
@@ -55,45 +55,53 @@ const fs = require('fs');
 const SRC = "./src";
 const { parse } = require('node-html-parser');
 
-const tenses = {};
-
-function extractTense(doc, selector) {
+function extractTense(doc, selector, cutBase = "") {
   return doc.querySelector(`${selector} .person`)
     .querySelectorAll(".form0")
-    .map(it => it.text)
+    .map(it => it.text.replace(cutBase, ""))
 }
 
-async function extractVerb(verb) {
+async function extractVerb(verb, cutBase = "") {
   console.log(verb);
-  tenses[verb] = {};
+  result = {};
   const path = verb.replace(/[\s']/g, "_").replace(/[éê]/g, "e").replace("î", "i");
   const url = `https://www.le-francais.ru/conjugaison/${path}/`;
   const response = await fetch(url);
   const html = await response.text();
   const doc = parse(html);
-  tenses[verb]["présent"] = extractTense(doc, ".indicative .present");
-  tenses[verb]["imparfait"] = extractTense(doc, ".indicative .imperfect");
-  tenses[verb]["passé simple"] = extractTense(doc, ".indicative .simple-past");
-  tenses[verb]["futur simple"] = extractTense(doc, ".indicative .future");
-  tenses[verb]["subjonctif présent"] = extractTense(doc, ".subjunctive .present");
-  tenses[verb]["subjonctif imparfait"] = extractTense(doc, ".subjunctive .imperfect");
-  tenses[verb]["conditionnel présent"] = extractTense(doc, ".conditional .present");
-  tenses[verb]["imperatif"] = extractTense(doc, ".imperative .present");
-  tenses[verb]["participe présent"] = extractTense(doc, ".participle .present");
-  tenses[verb]["participe passé"] = extractTense(doc, ".participle .past")[0];
+  result["présent"] = extractTense(doc, ".indicative .present", cutBase);
+  result["imparfait"] = extractTense(doc, ".indicative .imperfect", cutBase);
+  result["passé simple"] = extractTense(doc, ".indicative .simple-past", cutBase);
+  result["futur simple"] = extractTense(doc, ".indicative .future", cutBase);
+  result["subjonctif présent"] = extractTense(doc, ".subjunctive .present", cutBase);
+  result["subjonctif imparfait"] = extractTense(doc, ".subjunctive .imperfect", cutBase);
+  result["conditionnel présent"] = extractTense(doc, ".conditional .present", cutBase);
+  result["imperatif"] = extractTense(doc, ".imperative .present", cutBase);
+  result["participe présent"] = extractTense(doc, ".participle .present", cutBase);
+  result["participe passé"] = extractTense(doc, ".participle .past", cutBase)[0];
+  return result;
 }
 
 async function extractVerbs() {
+  const irregularVerbsTenses = {};
+
   const failedVerbs = [];
-  for (const verb of verbs) {
+  for (const verb of irregularVerbs) {
     try {
-      await extractVerb(verb);
+      irregularVerbsTenses[verb] = await extractVerb(verb);
     } catch {
       failedVerbs.push(verb);
     }
   }
+  console.log("failed irregular verbs:");
   console.log(failedVerbs);
-  fs.writeFileSync(`${SRC}/verbs/fr/irregular_verbs.json`, JSON.stringify(tenses));
+  fs.writeFileSync(`${SRC}/verbs/fr/irregular_verbs.json`, JSON.stringify(irregularVerbsTenses));
+
+  const regularVerbsEndings = {
+    "1": await extractVerb("parler", "parl"),
+    "2": await extractVerb("finir", "fin"),
+  };
+  fs.writeFileSync(`${SRC}/verbs/fr/regular_verbs.json`, JSON.stringify(regularVerbsEndings));
 }
 
 extractVerbs();
