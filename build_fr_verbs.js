@@ -43,6 +43,16 @@ for (const [verb, tenses] of Object.entries(irregularVerbs)) {
   }
 }
 
+const regularVerbs1 = fs.readFileSync(`${SRC}/verbs/fr/regular_verbs1.txt`, "utf8");
+const regularVerbs2 = fs.readFileSync(`${SRC}/verbs/fr/regular_verbs2.txt`, "utf8");
+const verbsCode = fs.readFileSync(`${SRC}/verbs/fr/verbs_code.js`, "utf8");
+
+function buildRegularVerbs(fileContent, name) {
+  const lines = fileContent.split(/\r?\n/);
+  return "new Set([" + lines.map(it => `"${it.trim().slice(0, -2)}"`).join(",") + "]);";
+}
+
+
 let content = `const infinitives = ${JSON.stringify(infinitives)};`;
 content += "\r\n";
 content += `const tenses = ${JSON.stringify(tenses)};`;
@@ -51,4 +61,10 @@ content += `const formToInfinitives = ${JSON.stringify(formToInfinitives)};`;
 content += "\r\n";
 content += `const formToTenses = ${JSON.stringify(formToTenses)};`;
 content += "\r\n";
-fs.writeFileSync(`${DEST}/js/fr_irregular_verbs.js`, content);
+content += `const regularVerbs1 = ${buildRegularVerbs(regularVerbs1)};`;
+content += "\r\n";
+content += `const regularVerbs2 = ${buildRegularVerbs(regularVerbs2)};`;
+content += "\r\n";
+content += verbsCode;
+content += "\r\n";
+fs.writeFileSync(`${DEST}/js/fr_verbs.js`, content);

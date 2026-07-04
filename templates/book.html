@@ -6,22 +6,18 @@
     <meta name="color-scheme" content="light dark"/>
     <link rel="stylesheet" href="../../css/mini-default.min.css"/>
 		<script src="../../js/script.js"></script>
-		<script src="../../js/[LANG]_irregular_verbs.js"></script>
+		<script src="../../js/[LANG]_verbs.js"></script>
     <title>[TITLE]</title>
 		<script>
-			function stringify(array, ids) {
-				return ids.map(it => array[it]).join(", ");
-			}
-
 			document.addEventListener("selectionchange", () => {
 				const actions = document.getElementById("actions");
 				const text = getSelectedText();
 				if (text.length) {
-					const infinitiveIds = formToInfinitives[text];
+					const verbTenses = findVerbTenses(text);
 					let conjugationText = "Спряжение";
-					if (infinitiveIds !== undefined) {
+					if (verbTenses !== undefined) {
 						const tenseIds = formToTenses[text];
-						conjugationText = `${stringify(infinitives, infinitiveIds)}: ${stringify(tenses, tenseIds)}`; 
+						conjugationText = `${verbTenses.infinitives}${verbTenses.type === "irregular" ? "*" : ""}: ${verbTenses.tenses}`; 
 					}
 					const btnConjugation = document.getElementById("btnConjugation");
 					btnConjugation.value = conjugationText;

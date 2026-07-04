@@ -62,15 +62,15 @@ function addWordOrCount(map, metadata, count) {
 function writeToFile(map, fileName) {
 	const data = [];
 	for (const value of Object.values(map)) {
-		const row = [value.text, value.ts, value.tr, value.count];
+		const row = [value.text, value.count];
 		if (value.gen) {
 			row.push(value.gen);
 		}
 		data.push(row);
 	};
-	data.sort((a, b) => b[3] - a[3]);
-	const content = data.map(it => it.join("\t")).join("\r\n"); 
-	fs.writeFileSync(`${SRC}/words/fr/${fileName}.txt`, content);
+	data.sort((a, b) => b[1] - a[1]);
+	const content = data.map(it => it[0]).join("\r\n"); 
+	fs.writeFileSync(`${SRC}/verbs/fr/${fileName}.txt`, content);
 }
 
 const skipPartsOfSpeach = ["prp", "prn", "pt", "cnj"];
@@ -78,7 +78,7 @@ async function buildWords() {
 	const verbs1 = {};
 	const verbs2 = {};
 	const rest = {};
-	for (const line of lines.slice(0, 10000)) { //.slice(0, 10000) 
+	for (const line of lines) { //.slice(0, 10000) 
 		console.log(line);
 		const parts = line.split(/\s/);
 		const word = parts[0];
@@ -97,8 +97,8 @@ async function buildWords() {
 		}
 	}
 
-	writeToFile(verbs1, "verbs1");
-	writeToFile(verbs2, "verbs2");
+	writeToFile(verbs1, "regular_verbs1");
+	writeToFile(verbs2, "regular_verbs2");
 }
 
 buildWords();
