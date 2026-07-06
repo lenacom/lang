@@ -40,21 +40,21 @@ async function getWordMetadata(word) {
 	if (!regular || regular.length === 0) {
 		return undefined;
 	}
-	const data = regular[0];
-	const text = data.text;
-	const pos = data.pos.code;
-	const ts = data.ts ?? "";
-	const tr = data.tr[0].text;
-	const gen = data.gen?.code ?? "";
-	return { text, pos, ts, tr, gen };
+	return regular.filter(it => it.pos.code === "vrb")
+	  .map(data => {
+			const text = data.text;
+			const ts = data.ts ?? "";
+			const tr = data.tr[0].text;
+			return { text, ts, tr };
+		});
 }
 
-function addWordOrCount(map, metadata, count) {
-	const text = metadata.text;
+function addWordOrCount(map, data, count) {
+	const text = data.text;
 	if (map[text]) {
 		map[text].count += count;
 	} else {
-		map[text] = metadata;
+		map[text] = data;
 		map[text].count = count;
 	}
 }
@@ -78,22 +78,22 @@ async function buildWords() {
 	const verbs1 = {};
 	const verbs2 = {};
 	const rest = {};
-	for (const line of lines) { //.slice(0, 10000) 
+	for (const line of lines) { //.slice(0, 1000) 
 		console.log(line);
 		const parts = line.split(/\s/);
 		const word = parts[0];
 		const count = Number(parts[1]);
 		if (!skipWord(word)) {
-			const metadata = await getWordMetadata(word);
-			if (metadata) {
-				if (metadata.pos === "vrb" && !irregularVerbs.has(metadata.text)) {
-					if (metadata.text.endsWith("er")) {
-						addWordOrCount(verbs1, metadata, count);
-					} else if (metadata.text.endsWith("ir")) {
-						addWordOrCount(verbs2, metadata, count);
+			const data = await getWordMetadata(word);
+			data?.forEach(it => {
+				if (!irregularVerbs.has(it.text)) {
+					if (it.text.endsWith("er")) {
+						addWordOrCount(verbs1, it, count);
+					} else if (it.text.endsWith("ir")) {
+						addWordOrCount(verbs2, it, count);
 					}
 				}
-			}
+			});
 		}
 	}
 
