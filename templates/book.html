@@ -9,55 +9,24 @@
 		<script src="../../js/[LANG]_verbs.js"></script>
     <title>[TITLE]</title>
 		<script>
-			async function translate() {
-				const text = getSelectedText();
-				const btnTranslation = document.getElementById("btnTranslation");
-				const btnConjugation = document.getElementById("btnConjugation");
-				btnTranslation.style.display = "none";
-				btnConjugation.style.display = "none";
-				if (text.length) {
-					const verbTenses = findVerbTenses(text);
-					console.log(verbTenses)
-					let conjugationText;
-					if (verbTenses !== undefined) {
-						const tenseIds = formToTenses[text];
-						conjugationText = `${verbTenses.infinitives}${verbTenses.type === "irregular" ? "*" : ""}: ${verbTenses.tenses}`; 
-						btnConjugation.value = conjugationText;
-						btnConjugation.style.display = "block";
-					}
-
-					const translationText = await getYandexTranslation(text);
-					if (translationText !== undefined) {
-						btnTranslation.value = translationText;
-						btnTranslation.style.display = "block";
-					}
-				}
-			}
-
-			document.addEventListener("selectionchange", async () => {
-				translate();
-			});
-
-			document.addEventListener("touchend", async () => {
-				translate();
-			});
-
 			const path = `[SELF_PATH]`;
 			setCookie("recent", path, 31);
 		</script>
 		<style>
 		  .chapter-links a, .current { margin-right: 10px; white-space: normal; }
 			.current { font-weight: bold; }
+			.no-select {
+				-webkit-touch-callout: none; /* Disables the iOS copy/share menu */
+				-webkit-user-select: none;   /* Safari */
+				user-select: none;           /* Standard */
+			}
 		</style>
   </head>
   <body>
     <main class="container">
 			<div><a href="../../index.html">Главная</a></div>
       [BODY]
-			<div style="position: fixed; bottom: 0;">
-				<input id="btnTranslation" style="display: none;" onClick='translation(getSelectedText(), "[LANG]", "ru")' type="button" value="Перевод" class="secondary rounded"/>
-				<input id="btnConjugation" style="display: none;" onClick="conjugation(getSelectedText())" type="button" value="Спряжение" class="secondary rounded"/>
-			</div>
+			<div id="fr-helper"></div>
 		</main>
   </body>
 </html>
