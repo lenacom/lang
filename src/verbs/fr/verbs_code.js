@@ -115,11 +115,14 @@ async function getYandexTranslation(text) {
 	}).map(it => `<div>${it}</div>`);
 }
 
-async function translate(text) {
+async function translate(selection) {
+  const text = selection.toString();
   const button = document.getElementById('fr-helper-btn');
 
   if (!text) {
-    button.style.display = 'none';
+    if (button) {
+      button.style.display = 'none';
+    }
     return;
   }
 
@@ -133,11 +136,13 @@ async function translate(text) {
   }
 
   if (!translation && ! conjugation) {
-    button.style.display = 'none';
+    if (button) {
+      button.style.display = 'none';
+    }
     return;
   }
 
-  let content = `<button onClick="this.parentElement.close();">x</button><h2>${text}</h2>`;
+  let content = "";
 
   if (translation) {
     content += `<div>${translation.join(" ")}</div>`;
@@ -145,19 +150,18 @@ async function translate(text) {
   if (conjugation) {
     content += `<div>${conjugation}</div>`;
   }
-  content += `<input onClick='translation("${text}", "fr", "ru")' type="button" value="Google Translate" class="secondary rounded"/>`;
-
+  
   const helper = document.getElementById('fr-helper');
-  helper.innerHTML = `<button id="fr-helper-btn" style="position: fixed; top:0; left:0; z-index: 100" onClick="this.style.display = 'none'; document.getSelection().removeAllRanges(); document.getElementById('fr-helper-dialog').showModal();">
-    ${text.substring(0, 20) + (text.length > 20? "&hellip;" : "")}
-    </button>
-    <dialog id="fr-helper-dialog">
+  const range = selection.getRangeAt(0);
+  const rect = range.getBoundingClientRect();
+  helper.innerHTML = `<div id="fr-helper-btn" style="background-color:white; color: black; padding: 5px; border-radius:5px; position:fixed; top:${Math.round(rect.top + rect.height)}px; left:${Math.round(rect.left)}px; z-index:100;">
     ${content}
-    </dialog>`;
+    <input onClick='translation("${text}", "fr", "ru")' type="button" value="Google Translate" class="secondary rounded"/>
+    </div>`;
 }
 
 document.addEventListener("selectionchange", async () => {
-  await translate(document.getSelection().toString());
+  await translate(document.getSelection());
 });
 
 function openURL(url) {
