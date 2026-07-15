@@ -86,8 +86,8 @@ function findVerbTenses(form) {
   }
 }
 
-async function getYandexTranslation(text) {
-	const url = new URL("https://dictionary.yandex.net/dicservice.json/lookupMultiple");
+function getYandexTranslationURL(text) {
+  const url = new URL("https://dictionary.yandex.net/dicservice.json/lookupMultiple");
 	url.searchParams.set("ui", "ru");
 	url.searchParams.set("lang", "fr-ru");
 	url.searchParams.set("dict", "fr-ru.regular");
@@ -95,7 +95,11 @@ async function getYandexTranslation(text) {
 	url.searchParams.set("flags", "15783");
 	url.searchParams.set("srv", "tr-text");
 	url.searchParams.set("text", text);
-	const response = await fetch(url);
+  return url;
+}
+
+async function getYandexTranslation(text) {
+	const response = await fetch(getYandexTranslationURL(text));
 	const json = await response.json();
 
 	const regular = json["fr-ru"]["regular"];
@@ -135,29 +139,41 @@ async function translate(selection) {
     conjugation = `${verbTenses.infinitives}${verbTenses.type === "irregular" ? "*" : ""}: ${verbTenses.tenses}`;
   }
 
-  if (!translation && ! conjugation) {
-    if (button) {
-      button.style.display = 'none';
-    }
-    return;
-  }
-
-  let content = "";
-
+  const parts = []
   if (translation) {
-    content += `<div>${translation.join(" ")}</div>`;
+    parts.push(`<div>${translation.join(" ")}</div>`);
   }
   if (conjugation) {
-    content += `<div>${conjugation}</div>`;
+    parts.push(`<div>${conjugation}</div>`);
   }
+  const ga = `<input onClick='translation("${text}", "fr", "ru")' type="button" 
+    value="Google Translate" class="secondary rounded" style="margin:0"/>`;
+  parts.push(ga);
   
   const helper = document.getElementById('fr-helper');
-  const range = selection.getRangeAt(0);
-  const rect = range.getBoundingClientRect();
-  helper.innerHTML = `<div id="fr-helper-btn" style="background-color:white; color: black; padding: 5px; border-radius:5px; position:fixed; top:${Math.round(rect.top + rect.height)}px; left:${Math.round(rect.left)}px; z-index:100;">
-    ${content}
-    <input onClick='translation("${text}", "fr", "ru")' type="button" value="Google Translate" class="secondary rounded"/>
+  const { clientWidth: screenWidth, clientHeight: screenHeight } = document.documentElement;
+  const selRange = selection.getRangeAt(0);
+  const selRect = selRange.getBoundingClientRect();
+  const style = (left, top, position) => {
+    return `background-color:white; color:black; padding:10px; margin:0; 
+    border-radius:5px; position:${position}; 
+    left:${left}px; top:${top}px; max-width:${screenWidth}`;
+  } 
+  const helperHTML = (style) => {
+    return `<div id="fr-helper-btn" style="${style}">
+    <div id="fr-helper-pnl">
+    ${parts.join("<hr/>")}
     </div>`;
+  }
+  let left = selRect.left;
+  let top = selRect.top + selRect.height;
+  helper.innerHTML = helperHTML(style(left, top, "fixed"));
+  const pnl = document.getElementById('fr-helper-pnl');
+  while ((pnl.getBoundingClientRect().right + 10) > screenWidth && left > 0) {
+    left -= 1;
+    pnl.style = style(left, top, "fixed");
+  }
+  helper.innerHTML = helperHTML(style(left + window.scrollX, top + window.scrollY, "absolute"));
 }
 
 document.addEventListener("selectionchange", async () => {
