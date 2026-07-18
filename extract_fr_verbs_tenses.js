@@ -58,17 +58,18 @@ const { parse } = require('node-html-parser');
 function extractTense(doc, selector, cutBase = "") {
   return doc.querySelector(`${selector} .person`)
     .querySelectorAll(".form0")
-    .map(it => it.text.replace(cutBase, ""))
+    .map(it => it.text.replace(cutBase, ""));
 }
 
 async function extractVerb(verb, cutBase = "") {
   console.log(verb);
-  result = {};
   const path = verb.replace(/[\s']/g, "_").replace(/[éê]/g, "e").replace("î", "i");
   const url = `https://www.le-francais.ru/conjugaison/${path}/`;
   const response = await fetch(url);
   const html = await response.text();
   const doc = parse(html);
+
+  let result = {};
   result["présent"] = extractTense(doc, ".indicative .present", cutBase);
   result["imparfait"] = extractTense(doc, ".indicative .imperfect", cutBase);
   result["passé simple"] = extractTense(doc, ".indicative .simple-past", cutBase);
@@ -78,7 +79,18 @@ async function extractVerb(verb, cutBase = "") {
   result["conditionnel présent"] = extractTense(doc, ".conditional .present", cutBase);
   result["imperatif"] = extractTense(doc, ".imperative .present", cutBase);
   result["participe présent"] = extractTense(doc, ".participle .present", cutBase);
-  result["participe passé"] = extractTense(doc, ".participle .past", cutBase)[0];
+  result["participe passé"] = extractTense(doc, ".participle .past", cutBase).slice(0, 1);
+
+  result = Object.fromEntries(
+    Object.entries(result)
+    .map(([key, value]) => {
+      if (!value.find(it => it)) {
+        return [key, undefined];
+      }
+      return [key, value.length === 1? value[0] : value];
+    })
+    .filter(([_, value]) => value)
+  );
   return result;
 }
 
@@ -86,7 +98,7 @@ async function extractVerbs() {
   const irregularVerbsTenses = {};
 
   const failedVerbs = [];
-  for (const verb of irregularVerbs) {
+  for (const verb of irregularVerbs) { //.slice(0,10)
     try {
       irregularVerbsTenses[verb] = await extractVerb(verb);
     } catch {

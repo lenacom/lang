@@ -1,9 +1,11 @@
 const infinitives = [];
-const tenses = [];
 const formToInfinitives = {};
-const formToTenses = {};
 const endingToVerbType = {};
 const endingToTenses = {};
+
+function prefix(value) {
+  return `frh__${value}`;
+}
 
 function buildVerbs() {
   function getId(array, item) {
@@ -27,59 +29,87 @@ function buildVerbs() {
   for (const [infinitive, data] of Object.entries(irregularVerbs)) {
     for (const [tense, forms] of Object.entries(data)) {
       const infinitiveId = getId(infinitives, infinitive);
-      const tenseId = getId(tenses, tense);
       for (const form of (Array.isArray(forms)? forms : [forms])) {
         addMultipleValue(formToInfinitives, form, infinitiveId);
-        addMultipleValue(formToTenses, form, tenseId);
       }
     }
   }
 
   for (const [verbType, data] of Object.entries(regularVerbs)) {
     for (const [tense, endings] of Object.entries(data)) {
-      const tenseId = getId(tenses, tense);
       for (const ending of (Array.isArray(endings)? endings : [endings])) {
         endingToVerbType[ending] = verbType;
-        addMultipleValue(endingToTenses, ending, tenseId);
       }
     }
   }
 }
 buildVerbs();
 
-function findVerbTenses(form) {
-  form = form.toLowerCase();
-
-  function stringify(array, ids) {
-    return ids.map(it => array[it]).join(", ");
+function regularVerbTenses(base, verbType) {
+  const tenses = {};
+  for (const [tenseName, endings] of Object.entries(regularVerbs[verbType])) {
+    const normalizedEndings = Array.isArray(endings)? endings : [endings];
+    const forms = [];
+    for (let i = 0; i < normalizedEndings.length; i++) {
+      forms[i] = base;
+      if (verbType === "1") {
+        const special = ["achet", "béguet", "cisel", "congel", "corset", "crochet", "décel", 
+          "dégel", "démantel", "écartel", "encastel", "filet", "furet", "gel", "halet", "martel", 
+          "model", "pel", "rachet", "recel", "surgel", "cel"];
+        if (/el$|et$/i.test(base) && (tenseName === "présent" && (i < 3 || i === 5) || 
+          ["futur simple", "subjonctif présent", "conditionnel présent"].includes(tenseName) ||
+          tenseName === "imperatif" && i === 0)) {
+          if (special.includes(base)) {
+            forms[i] = base.slice(0, -2) + "è" + base.at(-1);
+          } else {
+            forms[i] = base + base.at(-1);
+          }
+        } else if (base.endsWith("g") && "oaâ".includes(normalizedEndings[i].at(0))) {
+          forms[i] += "e";
+        }  else if (base.endsWith("c") && "oaâ".includes(normalizedEndings[i].at(0))) {
+          forms[i] = base.slice(0, -1) + "ç";
+        }
+      }
+      forms[i] += normalizedEndings[i];
+    }
+    tenses[tenseName] = forms.length > 1? forms : forms[0];
   }
+  return tenses;
+}
 
+function getConjugation(form) {
   const infinitiveIds = formToInfinitives[form];
   if (infinitiveIds !== undefined) {
-    const tenseIds = formToTenses[form];
-    return { 
-      infinitives: stringify(infinitives, infinitiveIds), 
-      tenses: stringify(tenses, tenseIds),
-      type: "irregular"
-    }
+    return infinitiveIds.map(id => {
+      const infinitive = infinitives[id];
+      return { infinitive, type: "irregular", tenses: irregularVerbs[infinitive] };
+    });
   } else {
     for (let i = 1; i <= 8; i++) {
       const baseLength = form.length - i;
       if (baseLength >= 2) {
-        const base = form.slice(0, baseLength).replace("ç", "c");
+        let base = form.slice(0, baseLength);  
         const ending = form.slice(baseLength);
-        const tenseIds = endingToTenses[ending];
-        if (tenseIds !== undefined) {
-          const verbType = endingToVerbType[ending];
+        let verbType = endingToVerbType[ending];
+        if (verbType) {
           const verbs = verbType === "1" ? regularVerbBases1 : regularVerbBases2;
-          if (verbs.has(base)) {
-            const infinitive = base + (verbType === "1" ? "er" : "ir");
-            return { 
-              infinitives: infinitive, 
-              tenses: stringify(tenses, tenseIds),
-              type: "regular"
-            }
+          const bases = [base];
+          if (/ell$|ett$/i.test(base)) {
+             bases[1] = base.slice(0, -1);
+          } else if (/èt$|èl$/i.test(base)) {
+             bases[1] = base.slice(0, -2) + "e" + base.at(-1);
+          } else if (/ge/i.test(base)) {
+             bases[1] = base.slice(0, -1);
+          } else if (/ç$/i.test(base)) {
+            base[1] = base.slice(0, -1) + "c";
           }
+          const result = bases.map(base => {
+            if (verbs.has(base)) {
+              const infinitive = base + (verbType === "1" ? "er" : "ir");
+              return { infinitive, type: "regular", tenses: regularVerbTenses(base, verbType) };
+            }
+          }).filter(it => it);
+          if (result.length) { return result; }
         }
       }
     }
@@ -119,65 +149,100 @@ async function getYandexTranslation(text) {
 	}).map(it => `<div>${it}</div>`);
 }
 
-async function translate(selection) {
-  const text = selection.toString();
-  const button = document.getElementById('fr-helper-btn');
+function getConjugationHTML(text, data) {
+  return data?.map(({ infinitive, type, tenses }) => {
+    const tensesHTML = Object.entries(tenses).map(([tenseName, forms]) => {
+      const normalizedForms = Array.isArray(forms) ? forms : [forms];
 
-  if (!text) {
-    if (button) {
-      button.style.display = 'none';
-    }
-    return;
-  }
+      let formsHTML = normalizedForms.map(form => {
+        return form === text? `<span style='color:red; font-weight:bold;'>${form}</span>` : form;
+      });
+      if (normalizedForms.length === 6) {
+        const pronouns = ["je", "tu", "il", "nous", "vous", "ils"];
+        for (let i = 0; i < 6; i++) {
+          const pronoun = (i === 0 && "aeéêioôuy".includes(forms[i].at(0)))? "j'" :  pronouns[i] + " ";
+          formsHTML[i] = `${pronoun}${formsHTML[i]}`;
+        }
+      }
+      formsHTML = formsHTML.map(it => `<div>${it}</div>`);
+      if (formsHTML.length === 6) {
+        formsHTML = `<div style="display:flex; gap:20px">
+          <div>${formsHTML.slice(0,3).join("")}</div>
+          <div>${formsHTML.slice(3,6).join("")}</div>
+          </div>`;
+      } else {
+        formsHTML = formsHTML.join("");
+      }
+      const found = normalizedForms.find(form => form === text)
+      return `<div class="${found? '' : prefix(infinitive)}">
+          <div><b>${tenseName}</b></div>
+          <div>${formsHTML}</div>
+        </div>`;
+    });
+    const onClick = `this.innerHTML = this.innerHTML === 'Больше'? 'Меньше' : 'Больше';
+      Array.from(document.getElementsByClassName('${prefix(infinitive)}'))
+      .forEach(it => { it.style.display = it.style.display === 'none'? 'block' : 'none'});`;
+    return `<div>
+      ${infinitive + (type === "irregular"? "*" : "")}
+      <button style="border-radius:5px; padding:5px; margin:0;" id="${prefix("conjugation")}" onClick="${onClick}">Меньше</button>
+      </div>
+      ${tensesHTML.join("")}`;
+  }).join("<hr/>").replace(/\s\s*/, " ");
+}
+
+async function translate(selection) {
+  const text = selection.toString().trim().toLowerCase();
+  const helper = document.getElementById('fr-helper'); //TODO
 
   const translation = await getYandexTranslation(text);
-
-  const verbTenses = findVerbTenses(text);
-  let conjugation;
-  if (verbTenses !== undefined) {
-    const tenseIds = formToTenses[text];
-    conjugation = `${verbTenses.infinitives}${verbTenses.type === "irregular" ? "*" : ""}: ${verbTenses.tenses}`;
-  }
+  const conjugation = getConjugation(text);
 
   const parts = []
   if (translation) {
     parts.push(`<div>${translation.join(" ")}</div>`);
   }
   if (conjugation) {
-    parts.push(`<div>${conjugation}</div>`);
+    parts.push(`<div>${getConjugationHTML(text, conjugation)}</div>`);
   }
   const ga = `<input onClick='translation("${text}", "fr", "ru")' type="button" 
     value="Google Translate" class="secondary rounded" style="margin:0"/>`;
   parts.push(ga);
   
-  const helper = document.getElementById('fr-helper');
   const { clientWidth: screenWidth, clientHeight: screenHeight } = document.documentElement;
   const selRange = selection.getRangeAt(0);
   const selRect = selRange.getBoundingClientRect();
   const style = (left, top, position) => {
-    return `background-color:white; color:black; padding:10px; margin:0; 
-    border-radius:5px; position:${position}; 
+    return `background-color:black; color:#fff8dc; border:1px solid #fff8dc; padding:10px; margin:0; 
+    border-radius:5px; position:${position}; z-index:100;
     left:${left}px; top:${top}px; max-width:${screenWidth}`;
   } 
   const helperHTML = (style) => {
-    return `<div id="fr-helper-btn" style="${style}">
-    <div id="fr-helper-pnl">
-    ${parts.join("<hr/>")}
-    </div>`;
+    return `<div id="${prefix("helper")}" style="${style}">${parts.join("<hr/>")}</div>`;
   }
+  
   let left = selRect.left;
   let top = selRect.top + selRect.height;
   helper.innerHTML = helperHTML(style(left, top, "fixed"));
-  const pnl = document.getElementById('fr-helper-pnl');
+  const pnl = document.getElementById(prefix("helper"));
   while ((pnl.getBoundingClientRect().right + 10) > screenWidth && left > 0) {
     left -= 1;
     pnl.style = style(left, top, "fixed");
   }
   helper.innerHTML = helperHTML(style(left + window.scrollX, top + window.scrollY, "absolute"));
+  document.getElementById(prefix("conjugation"))?.click();
 }
 
-document.addEventListener("selectionchange", async () => {
-  await translate(document.getSelection());
+document.addEventListener("selectionchange", () => {
+  const text = document.getSelection().toString();
+  if (!text) {
+    document.getElementById('fr-helper').innerHTML = ""; // TODO
+  } else {
+    setTimeout(async () => {
+      if (text === document.getSelection().toString()) {
+        await translate(document.getSelection());
+      }
+    }, 100);
+  }
 });
 
 function openURL(url) {
@@ -195,5 +260,3 @@ function translation(text, fromLang, toLang) {
 	src.searchParams.set("op", "translate");
 	openURL(src.toString());
 }
-
-// TODO https://www.le-francais.ru/conjugaison/rappeler/
