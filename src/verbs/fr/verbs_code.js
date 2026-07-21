@@ -184,7 +184,7 @@ function getConjugationHTML(text, data) {
       .forEach(it => { it.style.display = it.style.display === 'none'? 'block' : 'none'});`;
     return `<div>
       ${infinitive + (type === "irregular"? "*" : "")}
-      <button style="border-radius:5px; padding:5px; margin:0;" id="${prefix("conjugation")}" onClick="${onClick}">Меньше</button>
+      <button style="border-radius:5px; padding:5px; margin:0;" class="${prefix("conjugation")}" onClick="${onClick}">Меньше</button>
       </div>
       ${tensesHTML.join("")}`;
   }).join("<hr/>").replace(/\s\s*/, " ");
@@ -194,6 +194,17 @@ async function translate(selection) {
   const text = selection.toString().trim().toLowerCase();
   const helper = document.getElementById('fr-helper'); //TODO
 
+  if (text && helper.getAttribute("text") === text) {
+    return;
+  }
+
+  if (!text) {
+    helper.removeAttribute("text");
+    helper.innerHTML = ""; // TODO
+    return;
+  }
+
+  helper.setAttribute("text", text);
   const translation = await getYandexTranslation(text);
   const conjugation = getConjugation(text);
 
@@ -213,8 +224,8 @@ async function translate(selection) {
   const selRect = selRange.getBoundingClientRect();
   const style = (left, top, position) => {
     return `background-color:black; color:#fff8dc; border:1px solid #fff8dc; padding:10px; margin:0; 
-    border-radius:5px; position:${position}; z-index:100;
-    left:${left}px; top:${top}px; max-width:${screenWidth}`;
+    border-radius:5px; position:${position}; 
+    left:${left}px; top:${top}px; max-width:${screenWidth};`;
   } 
   const helperHTML = (style) => {
     return `<div id="${prefix("helper")}" style="${style}">${parts.join("<hr/>")}</div>`;
@@ -229,20 +240,15 @@ async function translate(selection) {
     pnl.style = style(left, top, "fixed");
   }
   helper.innerHTML = helperHTML(style(left + window.scrollX, top + window.scrollY, "absolute"));
-  document.getElementById(prefix("conjugation"))?.click();
+  Array.from(document.getElementsByClassName(prefix("conjugation"))).forEach(it => it.click());
 }
 
-document.addEventListener("selectionchange", () => {
-  const text = document.getSelection().toString();
-  if (!text) {
-    document.getElementById('fr-helper').innerHTML = ""; // TODO
-  } else {
-    setTimeout(async () => {
-      if (text === document.getSelection().toString()) {
-        await translate(document.getSelection());
-      }
-    }, 100);
-  }
+document.addEventListener("contextmenu", async () => {
+  await translate(document.getSelection());
+});
+
+document.addEventListener('mouseup', async () => {
+  await translate(document.getSelection());
 });
 
 function openURL(url) {
