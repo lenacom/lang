@@ -207,6 +207,9 @@ async function translate(selection) {
   helper.setAttribute("text", text);
   const translation = await getYandexTranslation(text);
   const conjugation = getConjugation(text);
+  if (!translation && !conjugation) {
+    return;
+  }
 
   const parts = []
   if (translation) {
