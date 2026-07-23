@@ -116,11 +116,13 @@ function getConjugation(form) {
   }
 }
 
+const LANG = "fr-ru";
+
 function getYandexTranslationURL(text) {
   const url = new URL("https://dictionary.yandex.net/dicservice.json/lookupMultiple");
 	url.searchParams.set("ui", "ru");
-	url.searchParams.set("lang", "fr-ru");
-	url.searchParams.set("dict", "fr-ru.regular");
+	url.searchParams.set("lang", LANG);
+	url.searchParams.set("dict", LANG + ".regular");
 	url.searchParams.set("type", "regular");
 	url.searchParams.set("flags", "15783");
 	url.searchParams.set("srv", "tr-text");
@@ -132,36 +134,61 @@ async function getYandexTranslation(text) {
 	const response = await fetch(getYandexTranslationURL(text));
 	const json = await response.json();
 
-	const regular = json["fr-ru"]["regular"];
+	const regular = json[LANG]["regular"];
 	if (!regular || regular.length === 0) {
 		return undefined;
 	}
 
 	return regular.map(item => {
-		const word = item.text;
-		let ts = item.ts ?? "";
-		if (ts) {
-			ts = `[${ts}]`;
-		}
-		const tr = item.tr[0].text;
-		const gen = item.gen?.code ?? "";
-		return [word, ts, gen, tr].filter(it => it).join(" ");
-	}).map(it => `<div>${it}</div>`);
+    const { text, ts, tr, gen } = item;
+		const result = [`<b>${text}</b>`,
+      ts? `[${ts}]` : "",
+      gen?.code].filter(it => it).map(it => `<div>${it}</div>`);
+    result.splice(1, 0, speakBtnHTML(text, "fr", "font-size:0; margin: auto 0 0 0; padding:5px;"));
+    return `<div style="display:flex; flex-wrap:wrap; flex-direction:row; align-items:center; gap:10px;">
+      ${result.join("")}
+    </div><div style="max-width:${Math.min(document.documentElement.clientWidth, 500)}px">${tr.map(it => it.text).join(", ")}</div>`;
+	});
+}
+
+function speakBtnHTML(text, lang, style) {
+  if (!window.speechSynthesis) {
+    return "";
+  }
+  return `
+    <button style="${style}" onClick="speak('${text.replace("'", "\\'")}', '${lang}')">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20px" height="20px">
+        <path fill="currentColor" d="M48 352l48 0 134.1 119.2c6.4 5.7 14.6 8.8 23.1 8.8 19.2 0 34.8-15.6 34.8-34.8l0-378.4c0-19.2-15.6-34.8-34.8-34.8-8.5 0-16.7 3.1-23.1 8.8L96 160 48 160c-26.5 0-48 21.5-48 48l0 96c0 26.5 21.5 48 48 48zM441.1 107c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C443.3 170.7 464 210.9 464 256s-20.7 85.3-53.2 111.8c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5c43.2-35.2 70.9-88.9 70.9-149s-27.7-113.8-70.9-149zm-60.5 74.5c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C361.1 227.6 368 241 368 256s-6.9 28.4-17.7 37.3c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5C402.1 312.9 416 286.1 416 256s-13.9-56.9-35.5-74.5z"/>
+      </svg>
+    </button>`;
+}
+
+function speak(text, lang) {
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang; 
+  const voices = window.speechSynthesis.getVoices();
+  const voice = voices.find(voice => voice.lang === lang);
+  if (voice) {
+    utterance.voice = voice;
+  }
+  window.speechSynthesis.speak(utterance);
 }
 
 function getConjugationHTML(text, data) {
   return data?.map(({ infinitive, type, tenses }) => {
-    const tensesHTML = Object.entries(tenses).map(([tenseName, forms]) => {
-      const normalizedForms = Array.isArray(forms) ? forms : [forms];
+    const tensesHTML = Object.entries(tenses).map(([tenseName, __forms]) => {
+      const forms = Array.isArray(__forms) ? __forms : [__forms];
 
-      let formsHTML = normalizedForms.map(form => {
+      let formsHTML = forms.map(form => {
         return form === text? `<span style='color:red; font-weight:bold;'>${form}</span>` : form;
       });
-      if (normalizedForms.length === 6) {
+      let formsToSpeak = [...forms];
+      if (forms.length === 6) {
         const pronouns = ["je", "tu", "il", "nous", "vous", "ils"];
         for (let i = 0; i < 6; i++) {
-          const pronoun = (i === 0 && "aeéêioôuy".includes(forms[i].at(0)))? "j'" :  pronouns[i] + " ";
+          const pronoun = (i === 0 && "haeéêioôuy".includes(forms[i].at(0)))? "j'" :  pronouns[i] + " ";
           formsHTML[i] = `${pronoun}${formsHTML[i]}`;
+          formsToSpeak[i] = `${pronoun}${forms[i]}`;
         }
       }
       formsHTML = formsHTML.map(it => `<div>${it}</div>`);
@@ -173,9 +200,12 @@ function getConjugationHTML(text, data) {
       } else {
         formsHTML = formsHTML.join("");
       }
-      const found = normalizedForms.find(form => form === text)
+      const found = forms.find(form => form === text)
       return `<div class="${found? '' : prefix(infinitive)}">
-          <div><b>${tenseName}</b></div>
+          <div style="display:flex; flex-direction:row; align-items:center; gap:10px; font-weight:bold">
+            <span>${tenseName}</span>
+            ${speakBtnHTML(formsToSpeak.join(", "), "fr", "font-size:0; margin: auto 0 0 0; padding:5px;")}
+          </div>
           <div>${formsHTML}</div>
         </div>`;
     });
@@ -218,9 +248,6 @@ async function translate(selection) {
   if (conjugation) {
     parts.push(`<div>${getConjugationHTML(text, conjugation)}</div>`);
   }
-  const ga = `<input onClick='translation("${text}", "fr", "ru")' type="button" 
-    value="Google Translate" class="secondary rounded" style="margin:0"/>`;
-  parts.push(ga);
   
   const { clientWidth: screenWidth, clientHeight: screenHeight } = document.documentElement;
   const selRange = selection.getRangeAt(0);
@@ -260,12 +287,4 @@ function openURL(url) {
 	window.open(url, '_blank', `width=${width}, height=${height}`);
 }
 
-function translation(text, fromLang, toLang) {
-	const src = new URL("https://translate.google.com/details");
-	src.searchParams.set("hl", "ru");
-	src.searchParams.set("tl", toLang);
-	src.searchParams.set("sl", fromLang);
-	src.searchParams.set("text", text);
-	src.searchParams.set("op", "translate");
-	openURL(src.toString());
-}
+// TODO proférée
