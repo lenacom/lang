@@ -1,0 +1,400 @@
+<html>
+  <head>
+    <title>à / de</title>
+    <script>
+      const tests = [
+        //["commencer à / de faire qch", "начинать делать что-л."],
+        //["continuer à / de faire qch", "продолжить делать что-л."],
+        //["discuter (de) qch", "обсуждать что-л."],
+        ["aboutir à qch", "привести к чему-л."],
+        ["s’abstenir de qch / de faire qch", "воздерживаться от чего-л."],
+        ["abuser de qch", "злоупотреблять чем-л."],
+        ["accepter de faire qch", "соглашаться делать что-л."],
+        ["être accompagné de qn", "быть сопровожденным кем-л."],
+        ["accorder qch à qn", "давать, предоставлять что-л. кому –л."],
+        ["accuser qn de qch / de faire qch", "обвинять кого-л в чем-л."],
+        ["acheter qch à qn", "покупать что-л. кому-л."],
+        ["être adapté à qch", "соответствовать чему-л."],
+        ["s’adresser à qn", "обращаться к кому-л."],
+        ["il s’agit de", "речь идет о чём-л."],
+        ["aider qn à faire qch", "помогать кому-л. делать что-л."],
+        ["aimer faire qch", "любить делать что-л."],
+        ["aller faire qch", "пойти делать что-л."],
+        ["amener qn à faire qch", "заставить кого-л. делать что-л."],
+        ["s’amuser à faire qch", "веселиться, делая что-л. / терять время на что-л."],
+        ["apercevoir qn faire qch", "увидеть кого-л. делающим что-л."],
+        ["s’apercevoir de qch", "догадываться о чем-л."],
+        ["apprendre à faire qch", "учиться делать что-л."],
+        ["apprendre à qn à faire qch", "учить кого-л. делать что-л."],
+        ["arracher qch à qn", "вырвать что-л. у кого-л."],
+        ["(s’)arrêter de faire qch", "прекратить делать что-л."],
+        ["arriver à faire qch", "удаваться сделать что-л."],
+        ["aspirer à faire qch", "желать сделать что-л."],
+        ["assister à qch", "присутствовать на чем-л."],
+        ["s’assurer de qch", "убедиться в чем-л."],
+        ["attendre qn de faire qch", "ждать, пока кто-л. не сделает что-л."],
+        ["s’attendre à qch / à faire qch", "ожидать, рассчитывать на что-л."],
+        ["avoir besoin de qch", "иметь необходимость в чем-л."],
+        ["avoir droit à qch", "иметь право на что-л."],
+        ["avoir de la peine / du mal à faire qch", "с трудом делать что-л."],
+        ["avoir envie de qch / de faire qch", "хотеть что-л. / сделать что-л."],
+        ["avoir la chance de faire qch", "иметь удачу сделать что-л."],
+        ["avoir le courage de faire qch", "иметь смелость сделать что-л."],
+        ["avoir le droit de faire qch", "иметь право сделать что-л."],
+        ["avoir le temps de faire qch", "иметь время сделать что-л."],
+        ["avoir l’intention de faire qch", "иметь намерение сделать что-л."],
+        ["avoir l’occasion de faire qch", "иметь случай сделать что-л."],
+        ["avoir peur de qch / de faire qch", "бояться чего-л. / делать что-л."],
+        ["avoir raison de faire qch", "быть правым, делая что-л."],
+        ["avoir tendance à faire qch", "иметь склонность делать что-л."],
+        ["avoir tort de faire qch", "ошибаться, делая что-л."],
+        ["cacher qch à qn", "прятать что-л. от кого-л."],
+        ["être capable de faire qch", "быть способным делать что-л."],
+        ["être censé faire qch", "предположительно сделать что-л."],
+        ["être certain de faire qch", "достоверно, точно сделать что-л."],
+        ["cesser de faire qch", "прекратить делать что-л."],
+        ["charger qn de qch / de faire qch", "поручать кому-л. что-л. / сделать что-л."],
+        ["chercher qch", "искать что-л."],
+        ["chercher à faire qch", "стараться", "стремиться сделать что-л."],
+        ["choisir de faire qch", "выбрать делать что-л."],
+        ["commander à qn de faire qch", "приказывать кому-л. сделать что-л."],
+        ["compter faire qch", "рассчитывать сделать что-л."],
+        ["concurrencer qch", "соперничать с чем-л."],
+        ["se confier à qn", "довериться кому-л."],
+        ["conseiller à qn de faire qch", "советовать кому-л. сделать что-л."],
+        ["consentir à qch / à faire qch", "соглашаться с чем-л. / сделать что-л."],
+        ["être content de qch / de faire qch", "быть довольным чем-л. / сделать что-л."],
+        ["se contenter de qch / de faire qch", "довольствоваться чем-л. / делая что-л."],
+        ["être contraint de faire qch", "под принуждением делать что-л."],
+        ["convaincre qn de faire qch", "убедить кого-л. сделать что-л."],
+        ["convenir de faire qch", "согласиться сделать что-л."],
+        ["craindre qch / de faire qch", "бояться чего-л. / делать что-л."],
+        ["décider de faire qch решить сделать что-л."],
+        ["se décider à faire qch", "решиться сделать что-л."],
+        ["décourager qn de qch / de faire qch", "подавить желание кого-л. в чем-л. / делать что-л."],
+        ["être défavorable à qch", "быть недоброжелательным к чему-л."],
+        ["défendre qch à qn / à qn de faire qch", "запрещать что-л. кому-л. / кому-л. делать что-л."],
+        ["demander qch à qn / à qn de faire qch", "попросить что-л. у кого-л. / кого-л. сделать что-л."],
+        ["se demander à faire qch", "попроситься сделать что-л."],
+        ["dépendre de qch", "зависеть от чего-л."],
+        ["désespérer de qch / de faire qch", "терять надежду на что-л. / сделать что-л."],
+        ["être désireux de faire qch", "жаждать сделать что-л."],
+        ["être destiné à qch / à faire qch", "предназначаться для чего-л. / делать что-л."],
+        ["être déterminé à faire qch", "склониться делать что-л."],
+        ["devoir faire qch", "долженствовать сделать что-л."],
+        ["être différent de qch", "отличаться от чего-л."],
+        ["différer de qch", "отличаться от чего-л."],
+        ["dire à qn de faire qch", "сказать кому-л. сделать что-л."],
+        ["disposer de qch", "располагать чем-л."],
+        ["être disposé à faire qch", "настроиться делать что-л."],
+        ["dissuader qn de faire qch", "отсоветовать, отговаривать, разубеждать кого-л. делать что-л."],
+        ["donner qch à qn", "дать что-л. кому-л."],
+        ["douter de qch", "сомневаться в чем-л."],
+        ["se douter de qch", "сомневаться в чем-л."],
+        ["échapper à qch", "избегать, избавляться от чего-л."],
+        ["échouer à qch", "попасть куда-л.", "очутиться, остановиться, застрять где-л."],
+        ["écouter qср", "слушать что-л."],
+        ["s’efforcer de faire qch", "прилагать усилия, принуждать себя сделать что-л."],
+        ["s’emparer de qch", "завладеть, захватить что-л."],
+        ["empêcher qn de faire qch", "помешать кому-л. сделать что-л."],
+        ["emprunter qch à qn", "занимать что-л. у кого-л."],
+        ["s’encombrer de qch", "обременять себя, затруднять себя чем-л."],
+        ["encourager qn à faire qch", "ободрять, поддерживать, поощрять", "побуждать кого-л. сделать что-л."],
+        ["s’engager à faire qch", "взять на себя обязательство сделать что-л."],
+        ["enlever qch à qn", "отбирать что-л. у кого-л."],
+        ["enseigner à qn à faire qch", "научить кого-л. делать что-л."],
+        ["entendre parler de qch", "слышать о чем-л."],
+        ["entrer à (institution)", "поступить (в учреждение)"],
+        ["espérer qch / faire qch", "надеяться на что-л. / сделать что-л."],
+        ["essayer de faire qch", "пытаться делать что-л."],
+        ["s’essayer à faire qch", "пытаться делать что-л."],
+        ["être en droit de faire qch", "быть в праве делать что-л."],
+        ["être en mesure de faire qch", "быть в состоянии, мочь делать что-л."],
+        ["être en train de faire qch", "быть в процессе делания чего-л."],
+        ["être sur le point de faire qch", "быть готовым делать что-л."],
+        ["éviter qch / qch à qn", "избежать чего-л. / избавлять кого-л. от чего-л. "],
+        ["éviter à qn de faire qch", "освобождать кого-л. делания чего-л."],
+        ["être exclu de qch", "быть исключенным из чего-л."],
+        ["s’excuser de qch", "извиниться за что-л."],
+        ["faire appel à qch", "взывать к чему-л."],
+        ["faire attention à qch", "обратить внимание на что-л."],
+        ["faire bien de faire qch", "сделать хорошо сделав что-л."],
+        ["faire confiance à qn", "оказать доверие кому-л."],
+        ["tu ferais mieux de faire qch", "будет лучше сделать что-л."],
+        ["faire partie de qch", "быть частью чего-л."],
+        ["être favorable à qch", "быть благоприятным, благосклонным к чему-л."],
+        ["féliciter qn de qch", "поздравить кого-л. с чем-л."],
+        ["finir de faire qch", "закончить делать что-л."],
+        ["forcer qn à faire qch", "заставить кого-л. делать что-л."],
+        ["être forcé de faire qch", "быть принужденным делать что-л."],
+        ["fournir qch à qn", "поставить что-л. кому-л."],
+        ["s’habituer à qch / à faire qch", "привыкнуть к чему-л. / делать что-л."],
+        ["hésiter à faire qch", "сомневаться делать что-л."],
+        ["être heureux de faire qch", "быть счастливым делать что-л."],
+        ["heurter qch", "толкать что-л."],
+        ["se heurter à qch", "удариться обо что-л."],
+        ["être impatient de faire qch", "быть в нетерпении сделать что-л."],
+        ["il importe de faire qch", "важно сделать что-л."],
+        ["être incapable de faire qch", "быть неспособным делать что-л."],
+        ["inciter qn à faire qch", "заставлять кого-л. делать что-л."],
+        ["informer qn de qch", "информировать кого-л. о чем-л."],
+        ["s’inquiéter de qch", "беспокоиться о чем-л."],
+        ["s’inscrire à qch", "записаться на что-л."],
+        ["s’intéresser à qch", "интересоваться чем-л."],
+        ["interdire à qn de faire qch", "запрещать кому-л. делать что-л."],
+        ["inviter qn à faire qch", "пригласить кого-л. делать что-л."],
+        ["jouir de qch", "пользоваться, наслаждаться чем-л."],
+        ["jurer de faire qch", "клясться сделать что-л."],
+        ["la façon de faire qch", "манера делать что-л."],
+        ["la manière de faire qch", "манера делать что-л."],
+        ["le premier (dernier) à faire qch", "первым (последним) сделать что-л."],
+        ["se livrer à qch", "предаваться чему-л."],
+        ["manquer de qch / de faire qch", "испытывать недостаток в чем-л.", "быть лишенным чего-л."],
+        ["se méfier de qch", "не доверять, относиться подозрительно к чему-л."],
+        ["mêler qch à qch", "смешивать что-л. с чем-л."],
+        ["se mêler de qch", "вмешиваться, соваться во что-л."],
+        ["menacer qn de qch / de faire qch", "угрожать кому-л. чем-л. / сделать что-л."],
+        ["mériter de faire qch", "заслуживать, удостаиваться сделать что-л."],
+        ["se mettre à faire qch", "приступить делать что-л."],
+        ["mettre fin à qch", "положить конец чему-л."],
+        ["se munir de qch", "вооружиться чем-л."],
+        ["être nécessaire à qch", "быть необходимым для чего-л."],
+        ["négliger de faire qch", "забыть сделать что-л."],
+        ["nier qch / avoir fait qch", "отрицать что-л., что сделал что-л."],
+        ["nuire à qch", "вредить, мешать чему-л."],
+        ["obéir à qn слушаться кого-л."],
+        ["obliger qn à faire qch", "обязать кого-л. делать что-л."],
+        ["être obligé de faire qch", "быть обязанным делать что-л."],
+        ["l’occasion de faire qch", "случай сделать что-л."],
+        ["s’occuper de qch / de faire qch", "заниматься чем-л. / деланием чего-л."],
+        ["offrir qch à qn / de faire qch", "предложить что-л. кому-л. / сделать что-л."],
+        ["s’opposer à qch", "противиться, мешать чему-л."],
+        ["ordonner à qn de faire qch", "приказать кому-л. сделать что-л."],
+        ["ôter qch à qn", "отнимать что-л. у кого-л."],
+        ["oublier de faire qch", "забыть сделать что-л."],
+        ["pardonner qch à qn", "простить что-л. кому-л."],
+        ["parler à qn de qch", "говорить с кем-л. о чем-л."],
+        ["participer à qch", "участвовать в чем-л."],
+        ["parvenir à faire qch", "суметь сделать что-л."],
+        ["penser à qch", "думать о чем-л. (не забывать)"],
+        ["penser de qch", "думать о чем-л. (иметь мнение)"],
+        ["permettre qch à qn / à qn de faire qch", "позволить что-л. кому-л. / кому-л. сделать что-л."],
+        ["se plaindre à qn de qch", "жаловаться кому-л. на что-л."],
+        ["plaire à qn", "нравиться кому-л."],
+        ["pouvoir faire qch", "мочь сделать что-л."],
+        ["préférer faire qch", "предпочитать сделать что-л."],
+        ["prendre qch à qn", "брать что-л. у кого-л."],
+        ["prendre part à qch", "участвовать в чем-л."],
+        ["être pressé de faire qch", "торопиться, спешить сделать что-л."],
+        ["être prêt à faire qch", "быть готовым сделать что-л."],
+        ["prévoir de faire qch", "предусмотреть сделать что-л."],
+        ["prier qn de faire qch", "просить кого-л. сделать что-л."],
+        ["projeter de faire qch", "планировать сделать что-л."],
+        ["promettre qch à qn / à qn de faire qch", "обещать что-л. кому-л. / кому-л. сделать что-л."],
+        ["proposer de faire qch", "предложить сделать что-л."],
+        ["raconter qch à qn", "рассказать что-л. кому-л."],
+        ["se rappeler qch", "вспомнить что-л."],
+        ["rappeler qch à qn", "напомнить что-л. кому-л."],
+        ["être ravi de faire qch", "быть довольным сделать что-л."],
+        ["recommander à qn de faire qch", "рекомендовать кому-л. сделать что-л."],
+        ["être reconnaissant de qch / à qn d’avoir fait", "быть признательным за что-л. / кому-л., что сделал что-л."],
+        ["redouter qch / de faire qch", "опасаться чего-л. / делать что-л."],
+        ["refuser qch à qn / de faire qch", "отказать кому-л. в чем-л. / отказаться делать что-л."],
+        ["regarder qch", "смотреть на что-л."],
+        ["regretter d’avoir fait qch", "сожалеть, что сделал что-л."],
+        ["remercier qn de qch", "благодарить кого-л. за что-л."],
+        ["renoncer à qch", "отказаться от чего-л."],
+        ["répondre à qn", "ответить кому-л."],
+        ["se résigner à faire qch", "смириться делать что-л."],
+        ["résister à qch", "сопротивляться чему-л."],
+        ["se résoudre à faire qch", "решиться делать что-л."],
+        ["être responsable de qch", "быть ответственным за что-л."],
+        ["ressembler à qch", "быть похожим на что-л."],
+        ["réussir qch", "добиться успеха в чем-л."],
+        ["réussir à qch", "преуспевать в чем-л."],
+        ["se révéler être qch", "проявлять себя как что-л."],
+        ["rêver à qch / de faire qch", "мечтать о чем-л. / сделать что-л."],
+        ["rire de qch", "смеяться над чем-л."],
+        ["risquer de faire qch", "рисковать делая что-л."],
+        ["être satisfait de qch", "быть удовлетворенным чем-л."],
+        ["sembler faire qch", "казаться делающим что-л."],
+        ["servir à qch / à faire qch", "служить чему-л. / для того, чтобы делать что-л."],
+        ["se servir de qch", "пользоваться чем-л."],
+        ["être seul à faire qch", "быть единственным делающим что-л."],
+        ["songer à qch / à faire qch", "думать о чем-л. / сделать что-л."],
+        ["souhaiter qch / faire qch", "желать что-л. / сделать что-л."],
+        ["se soucier de faire qch", "стараться делать что-л."],
+        ["être soucieux de faire qch", "стремиться сделать что-л."],
+        ["se souvenir de qch / à qn", "вспоминать о чем-л. / о ком-л."],
+        ["il suffit à qn de faire qch", "достаточно кому-л. сделать что-л."],
+        ["suggérer à qn de faire qch", "побуждать кого-л. сделать что-л."],
+        ["être susceptible de faire qch", "быть способным, годным делать что-л."],
+        ["téléphoner à qn", "звонить кому-л."],
+        ["tenir à qch / à faire qch", "дорожить чем-л. / сильно хотеть сделать что-л."],
+        ["tenter de faire qch", "пытаться делать что-л."],
+        ["user de qch", "употреблять что-л."],
+        ["s’user à faire qch", "истощать свои силы, делая что-л."],
+        ["il vaut mieux faire qch", "лучше сделать что-л."],
+        ["viser qch / à qn / à faire qch", "стремиться к чему-л. / к кому-л. / сделать что-л."],
+        ["voler qch à qn", "украсть что-л. у кого-л."],
+        ["vouloir faire qch", "хотеть сделать что-л."],
+        ["admirer qch", "любоваться, восхищаться чем-л."],
+        ["applaudir qn", "аплодировать кому-л."],
+        ["avouer qch", "признаваться в чем-л."],
+        ["consulter qn", "консультироваться, советоваться с кем-л."],
+        ["contredire qn", "противоречить кому-л."],
+        ["dénoncer qn", "доносить на кого-л."],
+        ["descendre qch", "спускаться по чему-л."],
+        ["dominer qch", "господствовать, возвышаться над чем-л."],
+        ["flatter qn", "льстить кому-л."],
+        ["jurer qch", "клясться в чем-л."],
+        ["longer qch", "идти вдоль чего-л."],
+        ["monter qch", "подниматься по чему-л."],
+        ["payer qch", "платить за что-л."],
+        ["plaisanter qn", "подшучивать над кем-л."],
+        ["regretter qch", "сожалеть о чем-л."],
+        ["rejoindre qch", "присоединиться к чему-л."],
+        ["sacrifier qch", "жертвовать чем-л."],
+        ["soigner qn", "ухаживать за кем-л."],
+        ["suivre qch", "следовать за за чем-л."],
+        ["surveiller qn", "наблюдать, присматривать за кем-л."],
+        ["venger qch", "отомстить за что-л."]
+      ];
+
+    </script>
+    <meta charset="UTF-8">
+    <style>
+      html {
+        color: blanchedalmond;
+        background-color: black;
+      }
+      option {
+        background-color: blanchedalmond;
+        color: black;
+      }
+      option:checked {
+        background-color: brown;
+        color: blanchedalmond;
+      }
+      button {
+        background-color:burlywood;
+        color: black;
+        cursor: pointer;
+        border-radius: 5px;
+        padding: 5px;
+      }
+      html, button, select, option {
+        font-size: 30px;
+        font-family: 'Courier New', Courier, monospace;
+      } 
+      button {
+        margin-right: 10px;
+      }
+      #errors {
+        color:crimson;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="test"></div>
+    <div id="successPercent"></div>
+    <div id="errors"></div>
+    <script>
+      const LANG = "fr";
+
+      const elmTest = document.getElementById("test");
+      const elmSuccessfulAnswersPercent = document.getElementById("successPercent");
+      const elmErrors = document.getElementById("errors");
+      
+      let test;
+      let correctTestParts;
+      let testParts;
+      let countTests = 0;
+      let countSuccessfulAnswersTests = 0;
+
+      function addVariants(text) {
+        const regex = /( à | de | )(faire qch|qch|qn)/ig; 
+        correctTestParts = text.replace(regex, "--$1--$2").split("--");
+        testParts = text.replace(regex, "-- --$2").split("--");
+        return correctTestParts.map((part, index)  => {
+          if ([" à ", " de ", " "].includes(part)) {
+            return `&nbsp;<select name="part${index}" onChange="testParts[${index}] = this.value" size="3">
+              <option value=" " selected> </option>
+              <option value=" à ">à</option>
+              <option value=" de ">de</option>
+            </select>&nbsp;`;
+          } else {
+            return part;
+          }
+        }).join("");
+      }
+
+      function setTest() {
+        if (tests.length === 0) {
+          elmTest.innerHTML = "";
+          return;
+        }
+
+        const index = Math.round(Math.random() * (tests.length - 1));
+        test = tests[index];
+        tests.splice(index, 1);
+        const testHTML = `
+          <div>${test[1]}</div>
+          <div style="display: flex; align-items: flex-start;">${addVariants(test[0])}</div>
+          <div><button onClick="checkAnswer()"">Дальше</button></div>
+        `;
+        elmTest.innerHTML = testHTML;
+      }
+
+      function checkAnswer() {
+        countTests += 1;
+        let error = false;
+        for (let i = 0; i < testParts.length; i++) {
+          if (testParts[i] !== correctTestParts[i]) {
+            error = true;
+          }
+        }
+        if (error) {
+          elmErrors.innerHTML = `<div>${test[1]}</div><div>${test[0]}</div>` + elmErrors.innerHTML;
+        } else {
+          countSuccessfulAnswersTests += 1;
+        }
+        elmSuccessfulAnswersPercent.innerHTML = Math.round((countSuccessfulAnswersTests / countTests) * 100) + "%";
+        setTest();
+      }
+
+      function wordWithSpeakBtnHTML(text) {
+        return `
+          <div><span style="display: flex; flex-direction: row; gap: 10px;">
+            <span>${text}</span>
+            ${speakBtnHTML(text)}
+          </div>`;
+      }
+
+      function speakBtnHTML(text, lang, style) {
+        if (!window.speechSynthesis) {
+          return "";
+        }
+        return `
+          <button style="margin-top: auto;" onClick="speak('${text.replace("'", "\\'")}', '${LANG}')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20">
+              <path fill="currentColor" d="M48 352l48 0 134.1 119.2c6.4 5.7 14.6 8.8 23.1 8.8 19.2 0 34.8-15.6 34.8-34.8l0-378.4c0-19.2-15.6-34.8-34.8-34.8-8.5 0-16.7 3.1-23.1 8.8L96 160 48 160c-26.5 0-48 21.5-48 48l0 96c0 26.5 21.5 48 48 48zM441.1 107c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C443.3 170.7 464 210.9 464 256s-20.7 85.3-53.2 111.8c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5c43.2-35.2 70.9-88.9 70.9-149s-27.7-113.8-70.9-149zm-60.5 74.5c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C361.1 227.6 368 241 368 256s-6.9 28.4-17.7 37.3c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5C402.1 312.9 416 286.1 416 256s-13.9-56.9-35.5-74.5z"/>
+            </svg>
+          </button>`;
+      }
+
+      function speak(text, lang) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = lang; 
+        const voices = window.speechSynthesis.getVoices();
+        const voice = voices.find(voice => voice.lang === lang);
+        if (voice) {
+          utterance.voice = voice;
+        }
+        window.speechSynthesis.speak(utterance);
+      }
+
+      setTest();
+    </script>
+  </body>
+</html>
