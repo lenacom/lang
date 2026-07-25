@@ -2,6 +2,7 @@
   <head>
     <title>Слова</title>
     <script>
+      const LANG = "en";
       const phrases = {};
       phrases["1"] = [
         ["versatile", ""]
@@ -35,20 +36,26 @@
     </style>
   </head>
   <body>
-    <div id=index style="display:block" ></div>
-    <div id="phrase1"></div>
-    <div id="phrase2"></div>
-    <input id="next" style="display:none" type="button" value="Дальше" onclick="next()"/>
+    <div id=index style="display:block"></div>
+    <div id="phrases" style="display:none">
+      <div id="phrase1"></div>
+      <div id="phrase2"></div>
+      <input id="next" type="button" value="Дальше" onclick="next()"/>
+      <input id="autoplay" type="button" value="Autoplay" onclick="toggleAutoplay()"/>
+    </div>
     <script>
-      const LANG = "en";
+      
       const index = document.getElementById("index");
+      const divPhrases = document.getElementById("phrases");
       const phrase1 = document.getElementById("phrase1");
       const phrase2 = document.getElementById("phrase2");
-      const button = document.getElementById("next");
+      const btnNext = document.getElementById("next");
+      const btnAutoplay = document.getElementById("autoplay");
+      let autoplay = false;
       
       let indexHtml = "";
       for (let key of Object.keys(phrases)) {
-        indexHtml += `<a href="javascript:setPart('${key}')">${key}</a> `;
+        indexHtml += `<div><a href="javascript:setPart('${key}')">${key}</a><div>`;
       }
       index.innerHTML = indexHtml;
 
@@ -68,30 +75,53 @@
         partIndex = _index;
         part = phrases[partIndex].slice();
         hide(index);
-        show(button);
+        show(divPhrases);
         setPhrase();
       }
 
-      function setPhrase() {
+      async function setPhrase() {
         phrase1.innerHTML = "";
         phrase2.innerHTML = "";
         if (part.length === 0) {
           show(index);
-          hide(button);
+          hide(divPhrases);
         } else {
           phraseIndex = Math.round(Math.random() * (part.length - 1)); 
           const text = part[phraseIndex][1];
           phrase1.innerHTML = text;
+
+          if (autoplay) {
+            await speak(text, "ru");
+            await delay(1000);
+            btnNext.click();
+          }
         } 
       }
 
-      function next() {
+      async function next() {
         if (phrase2.innerHTML === "") {
           const text = part[phraseIndex][0];
-          phrase2.innerHTML = `<span>${text}</span> ${speakBtnHTML(text, LANG)}`;
+          const speakText = text.split("[")[0];
+          phrase2.innerHTML = `<span>${text}</span> ${speakBtnHTML(speakText, LANG)}`;
           part.splice(phraseIndex, 1); 
+
+          if (autoplay) {
+            for (let i = 0; i < 3; i++) {
+              await speak(speakText, LANG);
+              await delay(1000);
+            }
+            btnNext.click();
+          }
         } else {
-          setPhrase();
+          await setPhrase();
+        }
+      }
+
+      function toggleAutoplay() {
+        autoplay = !autoplay;
+        btnAutoplay.value = autoplay? "Stop" : "Autoplay";
+        if (autoplay) {
+          btnNext.click();
         }
       }
 
@@ -104,15 +134,22 @@
           </button>`;
       }
 
+      const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
       function speak(text, lang) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = lang; 
-        const voices = window.speechSynthesis.getVoices();
-        const voice = voices.find(voice => voice.lang === lang);
-        if (voice) {
-          utterance.voice = voice;
-        }
-        window.speechSynthesis.speak(utterance);
+        return new Promise((resolve, reject) => {
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = lang;
+          utterance.rate = 0.6; 
+          const voices = window.speechSynthesis.getVoices();
+          const voice = voices.find(voice => voice.lang === lang);
+          if (voice) {
+            utterance.voice = voice;
+          }
+          utterance.onend = () => resolve();
+          utterance.onerror = (event) => reject(event);
+          window.speechSynthesis.speak(utterance);
+        });
       }
     </script>
   </body>
