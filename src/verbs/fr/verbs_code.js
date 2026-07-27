@@ -289,3 +289,26 @@ function openURL(url) {
 
 // TODO proférée
 // renvoyer неправильный renverrait
+
+/*
+
+se repentir
+se méfier
+s’abstenir
+s’efforcer
+
+refaire
+haïr
+pendre
+compromettre
+enfreindre
+redescendre
+revendre
+réécrire
+morfondre
+renvoyer
+
+спряжение
+https://www.le-francais.ru/conjugaison/se_mefier/
+
+*/

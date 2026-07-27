@@ -1,13 +1,13 @@
 <html>
   <head>
     <title>à / de</title>
-    <script src="../verbs/fr/all_verbs.js"></script>
+    <meta charset="UTF-8">
     <script>
+      //["commencer à / de faire qch", "начинать делать что-л."],
+      //["continuer à / de faire qch", "продолжить делать что-л."],
+      //["discuter (de) qch", "обсуждать что-л."],
+      //["vouloir qch de (à) qn", "хотеть что-л. от кого-л."]      
       const tests = [
-        //["commencer à / de faire qch", "начинать делать что-л."],
-        //["continuer à / de faire qch", "продолжить делать что-л."],
-        //["discuter (de) qch", "обсуждать что-л."],
-        //["vouloir qch de (à) qn", "хотеть что-л. от кого-л."]
         ["être à qn", "принадлежать кому-л.", 12077423],
         ["faire bien de faire qch", "сделать хорошо сделав что-л.", 2960590],
         ["aller faire qch", "пойти делать что-л.", 2896308],
@@ -19,7 +19,7 @@
         ["parler à qn de qch", "говорить с кем-л. о чём-л.", 631717],
         ["penser à qch (qn)", "думать (не забывать) о чём-л. (ком-л.)", 609070],
         ["penser qch de qch (qn)", "думать (иметь мнение) что-л. о чём-л. (ком-л.)", 609070],
-        ["prendre soin de qn, de qch", "Заботиться о ком-л., о чем-л.", 601205],
+        ["prendre soin de qch (qn)", "Заботиться о чем-л. (о ком-л.)", 601205],
         ["prendre qch à qn", "брать что-л. у кого-л.", 601205],
         ["prendre part à qch", "участвовать в чём-л.", 601205],
         ["aimer faire qch", "любить делать что-л.", 510972],
@@ -59,8 +59,8 @@
         ["chercher à faire qch", "стараться", 201917],
         ["il importe de faire qch", "важно сделать что-л.", 187996],
         ["finir de faire qch", "закончить делать что-л.", 179029],
-        ["jouer à qch", "играть в какие-то спорт. игры)", 176051],
-        ["jouer de qch", "играть на каком-нибудь музыкальном инструменте", 176051],
+        ["jouer à qch (la tenis)", "играть в какие-то спорт. игры", 176051],
+        ["jouer de qch (la piano)", "играть на каком-нибудь музыкальном инструменте", 176051],
         ["nuire à qch (qn)", "вредить, мешать чему-л. (кому-л.)", 158387],
         ["avoir raison de faire qch", "быть правым, делая что-л.", 153137],
         ["être seul à faire qch", "быть единственным делающим что-л.", 149265],
@@ -132,7 +132,7 @@
         ["il suffit à qn de faire qch", "достаточно кому-л. сделать что-л.", 63479],
         ["cacher qch à qn", "прятать что-л. от кого-л.", 63117],
         ["choisir de faire qch", "выбрать делать что-л.", 63107],
-        ["décider de faire qch решить сделать что-л.", null, 61618],
+        ["décider de faire qch", "решить сделать что-л.",61618],
         ["se décider à faire qch", "решиться сделать что-л.", 61618],
         ["préférer faire qch", "предпочитать сделать что-л.", 60437],
         ["préférer qch (qn) à qch (qn)", "предпочитать что-л. (кого-л.) чему-л. (кому-л.)", 60437],
@@ -389,9 +389,7 @@
         ["être défavorable à qch", "быть недоброжелательным к чему-л.", 116],
         ["orner qch (qn) de qch", "украшать что-л. (кого-л.) чем-л.", 103]
       ];
-
     </script>
-    <meta charset="UTF-8">
     <style>
       html {
         color: blanchedalmond;
@@ -421,85 +419,97 @@
     </style>
   </head>
   <body>
-    <div id="test"></div>
-    <div id="successPercent"></div>
-    <div id="errors"></div>
+    <div id="index"></div>
+    <div id="tests">
+      <div id="count"></div>
+      <div id="test"></div>
+      <div id="errors"></div>
+    </div>
     <script>
       const LANG = "fr";
-
-      for (let k = 0; k < tests.length; k++) {
-        let word = tests[k][0];
-        if (word.startsWith("s’")) word = word.substring(2);
-        else if (word.startsWith("se ")) word = word.substring(3);
-        else if (word.startsWith("se ")) word = word.substring(3);
-        word = word.split(" ")[0];
-        if (word !== "être" && word !== "avoir" && word !== "faire") {
-          const found = all_verbs.find(it => it[0] === word)
-          if (found) tests[k][2] = found[1]
-        }
-      }
-      //console.log(tests.filter(it => !it[2]))
-      tests.sort((a, b) => b[2] - a[2])
-      console.log(JSON.stringify(tests));
-
-      const elmTest = document.getElementById("test");
-      const elmSuccessfulAnswersPercent = document.getElementById("successPercent");
-      const elmErrors = document.getElementById("errors");
-      
+      const partLength = 50;
+      let part;
       let test;
-      let correctTestParts;
-      let testParts;
-      let countTests = 0;
-      let countSuccessfulAnswersTests = 0;
+      let correctTestWords;
+      let testWords;
 
-      function addVariants(text) {
+      let indexHtml = "";
+      for (let i = 0; i <= tests.length; i += partLength) {
+        indexHtml += `<div><button onClick="setPart(${i})">Часть ${(i / partLength) + 1}</button></div>`;
+      }
+      elm("index").innerHTML = indexHtml;
+
+      function elm(id) {
+        return document.getElementById(id);
+      }
+
+      function show(id) {
+        elm(id).style.display = "block"; 
+      }
+
+      function hide(id) {
+        elm(id).style.display = "none"; 
+      }
+      
+      function variants(text) {
         const regex = /( à | de | )(faire qch|qch|qn)/ig; 
-        correctTestParts = text.replace(regex, "--$1--$2").split("--");
-        testParts = text.replace(regex, "-- --$2").split("--");
-        return correctTestParts.map((part, index)  => {
-          if ([" à ", " de ", " "].includes(part)) {
-            return `&nbsp;<select name="part${index}" onChange="testParts[${index}] = this.value">
+        correctTestWords = text.replace(regex, "--$1--$2").split("--");
+        testWords = text.replace(regex, "-- --$2").split("--");
+        return correctTestWords.map((word, index)  => {
+          if ([" à ", " de ", " "].includes(word)) {
+            return `&nbsp;<select name="part${index}" onChange="testWords[${index}] = this.value">
               <option value=" " selected> </option>
               <option value=" à ">à</option>
               <option value=" de ">de</option>
             </select>&nbsp;`;
           } else {
-            return part;
+            return word;
           }
         }).join("");
       }
 
+      function setPart(start) {
+        const end = Math.min(start + partLength, tests.length);
+        part = [...tests.slice(start, end)];
+        setTest();
+        hide("index");
+        show("tests");
+      }
+
+      function setIndex() {
+        elm("test").innerHTML = "";
+        show("index");
+        hide("tests");
+      }
+
       function setTest() {
-        if (tests.length === 0) {
-          elmTest.innerHTML = "";
+        if (part.length === 0) {
+          setIndex();
           return;
         }
 
-        const index = Math.round(Math.random() * (tests.length - 1));
-        test = tests[index];
-        tests.splice(index, 1);
+        elm("count").innerHTML = part.length;
+        const index = Math.round(Math.random() * (part.length - 1));
+        test = part[index];
+        part.splice(index, 1);
         const testHTML = `
           <div>${test[1]}</div>
-          <div style="display: flex; align-items: flex-start; flex-wrap: wrap;">${addVariants(test[0])}</div>
+          <div style="display: flex; align-items: flex-start; flex-wrap: wrap;">${variants(test[0])}</div>
           <div><button onClick="checkAnswer()"">Дальше</button></div>
         `;
-        elmTest.innerHTML = testHTML;
+        elm("test").innerHTML = testHTML;
       }
 
       function checkAnswer() {
-        countTests += 1;
         let error = false;
-        for (let i = 0; i < testParts.length; i++) {
-          if (testParts[i] !== correctTestParts[i]) {
+        for (let i = 0; i < testWords.length; i++) {
+          if (testWords[i] !== correctTestWords[i]) {
             error = true;
           }
         }
         if (error) {
-          elmErrors.innerHTML = `<div>${test[1]}</div><div class="error">${test[0]}</div>` + elmErrors.innerHTML;
-        } else {
-          countSuccessfulAnswersTests += 1;
+          elm("errors").innerHTML = `<div>${test[1]}</div><div class="error">${wordWithSpeakBtnHTML(test[0])}</div>` + elm("errors").innerHTML;
         }
-        elmSuccessfulAnswersPercent.innerHTML = Math.round((countSuccessfulAnswersTests / countTests) * 100) + "%";
         setTest();
       }
 
@@ -507,16 +517,16 @@
         return `
           <div><span style="display: flex; flex-direction: row; gap: 10px;">
             <span>${text}</span>
-            ${speakBtnHTML(text)}
+            ${speakBtnHTML(text, LANG)}
           </div>`;
       }
 
-      function speakBtnHTML(text, lang, style) {
+      function speakBtnHTML(text, lang) {
         if (!window.speechSynthesis) {
           return "";
         }
         return `
-          <button style="margin-top: auto;" onClick="speak('${text.replace("'", "\\'")}', '${LANG}')">
+          <button style="margin-top: auto;" onClick="speak('${text.replace("'", "\\'")}', '${lang}')">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20">
               <path fill="currentColor" d="M48 352l48 0 134.1 119.2c6.4 5.7 14.6 8.8 23.1 8.8 19.2 0 34.8-15.6 34.8-34.8l0-378.4c0-19.2-15.6-34.8-34.8-34.8-8.5 0-16.7 3.1-23.1 8.8L96 160 48 160c-26.5 0-48 21.5-48 48l0 96c0 26.5 21.5 48 48 48zM441.1 107c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C443.3 170.7 464 210.9 464 256s-20.7 85.3-53.2 111.8c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5c43.2-35.2 70.9-88.9 70.9-149s-27.7-113.8-70.9-149zm-60.5 74.5c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C361.1 227.6 368 241 368 256s-6.9 28.4-17.7 37.3c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5C402.1 312.9 416 286.1 416 256s-13.9-56.9-35.5-74.5z"/>
             </svg>
@@ -524,17 +534,21 @@
       }
 
       function speak(text, lang) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = lang; 
-        const voices = window.speechSynthesis.getVoices();
-        const voice = voices.find(voice => voice.lang === lang);
-        if (voice) {
-          utterance.voice = voice;
-        }
-        window.speechSynthesis.speak(utterance);
+        const fullText = text.replace("qn", "quelqun").replace("qch", "quelquechose");
+        return new Promise((resolve, reject) => {
+          const utterance = new SpeechSynthesisUtterance(fullText);
+          utterance.lang = lang;
+          utterance.rate = 0.6; 
+          const voices = window.speechSynthesis.getVoices();
+          const voice = voices.find(voice => voice.lang === lang);
+          if (voice) {
+            utterance.voice = voice;
+          }
+          utterance.onend = () => resolve();
+          utterance.onerror = (event) => reject(event);
+          window.speechSynthesis.speak(utterance);
+        });
       }
-
-      setTest();
     </script>
   </body>
 </html>
