@@ -16,6 +16,9 @@ function skipWord(word) {
 		if (word.endsWith(skipEnding)) {
 			return true;
 		}
+		if (word === "suis" || word === "oui") {
+			return true;
+		}
 	}
 	return false;
 }
@@ -48,33 +51,36 @@ async function getWordMetadata(word) {
 		});
 }
 
-function addWordOrCount(map, data, count) {
+function addWordOrCount(map, data, count, irregular) {
 	const text = data.text;
 	if (map[text]) {
 		map[text].count += count;
 	} else {
 		map[text] = data;
 		map[text].count = count;
+		map[text].irregular = irregular;
 	}
 }
 
 function writeToFile(map, fileName) {
 	const data = [];
 	for (const value of Object.values(map)) {
-		const row = [value.text, value.count];
+		const row = [value.text, value.count, value.irregular];
 		if (value.gen) {
 			row.push(value.gen);
 		}
 		data.push(row);
 	};
 	data.sort((a, b) => b[1] - a[1]);
-	const content = data.map(it => it[0]).join("\r\n"); 
-	fs.writeFileSync(`${SRC}/verbs/fr/${fileName}.txt`, content);
+	let content = "const all_verbs = [\r\n";
+	content += data.map(it => `["${it[0]}", ${it[1]}, ${it[2]}],`).join("\r\n"); 
+	content += "]\r\n";
+	fs.writeFileSync(`${SRC}/verbs/fr/${fileName}.js`, content);
 }
 
 async function buildWords() {
-	const verbs1 = {};
-	const verbs2 = {};
+	const verbs = {};
+	const strange = {};
 	for (const line of lines) { //.slice(0, 1000) 
 		console.log(line);
 		const parts = line.split(/\s/);
@@ -83,19 +89,18 @@ async function buildWords() {
 		if (!skipWord(word)) {
 			const data = await getWordMetadata(word);
 			data?.forEach(it => {
-				if (!irregularVerbs.has(it.text)) {
-					if (it.text.endsWith("er")) {
-						addWordOrCount(verbs1, it, count);
-					} else if (it.text.endsWith("ir")) {
-						addWordOrCount(verbs2, it, count);
-					}
+				const irregular = irregularVerbs.has(it.text);
+				if (irregular || it.text.endsWith("er") || it.text.endsWith("ir")) {	
+					addWordOrCount(verbs, it, count, irregular);
+				} else {
+					addWordOrCount(strange, it, count, false);
 				}
 			});
 		}
 	}
 
-	writeToFile(verbs1, "regular_verbs1");
-	writeToFile(verbs2, "regular_verbs2");
+	writeToFile(verbs, "all_verbs");
+	writeToFile(strange, "strange_verbs");
 }
 
 buildWords();

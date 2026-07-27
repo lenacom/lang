@@ -49,7 +49,7 @@ const irregularVerbs = ["absoudre", "dissoudre", "acquérir", "conquérir", "qu�
   "prévenir", "provenir", "redevenir", "se ressouvenir", "revenir", "se souvenir", "subvenir", "survenir", "traire", 
   "abstraire", "distraire", "extraire", "soustraire", "braire", "vaincre", "convaincre", "valoir", "équivaloir", 
   "prévaloir", "revaloir", "vêtir", "dévêtir", "revêtir", "vivre", "revivre", "survivre", "voir", "entrevoir", 
-  "prévoir", "revoir", "vouloir"];
+  "prévoir", "revoir", "vouloir", "ouïr"];
 
 const fs = require('fs');
 const SRC = "./src";
