@@ -45,34 +45,46 @@ function buildVerbs() {
 }
 buildVerbs();
 
-function regularVerbTenses(base, verbType) {
+function replaceLastOccurance(text, char, replacement) {
+  const index = text.lastIndexOf(char);
+  return text.substring(0, index) + replacement + text.substring(index + 1);
+}
+
+function regularVerbTenses(base, verbType, form) {
   const tenses = {};
   for (const [tenseName, endings] of Object.entries(regularVerbs[verbType])) {
     const normalizedEndings = Array.isArray(endings)? endings : [endings];
-    const forms = [];
+    const tenseForms = [];
     for (let i = 0; i < normalizedEndings.length; i++) {
-      forms[i] = base;
+      tenseForms[i] = base;
       if (verbType === "1") {
-        const special = ["achet", "béguet", "cisel", "congel", "corset", "crochet", "décel", 
-          "dégel", "démantel", "écartel", "encastel", "filet", "furet", "gel", "halet", "martel", 
-          "model", "pel", "rachet", "recel", "surgel", "cel"];
-        if (/el$|et$/i.test(base) && (tenseName === "présent" && (i < 3 || i === 5) || 
-          ["futur simple", "subjonctif présent", "conditionnel présent"].includes(tenseName) ||
-          tenseName === "imperatif" && i === 0)) {
-          if (special.includes(base)) {
-            forms[i] = base.slice(0, -2) + "è" + base.at(-1);
+        const cond1 = ["présent", "subjonctif présent"].includes(tenseName) && (i < 3 || i === 5) ||
+          tenseName === "imperatif" && i === 0;
+        const cond2 = ["futur simple", "conditionnel présent"].includes(tenseName);
+        if (/el$|et$/i.test(base) && (cond1 || cond2)) {
+          if (["achet", "béguet", "cisel", "congel", "corset", "crochet", "décel", 
+            "dégel", "démantel", "écartel", "encastel", "filet", "furet", "gel", "halet", "martel", 
+            "model", "pel", "rachet", "recel", "surgel", "cel"].includes(base)) {
+            tenseForms[i] = replaceLastOccurance(base, "e", "è");
           } else {
-            forms[i] = base + base.at(-1);
+            tenseForms[i] = base + base.at(-1);
           }
+        } else if (/ec$|em$|ep$|er$|es$|ev$|evr$/.test(base) && (cond1 || cond2)) {
+          tenseForms[i] = replaceLastOccurance(base, "e", "è");
+        } else if (/ébr$|éc$|éch$|écr$|éd$|égl$|égn$|égr$|égu$|él$|ém$|én$|équ$|ér$|és$|ét$|étr$|évr$|éy$/i.test(base) && cond1) {
+          tenseForms[i] = replaceLastOccurance(base, "é", "è");
         } else if (base.endsWith("g") && "oaâ".includes(normalizedEndings[i].at(0))) {
-          forms[i] += "e";
-        }  else if (base.endsWith("c") && "oaâ".includes(normalizedEndings[i].at(0))) {
-          forms[i] = base.slice(0, -1) + "ç";
+          tenseForms[i] += "e";
+        } else if (base.endsWith("c") && "oaâ".includes(normalizedEndings[i].at(0))) {
+          tenseForms[i] = base.slice(0, -1) + "ç";
+        } else if (/ay$/.test(base) && /ai$/.test(form.substring(0, base.length)) 
+          && (cond1 || cond2)) {
+          tenseForms[i] = replaceLastOccurance(base, "y", "i");
         }
       }
-      forms[i] += normalizedEndings[i];
+      tenseForms[i] += normalizedEndings[i];
     }
-    tenses[tenseName] = forms.length > 1? forms : forms[0];
+    tenses[tenseName] = tenseForms.length > 1? tenseForms : tenseForms[0];
   }
   return tenses;
 }
@@ -94,19 +106,23 @@ function getConjugation(form) {
         if (verbType) {
           const verbs = verbType === "1" ? regularVerbBases1 : regularVerbBases2;
           const bases = [base];
-          if (/ell$|ett$/i.test(base)) {
-             bases[1] = base.slice(0, -1);
-          } else if (/èt$|èl$/i.test(base)) {
-             bases[1] = base.slice(0, -2) + "e" + base.at(-1);
-          } else if (/ge/i.test(base)) {
-             bases[1] = base.slice(0, -1);
-          } else if (/ç$/i.test(base)) {
-            base[1] = base.slice(0, -1) + "c";
+          if (verbType === "1") {
+            if (/ell$|ett$|ge$/i.test(base)) {
+              bases[1] = base.slice(0, -1);
+            } else if (/èt$|èl$|èc$|èm$|èp$|èr$|ès$|èv$|èvr$/i.test(base)) {
+              bases[1] = replaceLastOccurance(base, "è", "e");
+            } else if (/èbr$|èc$|èch$|ècr$|èd$|ègl$|ègn$|ègr$|ègu$|èl$|èm$|èn$|èqu$|èr$|ès$|èt$|ètr$|èvr$|èy$/i.test(base)) {
+              bases[1] = replaceLastOccurance(base, "è", "é");
+            } else if (/ç$/i.test(base)) {
+              bases[1] = replaceLastOccurance(base, "ç", "c");
+            } else if (/ai$/i.test(base)) {
+              bases[1] = replaceLastOccurance(base, "i", "y");
+            }
           }
           const result = bases.map(base => {
             if (verbs.has(base)) {
               const infinitive = base + (verbType === "1" ? "er" : "ir");
-              return { infinitive, type: "regular", tenses: regularVerbTenses(base, verbType) };
+              return { infinitive, type: "regular", tenses: regularVerbTenses(base, verbType, form) };
             }
           }).filter(it => it);
           if (result.length) { return result; }
@@ -291,6 +307,8 @@ function openURL(url) {
 // renvoyer неправильный renverrait
 
 /*
+
+
 
 se repentir
 se méfier
