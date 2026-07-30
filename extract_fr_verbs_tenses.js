@@ -7,6 +7,9 @@
   'entre-luire',    'repleuvoir',
   'dépourvoir',     'désaprendre',
   'se ressouvenir', 'revaloir'
+  
+  refaire ?
+  réécrire ?
  */
 const irregularVerbs = ["absoudre", "dissoudre", "acquérir", "conquérir", "quérir", "reconquérir", 
   "requérir", "aller", "assaillir", "saillir", "tressaillir", "asseoir", "rasseoir", "avoir", "battre", 
@@ -49,7 +52,8 @@ const irregularVerbs = ["absoudre", "dissoudre", "acquérir", "conquérir", "qu�
   "prévenir", "provenir", "redevenir", "se ressouvenir", "revenir", "se souvenir", "subvenir", "survenir", "traire", 
   "abstraire", "distraire", "extraire", "soustraire", "braire", "vaincre", "convaincre", "valoir", "équivaloir", 
   "prévaloir", "revaloir", "vêtir", "dévêtir", "revêtir", "vivre", "revivre", "survivre", "voir", "entrevoir", 
-  "prévoir", "revoir", "vouloir", "ouïr"];
+  "prévoir", "revoir", "vouloir", "ouïr", "pendre", "haïr", "envoyer", "renvoyer", "compromettre", "enfreindre", 
+  "se morfondre", "redescendre", "revendre"];
 
 const fs = require('fs');
 const SRC = "./src";

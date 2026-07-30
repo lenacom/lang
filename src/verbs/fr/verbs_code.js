@@ -3,6 +3,8 @@ const formToInfinitives = {};
 const endingToVerbType = {};
 const endingToTenses = {};
 
+const LANG = "fr-ru";
+
 function prefix(value) {
   return `frh__${value}`;
 }
@@ -50,6 +52,18 @@ function replaceLastOccurance(text, char, replacement) {
   return text.substring(0, index) + replacement + text.substring(index + 1);
 }
 
+function verbTenses(infinitive, form = "") {
+  const tenses = irregularVerbs[infinitive];
+  if (tenses) {
+    const type = infinitive === "haïr"? "regular" : "irregular";
+    return { infinitive, type, tenses };
+  } else if (/er$|ir$/i.test(infinitive)) {
+    const verbType = /er$/i.test(infinitive)? "1" : "2";
+    const base = infinitive.slice(0, infinitive.length - 2);
+    return { infinitive, type: "regular", tenses: regularVerbTenses(base, verbType, form) };
+  }
+}
+
 function regularVerbTenses(base, verbType, form) {
   const tenses = {};
   for (const [tenseName, endings] of Object.entries(regularVerbs[verbType])) {
@@ -94,7 +108,7 @@ function getConjugation(form) {
   if (infinitiveIds !== undefined) {
     return infinitiveIds.map(id => {
       const infinitive = infinitives[id];
-      return { infinitive, type: "irregular", tenses: irregularVerbs[infinitive] };
+      return verbTenses(infinitive, form);
     });
   } else {
     for (let i = 1; i <= 8; i++) {
@@ -122,7 +136,7 @@ function getConjugation(form) {
           const result = bases.map(base => {
             if (verbs.has(base)) {
               const infinitive = base + (verbType === "1" ? "er" : "ir");
-              return { infinitive, type: "regular", tenses: regularVerbTenses(base, verbType, form) };
+              return verbTenses(infinitive, form);
             }
           }).filter(it => it);
           if (result.length) { return result; }
@@ -131,8 +145,6 @@ function getConjugation(form) {
     }
   }
 }
-
-const LANG = "fr-ru";
 
 function getYandexTranslationURL(text) {
   const url = new URL("https://dictionary.yandex.net/dicservice.json/lookupMultiple");
@@ -146,7 +158,7 @@ function getYandexTranslationURL(text) {
   return url;
 }
 
-async function getYandexTranslation(text) {
+async function getTranslation(text) {
 	const response = await fetch(getYandexTranslationURL(text));
 	const json = await response.json();
 
@@ -155,42 +167,52 @@ async function getYandexTranslation(text) {
 		return undefined;
 	}
 
-	return regular.map(item => {
+	return regular;
+}
+
+function getTranslationHTML(data) {
+	return data.map(item => {
     const { text, ts, tr, gen } = item;
 		const result = [`<b>${text}</b>`,
       ts? `[${ts}]` : "",
       gen?.code].filter(it => it).map(it => `<div>${it}</div>`);
-    result.splice(1, 0, speakBtnHTML(text, "fr", "font-size:0; margin: auto 0 0 0; padding:5px;"));
+    result.splice(1, 0, speakBtnHTML(text));
     return `<div style="display:flex; flex-wrap:wrap; flex-direction:row; align-items:center; gap:10px;">
       ${result.join("")}
     </div><div style="max-width:${Math.min(document.documentElement.clientWidth, 500)}px">${tr.map(it => it.text).join(", ")}</div>`;
-	});
+	}).join("");
 }
 
-function speakBtnHTML(text, lang, style) {
+function speakBtnHTML(text) {
   if (!window.speechSynthesis) {
     return "";
   }
   return `
-    <button style="${style}" onClick="speak('${text.replace("'", "\\'")}', '${lang}')">
+    <button style="font-size:0; margin: auto 0 0 0; padding:5px;" onClick="speak('${text.replace("'", "\\'")}')">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20px" height="20px">
         <path fill="currentColor" d="M48 352l48 0 134.1 119.2c6.4 5.7 14.6 8.8 23.1 8.8 19.2 0 34.8-15.6 34.8-34.8l0-378.4c0-19.2-15.6-34.8-34.8-34.8-8.5 0-16.7 3.1-23.1 8.8L96 160 48 160c-26.5 0-48 21.5-48 48l0 96c0 26.5 21.5 48 48 48zM441.1 107c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C443.3 170.7 464 210.9 464 256s-20.7 85.3-53.2 111.8c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5c43.2-35.2 70.9-88.9 70.9-149s-27.7-113.8-70.9-149zm-60.5 74.5c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C361.1 227.6 368 241 368 256s-6.9 28.4-17.7 37.3c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5C402.1 312.9 416 286.1 416 256s-13.9-56.9-35.5-74.5z"/>
       </svg>
     </button>`;
 }
 
-function speak(text, lang) {
+const voices = window.speechSynthesis.getVoices();
+const voice = voices.find(voice => voice.lang === "fr");
+function speak(text) {
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = lang; 
-  const voices = window.speechSynthesis.getVoices();
-  const voice = voices.find(voice => voice.lang === lang);
+  utterance.lang = "fr";
+  utterance.rate = 0.6; 
   if (voice) {
     utterance.voice = voice;
   }
   window.speechSynthesis.speak(utterance);
 }
 
+function startsWithVowel(text) {
+  return "haeéêioôuy".includes(text.at(0));
+}
+
 function getConjugationHTML(text, data) {
+  console.log(data)
   return data?.map(({ infinitive, type, tenses }) => {
     const tensesHTML = Object.entries(tenses).map(([tenseName, __forms]) => {
       const forms = Array.isArray(__forms) ? __forms : [__forms];
@@ -202,7 +224,7 @@ function getConjugationHTML(text, data) {
       if (forms.length === 6) {
         const pronouns = ["je", "tu", "il", "nous", "vous", "ils"];
         for (let i = 0; i < 6; i++) {
-          const pronoun = (i === 0 && "haeéêioôuy".includes(forms[i].at(0)))? "j'" :  pronouns[i] + " ";
+          const pronoun = (i === 0 && startsWithVowel(forms[i]))? "j'" :  pronouns[i] + " ";
           formsHTML[i] = `${pronoun}${formsHTML[i]}`;
           formsToSpeak[i] = `${pronoun}${forms[i]}`;
         }
@@ -220,7 +242,7 @@ function getConjugationHTML(text, data) {
       return `<div class="${found? '' : prefix(infinitive)}">
           <div style="display:flex; flex-direction:row; align-items:center; gap:10px; font-weight:bold">
             <span>${tenseName}</span>
-            ${speakBtnHTML(formsToSpeak.join(", "), "fr", "font-size:0; margin: auto 0 0 0; padding:5px;")}
+            ${speakBtnHTML(formsToSpeak.join(", "))}
           </div>
           <div>${formsHTML}</div>
         </div>`;
@@ -236,7 +258,24 @@ function getConjugationHTML(text, data) {
   }).join("<hr/>").replace(/\s\s*/, " ");
 }
 
-async function translate(selection) {
+async function getHelperData(text) {
+  let translation = await getTranslation(text);
+  let conjugation = getConjugation(text);
+  if (!translation && conjugation) {
+    const infinitive = conjugation[0].infinitive;
+    const reflexiveVerb = `${startsWithVowel(infinitive)? "s'": "se "}${infinitive}`;
+    translation = await getTranslation(reflexiveVerb);
+  }
+  if (translation && !conjugation) {
+    const verbs = translation.filter(it => it.pos.code === "vrb");
+    if (verbs.length) {
+      conjugation = [verbTenses(verbs[0].text)];
+    }
+  }
+  return { translation, conjugation };
+}
+
+async function showHelper(selection) {
   const text = selection.toString().trim().toLowerCase();
   const helper = document.getElementById('fr-helper'); //TODO
 
@@ -251,18 +290,17 @@ async function translate(selection) {
   }
 
   helper.setAttribute("text", text);
-  const translation = await getYandexTranslation(text);
-  const conjugation = getConjugation(text);
-  if (!translation && !conjugation) {
-    return;
-  }
+  const { translation, conjugation } = await getHelperData(text);
 
   const parts = []
   if (translation) {
-    parts.push(`<div>${translation.join(" ")}</div>`);
+    parts.push(`<div>${getTranslationHTML(translation)}</div>`);
   }
   if (conjugation) {
     parts.push(`<div>${getConjugationHTML(text, conjugation)}</div>`);
+  }
+  if (parts.length === 0) {
+    parts.push(`<div>${speakBtnHTML(text)}</div>`);
   }
   
   const { clientWidth: screenWidth, clientHeight: screenHeight } = document.documentElement;
@@ -289,13 +327,12 @@ async function translate(selection) {
   Array.from(document.getElementsByClassName(prefix("conjugation"))).forEach(it => it.click());
 }
 
-document.addEventListener("contextmenu", async () => {
-  await translate(document.getSelection());
-});
+const listener = async () => {
+  await showHelper(document.getSelection());
+};
 
-document.addEventListener('mouseup', async () => {
-  await translate(document.getSelection());
-});
+document.addEventListener("contextmenu", listener);
+document.addEventListener('mouseup', listener);
 
 function openURL(url) {
 	const width = Math.min(window.innerWidth, 1024);
@@ -304,29 +341,27 @@ function openURL(url) {
 }
 
 // TODO proférée
-// renvoyer неправильный renverrait
-
+// enivrante - не находит
+// enivrant
 /*
 
+s’efforcer ?
 
-
-se repentir
-se méfier
-s’abstenir
-s’efforcer
-
-refaire
-haïr
-pendre
-compromettre
-enfreindre
-redescendre
-revendre
-réécrire
-morfondre
-renvoyer
-
-спряжение
-https://www.le-francais.ru/conjugaison/se_mefier/
-
+Основные глаголы только в возвратной форме
+Se souvenir — помнить, вспоминать
+S'enfuir — убегать, сбегать
+Se méfier — остерегаться, не доверять
+Se repentir — раскаиваться
+S'évanouir — падать в обморок, исчезать
+S'écrier — воскликнуть
+S'absenter — отсутствовать
+S'efforcer — стараться, силиться
+Se douter — догадываться, подозревать
+Se suicider — покончить с собой
+S'emparer — завладеть, захватить
+Se moquer — насмехаться, издеваться
+S'agenouiller — вставать на колени
+S'envoler — улетать
+Se syndiquer — вступать в профсоюз
+se morfondre
 */

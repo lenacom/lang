@@ -11,14 +11,25 @@
   </head>
   <body>
     <script>
-      function testConjugation(form, expected) {
-        const conjugation = getConjugation(form);
+      async function testTranslation(word, expected) {
+        const { translation } = await getHelperData(word);
+        if (!translation || translation[0].text !== expected) {
+          document.write(`<div>Failed translation "${word}".</div>`);
+          console.log(word);
+          console.log(JSON.stringify(translation));
+        }
+      }
+
+      async function testConjugation(form, expected) {
+        const { conjugation } = await getHelperData(form);
         if (!conjugation || JSON.stringify(conjugation) !== expected) {
-          document.write(`<div>Failed "${form}".</div>`);
+          document.write(`<div>Failed conjugation "${form}".</div>`);
           console.log(form);
           console.log(JSON.stringify(conjugation));
         }
       }
+
+      testTranslation("méfie", "se méfier");
 
       testConjugation("mangeons", '[{"infinitive":"manger","type":"regular","tenses":{"présent":["mange","manges","mange","mangeons","mangez","mangent"],"imparfait":["mangeais","mangeais","mangeait","mangions","mangiez","mangeaient"],"passé simple":["mangeai","mangeas","mangea","mangeâmes","mangeâtes","mangèrent"],"futur simple":["mangerai","mangeras","mangera","mangerons","mangerez","mangeront"],"subjonctif présent":["mange","manges","mange","mangions","mangiez","mangent"],"subjonctif imparfait":["mangeasse","mangeasses","mangeât","mangeassions","mangeassiez","mangeassent"],"conditionnel présent":["mangerais","mangerais","mangerait","mangerions","mangeriez","mangeraient"],"imperatif":["mange","mangeons","mangez"],"participe présent":"mangeant","participe passé":"mangé"}}]');
 
@@ -40,6 +51,17 @@
 
       testConjugation("repentons", '[{"infinitive":"se repentir","type":"irregular","tenses":{"présent":["repens","repens","repent","repentons","repentez","repentent"],"imparfait":["repentais","repentais","repentait","repentions","repentiez","repentaient"],"passé simple":["repentis","repentis","repentit","repentîmes","repentîtes","repentirent"],"futur simple":["repentirai","repentiras","repentira","repentirons","repentirez","repentiront"],"subjonctif présent":["repente","repentes","repente","repentions","repentiez","repentent"],"subjonctif imparfait":["repentisse","repentisses","repentît","repentissions","repentissiez","repentissent"],"conditionnel présent":["repentirais","repentirais","repentirait","repentirions","repentiriez","repentiraient"],"imperatif":["repens","repentons","repentez"],"participe présent":"repentant","participe passé":"repenti"}}]');
 
+      testConjugation("méfie", '[{"infinitive":"méfier","type":"regular","tenses":{"présent":["méfie","méfies","méfie","méfions","méfiez","méfient"],"imparfait":["méfiais","méfiais","méfiait","méfiions","méfiiez","méfiaient"],"passé simple":["méfiai","méfias","méfia","méfiâmes","méfiâtes","méfièrent"],"futur simple":["méfierai","méfieras","méfiera","méfierons","méfierez","méfieront"],"subjonctif présent":["méfie","méfies","méfie","méfiions","méfiiez","méfient"],"subjonctif imparfait":["méfiasse","méfiasses","méfiât","méfiassions","méfiassiez","méfiassent"],"conditionnel présent":["méfierais","méfierais","méfierait","méfierions","méfieriez","méfieraient"],"imperatif":["méfie","méfions","méfiez"],"participe présent":"méfiant","participe passé":"méfié"}}]');
+
+      testConjugation("répudie", '[{"infinitive":"répudier","type":"regular","tenses":{"présent":["répudie","répudies","répudie","répudions","répudiez","répudient"],"imparfait":["répudiais","répudiais","répudiait","répudiions","répudiiez","répudiaient"],"passé simple":["répudiai","répudias","répudia","répudiâmes","répudiâtes","répudièrent"],"futur simple":["répudierai","répudieras","répudiera","répudierons","répudierez","répudieront"],"subjonctif présent":["répudie","répudies","répudie","répudiions","répudiiez","répudient"],"subjonctif imparfait":["répudiasse","répudiasses","répudiât","répudiassions","répudiassiez","répudiassent"],"conditionnel présent":["répudierais","répudierais","répudierait","répudierions","répudieriez","répudieraient"],"imperatif":["répudie","répudions","répudiez"],"participe présent":"répudiant","participe passé":"répudié"}}]');
+
+      testConjugation("abstiens", `[{"infinitive":"s'abstenir","type":"irregular","tenses":{"présent":["abstiens","abstiens","abstient","abstenons","abstenez","abstiennent"],"imparfait":["abstenais","abstenais","abstenait","abstenions","absteniez","abstenaient"],"passé simple":["abstins","abstins","abstint","abstînmes","abstîntes","abstinrent"],"futur simple":["abstiendrai","abstiendras","abstiendra","abstiendrons","abstiendrez","abstiendront"],"subjonctif présent":["abstienne","abstiennes","abstienne","abstenions","absteniez","abstiennent"],"subjonctif imparfait":["abstinsse","abstinsses","abstînt","abstinssions","abstinssiez","abstinssent"],"conditionnel présent":["abstiendrais","abstiendrais","abstiendrait","abstiendrions","abstiendriez","abstiendraient"],"imperatif":["abstiens","abstenons","abstenez"],"participe présent":"abstenant","participe passé":"abstenu"}}]`);
+
+      testConjugation("pendons", '[{"infinitive":"pendre","type":"irregular","tenses":{"présent":["pends","pends","pend","pendons","pendez","pendent"],"imparfait":["pendais","pendais","pendait","pendions","pendiez","pendaient"],"passé simple":["pendis","pendis","pendit","pendîmes","pendîtes","pendirent"],"futur simple":["pendrai","pendras","pendra","pendrons","pendrez","pendront"],"subjonctif présent":["pende","pendes","pende","pendions","pendiez","pendent"],"subjonctif imparfait":["pendisse","pendisses","pendît","pendissions","pendissiez","pendissent"],"conditionnel présent":["pendrais","pendrais","pendrait","pendrions","pendriez","pendraient"],"imperatif":["pends","pendons","pendez"],"participe présent":"pendant","participe passé":"pendu"}}]');
+
+      testConjugation("haïssons", '[{"infinitive":"haïr","type":"regular","tenses":{"présent":["hais","hais","hait","haïssons","haïssez","haïssent"],"imparfait":["haïssais","haïssais","haïssait","haïssions","haïssiez","haïssaient"],"passé simple":["haïs","haïs","haït","haïmes","haïtes","haïrent"],"futur simple":["haïrai","haïras","haïra","haïrons","haïrez","haïront"],"subjonctif présent":["haïsse","haïsses","haïsse","haïssions","haïssiez","haïssent"],"subjonctif imparfait":["haïsse","haïsses","haït","haïssions","haïssiez","haïssent"],"conditionnel présent":["haïrais","haïrais","haïrait","haïrions","haïriez","haïraient"],"imperatif":["hais","haïssons","haïssez"],"participe présent":"haïssant","participe passé":"haï"}}]');
+      
+      testConjugation("enivrante", '[{"infinitive":"enivrer","type":"regular","tenses":{"présent":["enivre","enivres","enivre","enivrons","enivrez","enivrent"],"imparfait":["enivrais","enivrais","enivrait","enivrions","enivriez","enivraient"],"passé simple":["enivrai","enivras","enivra","enivrâmes","enivrâtes","enivrèrent"],"futur simple":["enivrerai","enivreras","enivrera","enivrerons","enivrerez","enivreront"],"subjonctif présent":["enivre","enivres","enivre","enivrions","enivriez","enivrent"],"subjonctif imparfait":["enivrasse","enivrasses","enivrât","enivrassions","enivrassiez","enivrassent"],"conditionnel présent":["enivrerais","enivrerais","enivrerait","enivrerions","enivreriez","enivreraient"],"imperatif":["enivre","enivrons","enivrez"],"participe présent":"enivrant","participe passé":"enivré"}}]');
     </script>
   </body>
 </html>
