@@ -2,10 +2,8 @@
   <head>
     <title>Слова</title>
     <script>
-      const LANG = "en";
       const phrases = {};
-      phrases["1"] = [
-        ["versatile", ""]
+      phrases["Разное"] = [
       ];
     </script>
     <meta charset="UTF-8">
@@ -33,25 +31,34 @@
       button {
         margin-top: auto;
       }
+      input[type=checkbox] {
+        width: 20px;
+        height: 20px;
+      }
     </style>
   </head>
   <body>
-    <div id=index style="display:block"></div>
-    <div id="phrases" style="display:none">
+    <div id=index style="display: block"></div>
+    <div id="phrases" style="display: none;">
       <div id="phrase1"></div>
       <div id="phrase2"></div>
-      <input id="next" type="button" value="Дальше" onclick="next()"/>
-      <input id="autoplay" type="button" value="Autoplay" onclick="toggleAutoplay()"/>
+      <div>
+        <input id="next" type="button" value="Дальше" onclick="next()"/>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <label for="autospeak">Озвучивать автоматически</label>
+        <input type="checkbox" id="autospeak" onclick="autospeak = !autospeak"/>
+      <div>
     </div>
     <script>
+      const LANG = "en";
       
       const index = document.getElementById("index");
       const divPhrases = document.getElementById("phrases");
       const phrase1 = document.getElementById("phrase1");
       const phrase2 = document.getElementById("phrase2");
       const btnNext = document.getElementById("next");
-      const btnAutoplay = document.getElementById("autoplay");
-      let autoplay = false;
+      let autospeak = false;
       
       let indexHtml = "";
       for (let key of Object.keys(phrases)) {
@@ -89,12 +96,6 @@
           phraseIndex = Math.round(Math.random() * (part.length - 1)); 
           const text = part[phraseIndex][1];
           phrase1.innerHTML = text;
-
-          if (autoplay) {
-            await speak(text, "ru");
-            await delay(1000);
-            btnNext.click();
-          }
         } 
       }
 
@@ -102,55 +103,52 @@
         if (phrase2.innerHTML === "") {
           const text = part[phraseIndex][0];
           const speakText = text.split("[")[0];
-          phrase2.innerHTML = `<span>${text}</span> ${speakBtnHTML(speakText, LANG)}`;
+          phrase2.innerHTML = `<span>${text}</span> ${speakBtnHTML(speakText)}`;
           part.splice(phraseIndex, 1); 
 
-          if (autoplay) {
-            for (let i = 0; i < 3; i++) {
-              await speak(speakText, LANG);
-              await delay(1000);
-            }
-            btnNext.click();
+          if (autospeak) {
+            speak(speakText);
           }
         } else {
           await setPhrase();
         }
       }
 
-      function toggleAutoplay() {
-        autoplay = !autoplay;
-        btnAutoplay.value = autoplay? "Stop" : "Autoplay";
-        if (autoplay) {
-          btnNext.click();
-        }
-      }
-
-      function speakBtnHTML(text, lang) {
+      function speakBtnHTML(text) {
         return `
-          <button onClick="speak('${text.replace("'", "\\'")}', '${lang}')">
+          <button onClick="speak('${text.replace("'", "\\'")}')">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20">
               <path fill="currentColor" d="M48 352l48 0 134.1 119.2c6.4 5.7 14.6 8.8 23.1 8.8 19.2 0 34.8-15.6 34.8-34.8l0-378.4c0-19.2-15.6-34.8-34.8-34.8-8.5 0-16.7 3.1-23.1 8.8L96 160 48 160c-26.5 0-48 21.5-48 48l0 96c0 26.5 21.5 48 48 48zM441.1 107c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C443.3 170.7 464 210.9 464 256s-20.7 85.3-53.2 111.8c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5c43.2-35.2 70.9-88.9 70.9-149s-27.7-113.8-70.9-149zm-60.5 74.5c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C361.1 227.6 368 241 368 256s-6.9 28.4-17.7 37.3c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5C402.1 312.9 416 286.1 416 256s-13.9-56.9-35.5-74.5z"/>
             </svg>
           </button>`;
       }
 
-      const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+      let started = false;
+      let voice;
 
-      function speak(text, lang) {
-        return new Promise((resolve, reject) => {
-          const utterance = new SpeechSynthesisUtterance(text);
-          utterance.lang = lang;
-          utterance.rate = 0.6; 
-          const voices = window.speechSynthesis.getVoices();
-          const voice = voices.find(voice => voice.lang === lang);
-          if (voice) {
-            utterance.voice = voice;
-          }
-          utterance.onend = () => resolve();
-          utterance.onerror = (event) => reject(event);
-          window.speechSynthesis.speak(utterance);
-        });
+      document.addEventListener("pointerup", (event) => {
+        if (!started) speak(" ");
+      });
+
+      function speak(text) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = LANG;
+        utterance.rate = 0.8; 
+        utterance.volume = started? 1 : 0;
+        if (voice) {
+          utterance.voice = voice;
+        }
+        started = true;
+        window.speechSynthesis.speak(utterance);
       }
+
+      function loadVoices() {
+        const voices = window.speechSynthesis.getVoices();
+				voice = voices.find(voice => voice.lang.startsWith(LANG)/* && voice.localService*/);
+      }
+
+      speechSynthesis.addEventListener("voiceschanged", loadVoices);
     </script>
   </body>
 </html>

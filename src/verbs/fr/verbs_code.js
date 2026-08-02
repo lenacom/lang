@@ -195,24 +195,38 @@ function speakBtnHTML(text) {
     </button>`;
 }
 
-const voices = window.speechSynthesis.getVoices();
-const voice = voices.find(voice => voice.lang === "fr");
+let started = false;
+let voice;
+
+document.addEventListener("pointerup", (event) => {
+  if (!started) speak(" ");
+});
+
 function speak(text) {
+  window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "fr";
-  utterance.rate = 0.6; 
+  utterance.rate = 0.8; 
+  utterance.volume = started? 1 : 0;
   if (voice) {
     utterance.voice = voice;
   }
+  started = true;
   window.speechSynthesis.speak(utterance);
 }
+
+function loadVoices() {
+  const voices = window.speechSynthesis.getVoices();
+  voice = voices.find(voice => voice.lang === "fr-FR"/* && voice.localService*/);
+}
+
+speechSynthesis.addEventListener("voiceschanged", loadVoices);
 
 function startsWithVowel(text) {
   return "haeéêioôuy".includes(text.at(0));
 }
 
 function getConjugationHTML(text, data) {
-  console.log(data)
   return data?.map(({ infinitive, type, tenses }) => {
     const tensesHTML = Object.entries(tenses).map(([tenseName, __forms]) => {
       const forms = Array.isArray(__forms) ? __forms : [__forms];
@@ -330,15 +344,14 @@ async function showHelper(selection) {
 const listener = async () => {
   await showHelper(document.getSelection());
 };
-
 document.addEventListener("contextmenu", listener);
-document.addEventListener('mouseup', listener);
-
-function openURL(url) {
-	const width = Math.min(window.innerWidth, 1024);
-	const height = Math.min(window.innerHeight, 768);
-	window.open(url, '_blank', `width=${width}, height=${height}`);
-}
+document.addEventListener("pointerup", listener);
+document.addEventListener("selectionchange", async () => {
+  const selection = document.getSelection()
+  if (!selection.toString()) {
+    await showHelper(document.getSelection());
+  }
+});
 
 // TODO proférée
 // enivrante - не находит

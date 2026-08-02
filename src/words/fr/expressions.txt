@@ -26,3 +26,5 @@ au fond de в глубине
 en entier	целиком
 sauf de	за исключением
 au-delà
+en effet
+à l’égal de
