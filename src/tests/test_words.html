@@ -40,16 +40,17 @@
   <body>
     <div id=index style="display: block"></div>
     <div id="phrases" style="display: none;">
+      <div id="counter"></div>
       <div id="phrase1"></div>
       <div id="phrase2"></div>
       <div>
         <input id="next" type="button" value="Дальше" onclick="next()"/>
       </div>
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <label for="autospeak">Озвучивать автоматически</label>
-        <input type="checkbox" id="autospeak" onclick="autospeak = !autospeak"/>
-      <div>
     </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <label for="autospeak">Озвучивать автоматически</label>
+      <input type="checkbox" id="autospeak" onclick="autospeak = !autospeak"/>
+    <div>
     <script>
       const LANG = "en";
       
@@ -58,6 +59,7 @@
       const phrase1 = document.getElementById("phrase1");
       const phrase2 = document.getElementById("phrase2");
       const btnNext = document.getElementById("next");
+      const counter = document.getElementById("counter");
       let autospeak = false;
       
       let indexHtml = "";
@@ -66,6 +68,7 @@
       }
       index.innerHTML = indexHtml;
 
+      let remained;
       let partIndex;
       let phraseIndex;
       let part;
@@ -81,6 +84,7 @@
       function setPart(_index) {
         partIndex = _index;
         part = phrases[partIndex].slice();
+        remained = part.length;
         hide(index);
         show(divPhrases);
         setPhrase();
@@ -93,6 +97,8 @@
           show(index);
           hide(divPhrases);
         } else {
+          counter.innerHTML = remained;
+          remained -= 1;
           phraseIndex = Math.round(Math.random() * (part.length - 1)); 
           const text = part[phraseIndex][1];
           phrase1.innerHTML = text;

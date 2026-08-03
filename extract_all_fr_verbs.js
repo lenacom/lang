@@ -66,9 +66,6 @@ function writeToFile(map, fileName) {
 	const data = [];
 	for (const value of Object.values(map)) {
 		const row = [value.text, value.count, value.irregular];
-		if (value.gen) {
-			row.push(value.gen);
-		}
 		data.push(row);
 	};
 	data.sort((a, b) => b[1] - a[1]);

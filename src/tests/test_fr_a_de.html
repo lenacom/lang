@@ -507,6 +507,7 @@
           }
         }
         if (error) {
+          speak(test[0]);
           elm("errors").innerHTML = `<div>${test[1]}</div><div class="error">${wordWithSpeakBtnHTML(test[0])}</div>` + elm("errors").innerHTML;
         }
         setTest();
