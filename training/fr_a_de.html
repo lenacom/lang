@@ -2,12 +2,13 @@
   <head>
     <title>à / de</title>
     <meta charset="UTF-8">
+    <script src="js/common.js"></script>
     <script>
       //["commencer à / de faire qch", "начинать делать что-л."],
       //["continuer à / de faire qch", "продолжить делать что-л."],
       //["discuter (de) qch", "обсуждать что-л."],
       //["vouloir qch de (à) qn", "хотеть что-л. от кого-л."]      
-      const tests = [
+      const phrases = [
         ["être à qn", "принадлежать кому-л.", 12077423],
         ["faire bien de faire qch", "сделать хорошо сделав что-л.", 2960590],
         ["aller faire qch", "пойти делать что-л.", 2896308],
@@ -32,6 +33,7 @@
         ["avoir le temps de faire qch", "иметь время сделать что-л.", 354330],
         ["appeler qn à qch", "призывать кого-л. к чему-л.", 333211],
         ["avoir besoin de qch", "иметь необходимость в чём-л.", 329446],
+        ["laisser faire qch", "иметь необходимость в чём-л.", 329302],
         ["(s’)arrêter de faire qch", "прекратить делать что-л.", 313753],
         ["s’arrêter à qch (le chapitre deux)", "остановиться на чем-л. (на второй главе)", 313753],
         ["donner qch à qn", "дать что-л. кому-л.", 310389],
@@ -416,47 +418,45 @@
       .error {
         color:crimson;
       }
+      #phrase {
+        margin-top: 20px;
+      }
     </style>
   </head>
   <body>
-    <div id="index"></div>
-    <div id="tests">
-      <div id="count"></div>
-      <div id="test"></div>
+    <div id="phrases">
+      <div id="part"></div>
+      <div id="progress"></div>
+      <div id="phrase"></div>
       <div id="errors"></div>
     </div>
     <script>
-      const partLength = 25;
-      let part;
-      let test;
-      let correctTestWords;
-      let testWords;
-
-      let indexHtml = "";
-      for (let i = 0; i <= tests.length; i += partLength) {
-        indexHtml += `<div><button onClick="setPart(${i})">Часть ${(i / partLength) + 1}</button></div>`;
+      const CONFIG_NAME = "fr_a_de";
+      const partSize = 10;
+      let { start } = getConfig(CONFIG_NAME);
+      if (!start) { 
+        start = 0; 
       }
-      elm("index").innerHTML = indexHtml;
+
+      let part;
+      let phrase;
+      let correctPhraseWords;
+      let phraseWords;
+
+      const LANG = "fr-FR";
+      initSpeak(LANG);
 
       function elm(id) {
         return document.getElementById(id);
       }
-
-      function show(id) {
-        elm(id).style.display = "block"; 
-      }
-
-      function hide(id) {
-        elm(id).style.display = "none"; 
-      }
       
       function variants(text) {
         const regex = /( à | de | )(faire qch|qch|qn)/ig; 
-        correctTestWords = text.replace(regex, "--$1--$2").split("--");
-        testWords = text.replace(regex, "-- --$2").split("--");
-        return correctTestWords.map((word, index)  => {
+        correctPhraseWords = text.replace(regex, "--$1--$2").split("--");
+        phraseWords = text.replace(regex, "-- --$2").split("--");
+        return correctPhraseWords.map((word, index)  => {
           if ([" à ", " de ", " "].includes(word)) {
-            return `&nbsp;<select name="part${index}" onChange="testWords[${index}] = this.value">
+            return `&nbsp;<select name="part${index}" onChange="phraseWords[${index}] = this.value">
               <option value=" " selected> </option>
               <option value=" à ">à</option>
               <option value=" de ">de</option>
@@ -467,101 +467,77 @@
         }).join("");
       }
 
-      function setPart(start) {
-        const end = Math.min(start + partLength, tests.length);
-        part = [...tests.slice(start, end)];
-        setTest();
-        hide("index");
-        show("tests");
-      }
-
-      function setIndex() {
-        elm("test").innerHTML = "";
-        show("index");
-        hide("tests");
-      }
-
-      function setTest() {
-        if (part.length === 0) {
-          setIndex();
-          return;
+      function setPart() {
+        let messages = [];
+        if (part && part.length === 0) {
+          start += partSize;
+          if (start >= phrases.length) {
+            messages.push("Ура! Все фразы пройдены. Начинаем с начала.");
+            start = 0;
+          }
         }
+        const end = Math.min(start + partSize, phrases.length);
+        part = [...phrases.slice(start, end)];
+        if (start > 0) {
+          const previousPhrases = [...phrases.slice(0, start)];
+          while (previousPhrases.length > (start - partSize)) {
+            const index = Math.round(Math.random() * (previousPhrases.length - 1));
+            part.push(previousPhrases[index]);
+            previousPhrases.splice(index, 1);
+          }
+        }
+        messages.push(`Фразы по ${end} из ${phrases.length}.`);
+        elm("part").innerHTML = messages.join(" ");
+        saveConfig(CONFIG_NAME, { start });
+        setPhrase()
+      }
 
-        elm("count").innerHTML = part.length;
-        const index = Math.round(Math.random() * (part.length - 1));
-        test = part[index];
-        part.splice(index, 1);
-        const testHTML = `
-          <div>${test[1]}</div>
-          <div style="display: flex; align-items: flex-start; flex-wrap: wrap;">${variants(test[0])}</div>
-          <div><button onClick="checkAnswer()"">Дальше</button></div>
-        `;
-        elm("test").innerHTML = testHTML;
+      function setPhrase() {
+        if (part.length === 0) {
+          setPart();
+        } else {
+          elm("progress").innerHTML = `Осталось фраз: ${part.length}.`;
+          const index = Math.round(Math.random() * (part.length - 1));
+          phrase = part[index];
+          part.splice(index, 1);
+          const phraseHTML = `
+            <div>${phrase[1]}</div>
+            <div style="display: flex; align-items: flex-start; flex-wrap: wrap;">${variants(phrase[0])}</div>
+            <div><button onClick="checkAnswer()"">Дальше</button></div>
+          `;
+          elm("phrase").innerHTML = phraseHTML;
+        }
       }
 
       function checkAnswer() {
         let error = false;
-        for (let i = 0; i < testWords.length; i++) {
-          if (testWords[i] !== correctTestWords[i]) {
+        for (let i = 0; i < phraseWords.length; i++) {
+          if (phraseWords[i] !== correctPhraseWords[i]) {
             error = true;
           }
         }
         if (error) {
-          speak(test[0]);
-          elm("errors").innerHTML = `<div>${test[1]}</div><div class="error">${wordWithSpeakBtnHTML(test[0])}</div>` + elm("errors").innerHTML;
+          speak(fullText(phrase[0]), LANG);
+          elm("errors").innerHTML = `<div>${phrase[1]}</div><div class="error">${phraseWithSpeakButtonHTML(phrase[0])}</div>` + elm("errors").innerHTML;
+          setPart();
+        } else {
+          setPhrase();
         }
-        setTest();
       }
 
-      function wordWithSpeakBtnHTML(text) {
+      function fullText(text) {
+        return text.replace("qn", "quelqu’un").replace("qch", "quelquechose");
+      }
+
+      function phraseWithSpeakButtonHTML(text) {
         return `
           <div><span style="display: flex; flex-direction: row; gap: 10px;">
             <span>${text}</span>
-            ${speakBtnHTML(text)}
+            ${speakButtonHTML(fullText(text), LANG)}
           </div>`;
       }
 
-      function speakBtnHTML(text) {
-        if (!window.speechSynthesis) {
-          return "";
-        }
-        return `
-          <button style="margin-top: auto;" onClick="speak('${text.replace("'", "\\'")}')">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20">
-              <path fill="currentColor" d="M48 352l48 0 134.1 119.2c6.4 5.7 14.6 8.8 23.1 8.8 19.2 0 34.8-15.6 34.8-34.8l0-378.4c0-19.2-15.6-34.8-34.8-34.8-8.5 0-16.7 3.1-23.1 8.8L96 160 48 160c-26.5 0-48 21.5-48 48l0 96c0 26.5 21.5 48 48 48zM441.1 107c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C443.3 170.7 464 210.9 464 256s-20.7 85.3-53.2 111.8c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5c43.2-35.2 70.9-88.9 70.9-149s-27.7-113.8-70.9-149zm-60.5 74.5c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C361.1 227.6 368 241 368 256s-6.9 28.4-17.7 37.3c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5C402.1 312.9 416 286.1 416 256s-13.9-56.9-35.5-74.5z"/>
-            </svg>
-          </button>`;
-      }
-
-      const LANG = "fr-FR";
-
-      let started = false;
-      let voice;
-
-      document.addEventListener("pointerup", (event) => {
-        if (!started) speak(" ");
-      });
-
-      function speak(text) {
-        const fullText = text.replace("qn", "quelqu’un").replace("qch", "quelquechose");
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(fullText);
-        utterance.lang = LANG;
-        utterance.rate = 0.8; 
-        utterance.volume = started? 1 : 0;
-        if (voice) {
-          utterance.voice = voice;
-        }
-        started = true;
-        window.speechSynthesis.speak(utterance);
-      }
-
-      function loadVoices() {
-        const voices = window.speechSynthesis.getVoices();
-        voice = voices.find(voice => voice.lang === LANG/* && voice.localService*/);
-      }
-
-      speechSynthesis.addEventListener("voiceschanged", loadVoices);
+      setPart();
     </script>
   </body>
 </html>

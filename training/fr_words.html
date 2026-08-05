@@ -1,0 +1,491 @@
+<html>
+  <head>
+    <title>Слова</title>
+    <script>
+      const phrases = {};
+      phrases["15 мая - тело"] = [
+        ["Quelle heure est-il? Il est midi.", 
+        "Который час? Полдень."], 
+        ["Nous sommes (=on est) quel jour de la semaine? Nous sommes (=on est) mardi.", 
+        "Какой день недели? Вторник."],
+        ["Nous sommes (=on est) quelle date? Nous sommes (=on est) le huit septembre deux mille", 
+        "Какое сегодня число? Восьмое сентября"],
+        ["le journal télévisé", "выпуск новостей"],
+        ["à mon avis", "по моему мнению"],
+        ["Vas-y!", "Давай!"],
+        ["Allons-y! Allez-y!", "Идём! Идите!"],
+        ["être enchanté", "приятно познакомится"],
+        ["être désolé", "сожалеть"],
+        ["être d’accord ", "согласен"],
+        ["être en forme", "быть в форме"],
+        ["être enrhumé", "иметь насморк"],
+        ["être au chômage", "быть безработным"],
+        ["être en vacances", "быть в отпуске"],
+        ["être en congé", "быть в отпуске (отгул, болезнь)"],
+        ["être en retard", "опаздывать"],
+        ["à temps = à l'heure", "быть вовремя"],
+        ["être en avance ", "приходить заранее"],
+        ["être à la retraite", "быть на пенсии"],
+        ["être jaloux / jalouse (de)", "завидовать"],
+        ["être pressé", "торопиться"],
+        ["être né", "быть рождённым"],
+        ["être célibataire / marié / divorcé", "быть не замужем, замужем, в разводе"],
+        ["être assis", "сидеть"],
+        ["être couché", "лежать"],
+        ["être debout", "стоять"],
+        ["être au courant (de)", "быть в курсе"],
+        ["être en réunion", "быть на собрании/совещании"],
+        ["Il n’est pas là", "Его не на месте"],
+        ["être en déplacement", "быть в отъезде"],
+        ["être en grève", "бастовать"],
+        ["être en panne", "не работать (о технике)"],
+        ["le poil", "волосы на теле"],
+        ["ça y est!", "Сделано!"]
+      ];
+      phrases["15 мая слова"] = [
+        ["tirelire (f)", "копилка"],
+        ["règle (f)", "правило"],
+        ["fleur (f)", "цветок"],
+        ["fête (f)", "праздник"],
+        ["tête (f)", "голова"],
+        ["poitrine (f)", "грудь"],
+        ["jambe (f)", "нога"],
+        ["cheville (f)", "лодыжка"],
+        ["epaule (f)", "плечо"],
+        ["patte (f)", "лапа"],
+        ["semaine (f)", "смена"],
+        ["date (f)", "дата"],
+        ["fesse (f)", "ягодица"],
+        ["oreille (f)", "ухо"],
+        ["joue (f)", "щека"],
+        ["bouche (f)", "рот"],
+        ["dent (f)", "зуб"],
+        ["peau (f)", "кожа"],
+        ["chemin (m)", "дорога"],
+        ["bras (m)", "рука"],
+        ["ballon (m)", "мяч"],
+        ["pot (m)", "горшок"],
+        ["pied (m)", "нога (ступня)"],
+        ["coup (m)", "удар"],
+        ["poil (m)", "шерсть"],
+        ["dos (m)", "спина"],
+        ["sein (m)", "грудь (жен.)"],
+        ["ventre (m)", "чрево"],
+        ["doigt (m)", "палец"],
+        ["ongle (m)", "ноготь"],
+        ["cheveux (m)", "волосы"],
+        ["oeil (m)", "глаз"],
+        ["nez (m)", "нос"],
+        ["menton (m)", "подбородок"],
+        ["muscle (m)", "мускул"],
+        ["sang (m)", "кровь"],
+        ["estomac (m)", "желудок"],
+        ["coeur (m)", "сердце"],
+        ["jour (m)", "день"],
+        ["journal (m)", "газета"],
+        ["avis (m)", "мнение"],
+        ["cours (m)", "урок"],
+        ["congé (m)", "отпуск"],
+        ["frange (f)", "чёлка"],
+        ["moustache (f)", "усы"],
+        ["barbe (f)", "борода"],
+        ["lunettes (f)", "очки"],
+        ["charme (m)", "шарм"]
+      ];
+      phrases["25 мая - внешность"] = [
+        ["un jour férié", "нерабочий праздничный день"],
+        ["un jour ouvrable", "рабочий день"],
+        ["même", "даже"],
+        ["même si", "даже если"],
+        ["contrairement à", "в отличие от"],
+        ["avoir faim", "хотеть есть"],
+        ["avoir soif", "хотеть пить"],
+        ["avoir sommeil", "хотеть спать"],
+        ["avoir chaud", "жарко о человеке"],
+        ["avoir froid", "холодно о человеке"],
+        ["avoir besoin de", "иметь нужду"],
+        ["avoir peur de", "бояться"],
+        ["avoir envie de", "иметь желание"],
+        ["donc = alors", "следовательно"],
+        ["avoir raison de", "быть правым"],
+        ["avoir tort de", "быть не правым"],
+        ["avoir rendez-vous avec qn ", "иметь встречу с кем-то"],
+        ["avoir pitié de qn", "жалеть кого-то"],
+        ["Vous avez quel âge? – J’ai dix-huit ans.", "Сколько вам лет? Мне восемнадцать лет."]
+      ];
+      phrases["12 июня - досуг"] = [
+        ["autant que je sais", "насколько я знаю"],
+        ["avoir lieu", "иметь место"],
+        ["ressembler à", "быть похожим на"],
+        ["la frontière", "граница"],
+        ["une poubelle", "мусорное ведро"],
+        ["une dépense", "трата"],
+        ["dépenser (de l'argent)", "тратить деньги"],
+        ["un sommet", "вершина, саммит"],
+        ["participer à", "участвовать в"],
+        ["grâce à", "благодаря"],
+        ["grâce à Dieu", "слава Богу"],
+        ["cause de", "из-за"],
+        ["faire la cuisine = cuisiner", "готовить"],
+        ["vous êtes, vous faites, vous dites", "вы есть, вы делаете, вы говорите"],
+        ["faire son lit, sa chambre", "убирать постель, комнату"],
+        ["faire sa toilette", "приводить себя в порядок"],
+        ["faire la grasse matinée", "нежиться утром в постели"],
+        ["faire les courses", "делать покупки"],
+        ["faire ses études", "учиться (про школьников, студентов)"],
+        ["faire du bruit", "шуметь"],
+        ["faire de la music", "выделять время для музыки (не обязательные дела)"],
+        ["jouer à la tenis", "играть в тенис (и др. виды спорта)"],
+        ["jouer de la piano", "играть на пианино (и др. муз. инструменты)"],
+        ["jouer sur l'ordinateur", "играть на компьютере"],
+        ["je ne fais pas de piano", "я не занимаюсь игрой на пианино"],
+        ["je ne joue pas du piano", "я не играю на пианино"],
+        ["Il pleut à torrents. = Il pleut à cordes", "Льёт как из ведра."],
+        ["demander de l'argent à qn", "просить у кого-то денег"],
+        ["manquer de temps", "не хватать времени"],
+        ["surtout", "сверх всего"],
+        ["payer qch", "платить за что-то"],
+        ["en plus", "более того"],
+        ["en ligne", "онлайн"],
+        ["dans tout le rest", "в остальном"],
+        ["plus proche de", "ближе"],
+        ["il fait combien? Il fait moins 10", "Какая (температура)? -10"],
+        ["il fait chaud / bon / frais / doux", "Жарко / хорошо / прохладно / не холодно"],
+        ["Il fait beau", "Ясно"],
+        ["Il fait gris = Le ciel est couvert", "Пасмурно"],
+        ["Il fait mauvais", "Плохая погода (дождь, холод)"],
+        ["au contraire", "напротив"],
+        ["répondre par le contraire", "ответить противоположно"],
+      ];
+      phrases["25 июня -погода"] = [
+        ["le brouillard", "туман"],
+        ["brouiller", "затуманивать, глушить"],
+        ["se débrouiller", "выпутываться"],
+        ["la débrouillardise = le système D", "выпутывание"],
+        ["débrouillard", "смекалистый"],
+        ["la grêle", "град"],
+        ["un grêlon", "градинка"],
+        ["un glaçon", "кубик льда"],
+        ["un nuage", "облако"],
+        ["un orage", "гроза"],
+        ["une tempête", "буря"],
+        ["le tonnerre", "гром"],
+        ["un coup de tonnerre", "удар грома"],
+        ["un éclair", "молния (зигзаг)"],
+        ["la foudre", "молния"],
+        ["abîmer", "портить"],
+        ["endommager", "нанести материальный ущерб"],
+        ["les dégâts (m) - ", "материальный ущерб"],
+        ["la chaleur", "тепло, жара"],
+        ["la canicule", "жара"],
+        ["la douceur", "нежность,  тепло, сладость"],
+        ["la fraîcheur", "прохлада"],
+        ["une pivoine", "пион"],
+        ["dans le cadre de", "в рамках"],
+        ["une réduction", "скидка"],
+        ["l'humidité", "влажность"],
+        ["la sécheresse", "сухость"],
+        ["sec (sèche)", "сухой"],
+        ["un ours", "медведь"],
+        ["une herbe", "трава"],
+        ["humide", "влажный"],
+        ["quant à moi", "что до меня"],
+        ["six persones sur dix", "шесть человек из десяти"],
+        ["par bonheure", "к счастью"],
+        ["tout à coup", "вдруг"],
+        ["il y a du verglas m", "гололёд"],
+        ["le vent souffle à 100 kilomètres à l'heure", "ветер дует со скоростью 100 км в час"]
+      ];
+      phrases["9 июля - город"] = [
+        ["au lieu de", "вместо"],
+        ["vide", "пустой"],
+        ["courir * - cours / cours / court / courons / courez / courent", "бегать"],
+        ["sauter 1", "прыгать"],
+        ["décider de faire qch", "решить сделать что-л."],
+        ["se décider à faire qch", "решиться сделать что-л."],
+        ["dépendre * de qch / qn - dépends / dépends / dépend / dépendons / dépendez / dépendent", "зависеть от"],
+        ["promettre * qch à qn / à qn de faire qch - promets / promets / promet / promettons / promettez / promettent ", "обещать что-л. кому-л. / кому-л. сделать что-л."],
+        ["sénatrice", "сенаторша"],
+        ["nuit blanche", "бессонная ночь"],
+        ["un pot à fleurs", "горшок для цветов (цель)"],
+        ["offrir * - offre / offres / offre / offrons / offrez / offrent", "дарить"],
+        ["ouvrir * - ouvre / ouvres / ouvre / ouvrons / ouvrez / ouvrent", "открывать"],
+        ["lettre f", "письмо"],
+        ["hier matin", "вчера утром"],
+        ["reprendre son chemin", "продолжил дорогу"],
+        ["monter 1", "подняться"],
+        ["se parler", "говорить друг с другом"],
+        ["se dire au revoir", "попрощаться друг с другом"],
+        ["tout à l'heure", "только что"],
+        ["Je n'ai pas honte f de le dire", "мне не стыдно это сказать"],
+        ["dessiner 1", "рисовать"],
+        ["feu (m) de forêt (f)", "лесной пожар"],
+        ["match m", "матч"],
+        ["se rappeler 1 - rappelle / rappelles / rappelle / rappelons / rappelez / rappellent", "вспомнить"],
+        ["rencontrer 1", "встретить"],
+        ["revenir * - reviens / reviens / revient / revenons / revenez / reviennent", "вернуться"],
+        ["apporter 1", "приносить"],
+        ["il lui raconte 1 ses aventures (f)", "он рассказывает ей свои приключения"],
+        ["en un moment", "в момент"],
+        ["arriver 1", "прибывать"],
+        ["tendre * - tends / tends / tend / tendons / tendez / tendent", "протягивать"],
+        ["cou m", "шея"],
+        ["rentrer 1 à la maison", "вернуться домой"],
+        ["embrasser 1", "обнимать"],
+        ["regarder un papillon voler devant lui", "видеть бабочку, которая летает перед ним"],
+        ["attraper 1", "ловить"],
+        ["lire * - lis / lis/ lit / lisons / lisez / lisent", "читать"],
+        ["hésiter 1", "колебаться"],
+        ["une vague", "волна"],
+        ["arroser 1", "поливать"],
+        ["y compris", "в том числе"],
+        ["le décalage horaire", "разница во времени"],
+        ["une insulte", "оскорбление"],
+        ["simple", "простой"],
+        ["détester 1", "ненавидеть"],
+        ["la fin", "конец"],
+        ["insulter 1", "оскорблять"],
+        ["faire des économies", "делать сбережения"],
+        ["économiser", "экономить"],
+        ["résister à 1", "сопротивляться чему-либо"],
+        ["céder 1", "уступать"],
+        ["neuf neuve", "новый (не б/у)"],
+        ["d'occasion", "б/у"],
+        ["payer en espèces (= en liquide)", "платить наличными"],
+        ["payer par carte / par chèque", "платить картой / чеком"],
+        ["rendre la monnaie", "возвращать сдачу"],
+        ["rendre * - rends / rends / rend / rendons / rendez / rendent", "возвращать"],
+        ["Nord m", "север"],
+        ["le Sud [syd]", "юг"],
+        ["ouest m [wɛst]", "запад"],
+        ["est m [ɛ, ɛst]", "восток"],
+        ["le réchauffement de la planète", "потепление планеты"],
+        ["des gaz à effet de serre", "газы парникового эффекта"],
+        ["les énergies f renouvelables", "возобновляемые источники энергии"],
+        ["les mouvements écologistes", "экологические движения"],
+        ["animé", "оживлённый"],
+        ["rapide", "быстрый"],
+        ["activité culturelle", "культурное мероприятие"],
+        ["circulation", "дорожное движение"],
+        ["En général", "В общем"],
+        ["le centre", "центр"],
+        ["banlieue f", "пригород"],
+        ["quartier m", "квартал"],
+        ["immeuble m", "здание"],
+        ["boutique f", "бутик"],
+        ["cathédrale f", "собор"],
+        ["avenue f", "проспект"],
+        ["une poste", "почта"],
+        ["une mairie", "мэрия"],
+        ["un lycée", "лицей"],
+        ["un musée", "музей"],
+        ["Métro - boulot - dodo", "метро - работа - спать"],
+        ["faire la queue", "стоять в очереди"],
+        ["le cinéma", "кино"],
+        ["un passage piétons", "пешеходный переход"],
+        ["un feu rouge", "красный свет"],
+        ["publicité f", "реклама"],
+        ["un parking", "парковка"],
+        ["un kiosque à journaux", "газетный киоск"],
+        ["un trottoir", "тротуар"],
+        ["un taxi", "такси"],
+        ["un embouteillage", "пробка"],
+        ["une cravate", "галстук"],
+        ["miel m", "мёд"],
+        ["réciter", "декламировать"],
+        ["lourd", "тяжёлый"],
+        ["noix f", "орех"],
+        ["obéir 2 - obéis / obéis / obéit / obéissons / obéissez / obéissent", "слушаться"],
+        ["enfin", "наконец"],
+        ["étourdir 2", "кружить голову"],
+        ["recevoir * - reçois / reçois / reçoit / recevons / recevez / reçoivent", "получать"],
+        ["baiser m", "поцелуй"],
+        ["bête f", "животное"],
+        ["souhaiter qch à qn 1", "желать кому-то"],
+        ["pouvoir * - peux / peux / peut / pouvons / pouvez / peuvent", "мочь"],
+        ["hérisson m", "ёж"],
+        ["accepter 1", "принять"],
+        ["un escargot", "улитка"],
+        ["une limace", "слизень"],
+        ["une pomme", "яблоко"],
+        ["piquer 1", "колоть"],
+        ["un museau", "морда"],
+        ["miauler", "мяукать"],
+        ["soie f", "шёлк"],
+        ["souriceau m", "мышонок"],
+        ["grignoter 1", "грызть"],
+        ["croûton m", "корочка"],
+        ["velours m", "бархат"],
+        ["trompette f", "труба"],
+        ["un os", "кость"],
+        ["aboiement", "лай"],
+        ["ourson", "медвежонок"],
+        ["souris f", "мышь"],
+        ["retenir * - retiens / retiens / retient / retenons / retenez / retiennent", "запоминать"],
+        ["se souvenir * - souviens / souviens / souvient / souvenons / souvenez / souviennent", "вспоминать"],
+      ];
+      phrases["21 июля - город и пригород"] = [
+        ["sauf", "за исключением"],
+        ["à la périphérie", "на переферии"],
+        ["désigner", "означать"],
+        ["difficile, sensible", "проблемный"],
+        ["espace vert", "зелёная зона"],
+        ["HLM [aʃɛlɛm] m, habitation à loyer modéré", "социальное жилье"],
+        ["logements sociaux", "социальное жильё"],
+        ["calme", "тихий"],
+        ["lent", "медленный"],
+        ["un château", "замок"],
+        ["une épicerie [episʁi]", "бакалейный магазин"],
+        ["une église [eɡliz] f", "церковь"],
+        ["un cimetière [simtjɛʁ]", "кладбище"],
+        ["un café", "кафе"],
+        ["une cabine téléphonique", "телефонная будка"],
+        ["une route", "дорога (асфальтированная)"],
+      ];
+    </script>
+    <meta charset="UTF-8">
+    <style>
+      html, a {
+        color: blanchedalmond;
+        background-color: black;
+      }
+      input, button {
+        background-color:burlywood;
+        color: black;
+        cursor: pointer;
+        border-radius: 5px;
+        padding: 5px;
+      }
+      html, input {
+        font-size: 30px;
+        font-family: 'Courier New', Courier, monospace;
+      }
+      #phrase2 {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+      }
+      button {
+        margin-top: auto;
+      }
+      input[type=checkbox] {
+        width: 20px;
+        height: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id=index style="display: block"></div>
+    <div id="phrases" style="display: none;">
+      <div id="phrase1"></div>
+      <div id="phrase2"></div>
+      <div>
+        <input id="next" type="button" value="Дальше" onclick="next()"/>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <label for="autospeak">Озвучивать автоматически</label>
+        <input type="checkbox" id="autospeak" onclick="autospeak = !autospeak"/>
+      <div>
+    </div>
+    <script>
+      const LANG = "fr";
+      
+      const index = document.getElementById("index");
+      const divPhrases = document.getElementById("phrases");
+      const phrase1 = document.getElementById("phrase1");
+      const phrase2 = document.getElementById("phrase2");
+      const btnNext = document.getElementById("next");
+      let autospeak = false;
+      
+      let indexHtml = "";
+      for (let key of Object.keys(phrases)) {
+        indexHtml += `<div><a href="javascript:setPart('${key}')">${key}</a><div>`;
+      }
+      index.innerHTML = indexHtml;
+
+      let partIndex;
+      let phraseIndex;
+      let part;
+
+      function show(element) {
+        element.style.display = "block"; 
+      }
+
+      function hide(element) {
+        element.style.display = "none"; 
+      }
+
+      function setPart(_index) {
+        partIndex = _index;
+        part = phrases[partIndex].slice();
+        hide(index);
+        show(divPhrases);
+        setPhrase();
+      }
+
+      async function setPhrase() {
+        phrase1.innerHTML = "";
+        phrase2.innerHTML = "";
+        if (part.length === 0) {
+          show(index);
+          hide(divPhrases);
+        } else {
+          phraseIndex = Math.round(Math.random() * (part.length - 1)); 
+          const text = part[phraseIndex][1];
+          phrase1.innerHTML = text;
+        } 
+      }
+
+      async function next() {
+        if (phrase2.innerHTML === "") {
+          const text = part[phraseIndex][0];
+          const speakText = text.split("[")[0];
+          phrase2.innerHTML = `<span>${text}</span> ${speakBtnHTML(speakText)}`;
+          part.splice(phraseIndex, 1); 
+
+          if (autospeak) {
+            speak(speakText);
+          }
+        } else {
+          await setPhrase();
+        }
+      }
+
+      function speakBtnHTML(text) {
+        return `
+          <button onClick="speak('${text.replace("'", "\\'")}')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20">
+              <path fill="currentColor" d="M48 352l48 0 134.1 119.2c6.4 5.7 14.6 8.8 23.1 8.8 19.2 0 34.8-15.6 34.8-34.8l0-378.4c0-19.2-15.6-34.8-34.8-34.8-8.5 0-16.7 3.1-23.1 8.8L96 160 48 160c-26.5 0-48 21.5-48 48l0 96c0 26.5 21.5 48 48 48zM441.1 107c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C443.3 170.7 464 210.9 464 256s-20.7 85.3-53.2 111.8c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5c43.2-35.2 70.9-88.9 70.9-149s-27.7-113.8-70.9-149zm-60.5 74.5c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C361.1 227.6 368 241 368 256s-6.9 28.4-17.7 37.3c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5C402.1 312.9 416 286.1 416 256s-13.9-56.9-35.5-74.5z"/>
+            </svg>
+          </button>`;
+      }
+
+      let started = false;
+      let voice;
+
+      document.addEventListener("pointerup", (event) => {
+        if (!started) speak(" ");
+      });
+
+      function speak(text) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = LANG;
+        utterance.rate = 0.8; 
+        utterance.volume = started? 1 : 0;
+        if (voice) {
+          utterance.voice = voice;
+        }
+        started = true;
+        window.speechSynthesis.speak(utterance);
+      }
+
+      function loadVoices() {
+        const voices = window.speechSynthesis.getVoices();
+				voice = voices.find(voice => voice.lang.startsWith(LANG)/* && voice.localService*/);
+      }
+
+      speechSynthesis.addEventListener("voiceschanged", loadVoices);
+    </script>
+  </body>
+</html>
