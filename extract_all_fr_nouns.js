@@ -43,7 +43,7 @@ async function getWordMetadata(word) {
 	if (regular.some(it => it.pos.code !== "nn")) {
 		return [];
 	}
-	return regular.filter(it => it.pos.code === "nn" && it.text === it.text.toLowerCase())
+	const data = regular.filter(it => it.pos.code === "nn" && it.text === it.text.toLowerCase())
 	  .map(data => {
 			const text = data.text;
 			const ts = data.ts ?? "";
@@ -51,6 +51,7 @@ async function getWordMetadata(word) {
 			const tr = data.tr[0].text;
 			return { text, ts, gen, tr };
 		});
+	return data.length === 1? data : [];
 }
 
 function addWordOrCount(map, data, count) {

@@ -3,12 +3,13 @@
     <title>à / de</title>
     <meta charset="UTF-8">
     <script src="js/common.js"></script>
+    <script src="js/small_steps.js"></script>
     <script>
       //["commencer à / de faire qch", "начинать делать что-л."],
       //["continuer à / de faire qch", "продолжить делать что-л."],
       //["discuter (de) qch", "обсуждать что-л."],
       //["vouloir qch de (à) qn", "хотеть что-л. от кого-л."]      
-      const phrases = [
+      const items = [
         ["être à qn", "принадлежать кому-л.", 12077423],
         ["faire bien de faire qch", "сделать хорошо сделав что-л.", 2960590],
         ["aller faire qch", "пойти делать что-л.", 2896308],
@@ -393,7 +394,7 @@
       ];
     </script>
     <style>
-      html {
+      html, hr {
         color: blanchedalmond;
         background-color: black;
       }
@@ -424,39 +425,21 @@
     </style>
   </head>
   <body>
-    <div id="phrases">
-      <div id="part"></div>
-      <div id="progress"></div>
-      <div id="phrase"></div>
-      <div id="errors"></div>
-    </div>
+    <div id="fr_a_de"></div>
     <script>
-      const CONFIG_NAME = "fr_a_de";
-      const partSize = 10;
-      let { start } = getConfig(CONFIG_NAME);
-      if (!start) { 
-        start = 0; 
-      }
-
-      let part;
-      let phrase;
-      let correctPhraseWords;
-      let phraseWords;
-
       const LANG = "fr-FR";
       initSpeak(LANG);
 
-      function elm(id) {
-        return document.getElementById(id);
-      }
-      
+      let correctItemWords;
+      let itemWords;
+
       function variants(text) {
         const regex = /( à | de | )(faire qch|qch|qn)/ig; 
-        correctPhraseWords = text.replace(regex, "--$1--$2").split("--");
-        phraseWords = text.replace(regex, "-- --$2").split("--");
-        return correctPhraseWords.map((word, index)  => {
+        correctItemWords = text.replace(regex, "--$1--$2").split("--");
+        itemWords = text.replace(regex, "-- --$2").split("--");
+        return correctItemWords.map((word, index)  => {
           if ([" à ", " de ", " "].includes(word)) {
-            return `&nbsp;<select name="part${index}" onChange="phraseWords[${index}] = this.value">
+            return `&nbsp;<select name="part${index}" onChange="itemWords[${index}] = this.value">
               <option value=" " selected> </option>
               <option value=" à ">à</option>
               <option value=" de ">de</option>
@@ -467,77 +450,35 @@
         }).join("");
       }
 
-      function setPart() {
-        let messages = [];
-        if (part && part.length === 0) {
-          start += partSize;
-          if (start >= phrases.length) {
-            messages.push("Ура! Все фразы пройдены. Начинаем с начала.");
-            start = 0;
-          }
-        }
-        const end = Math.min(start + partSize, phrases.length);
-        part = [...phrases.slice(start, end)];
-        if (start > 0) {
-          const previousPhrases = [...phrases.slice(0, start)];
-          while (previousPhrases.length > (start - partSize)) {
-            const index = Math.round(Math.random() * (previousPhrases.length - 1));
-            part.push(previousPhrases[index]);
-            previousPhrases.splice(index, 1);
-          }
-        }
-        messages.push(`Фразы по ${end} из ${phrases.length}.`);
-        elm("part").innerHTML = messages.join(" ");
-        saveConfig(CONFIG_NAME, { start });
-        setPhrase()
+      function itemHTML(item) {
+        return `<div>${item[1]}</div>
+          <div style="display: flex; align-items: flex-start; flex-wrap: wrap;">${variants(item[0])}</div>`;
       }
 
-      function setPhrase() {
-        if (part.length === 0) {
-          setPart();
-        } else {
-          elm("progress").innerHTML = `Осталось фраз: ${part.length}.`;
-          const index = Math.round(Math.random() * (part.length - 1));
-          phrase = part[index];
-          part.splice(index, 1);
-          const phraseHTML = `
-            <div>${phrase[1]}</div>
-            <div style="display: flex; align-items: flex-start; flex-wrap: wrap;">${variants(phrase[0])}</div>
-            <div><button onClick="checkAnswer()"">Дальше</button></div>
-          `;
-          elm("phrase").innerHTML = phraseHTML;
-        }
-      }
-
-      function checkAnswer() {
-        let error = false;
-        for (let i = 0; i < phraseWords.length; i++) {
-          if (phraseWords[i] !== correctPhraseWords[i]) {
-            error = true;
+      function checkAnswer(item) {
+        for (let i = 0; i < itemWords.length; i++) {
+          if (itemWords[i] !== correctItemWords[i]) {
+            return false;
           }
         }
-        if (error) {
-          speak(fullText(phrase[0]), LANG);
-          elm("errors").innerHTML = `<div>${phrase[1]}</div><div class="error">${phraseWithSpeakButtonHTML(phrase[0])}</div>` + elm("errors").innerHTML;
-          setPart();
-        } else {
-          setPhrase();
-        }
+        return true;
       }
-
+      
       function fullText(text) {
         return text.replace("qn", "quelqu’un").replace("qch", "quelquechose");
       }
 
-      function phraseWithSpeakButtonHTML(text) {
-        return `
-          <div><span style="display: flex; flex-direction: row; gap: 10px;">
-            <span>${text}</span>
-            ${speakButtonHTML(fullText(text), LANG)}
-          </div>`;
+      function withSpeakButtonHTML(text) {
+        return `<div><span style="display: flex; flex-direction: row; gap: 20px;">
+          <span>${text}</span>${speakButtonHTML(fullText(text), LANG)}</div>`;
       }
 
-      setPart();
+      function errorHTML(item) {
+        speak(fullText(item[0]), LANG);
+        return `<div>${item[1]}</div><div class="error">${withSpeakButtonHTML(item[0])}</div>`;
+      }
+
+      smallSteps("fr_a_de", items, itemHTML, checkAnswer, errorHTML);
     </script>
   </body>
 </html>

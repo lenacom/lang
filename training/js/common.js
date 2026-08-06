@@ -27,6 +27,10 @@ function getCookie(name) {
   return null;
 }
 
+function byId(id) {
+	return document.getElementById(id);
+}
+
 function initSpeak(lang) {
 	globalThis[`${lang}__started`] = false;
 	globalThis[`${lang}__voice`] = false;
