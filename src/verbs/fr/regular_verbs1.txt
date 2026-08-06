@@ -2246,8 +2246,6 @@ chouchouter
 froncer
 rabâcher
 stagner
-laisser aller
-laisser passer
 ciller
 empoigner
 recalibrer

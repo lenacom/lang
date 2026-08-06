@@ -43,7 +43,7 @@ async function getWordMetadata(word) {
 		}
 		return undefined;
 	}
-	return regular.filter(it => it.pos.code === "vrb")
+	return regular.filter(it => it.pos.code === "vrb" && !it.text.include(" ") /* laisser passer */)
 	  .map(data => {
 			let text = data.text;
 			if (text.startsWith("se ")) {
