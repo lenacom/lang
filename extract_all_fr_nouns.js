@@ -79,7 +79,7 @@ function writeToFile(map, fileName) {
 
 async function buildWords() {
 	const nouns = {};
-	for (const line of lines.slice(0, 1000) ) { //.slice(0, 1000) 
+	for (const line of lines) { //.slice(0, 1000) 
 		console.log(line);
 		const parts = line.split(/\s/);
 		const word = parts[0];
