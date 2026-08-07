@@ -33,6 +33,14 @@ function byId(id) {
 	return document.getElementById(id);
 }
 
+function show(id) {
+	byId(id).style.display = "block"; 
+}
+
+function hide(id) {
+	byId(id).style.display = "none"; 
+}
+
 function initSpeak(lang) {
 	globalThis[`${lang}__started`] = false;
 	globalThis[`${lang}__voice`] = false;
