@@ -1,0 +1,23 @@
+body, button, select, option {
+  font-size: 30px;
+  font-family: 'Courier New', Courier, monospace;
+}
+body {
+  color: blanchedalmond;
+  background-color: black;
+}
+select, option {
+  background-color: blanchedalmond;
+  color: black;
+}
+button {
+  font-weight: bold;
+  background-color:burlywood;
+  color: black;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 5px;
+}
+.error {
+  color: #CC6600;
+}

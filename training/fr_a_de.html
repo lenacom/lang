@@ -1,9 +1,10 @@
 <html>
   <head>
-    <title>à / de</title>
+    <title>Управление французских глаголов, предлоги à и de</title>
     <meta charset="UTF-8">
     <script src="js/common.js"></script>
     <script src="js/small_steps.js"></script>
+    <link rel="stylesheet" href="css/common.css">
     <script>
       //["commencer à / de faire qch", "начинать делать что-л."],
       //["continuer à / de faire qch", "продолжить делать что-л."],
@@ -393,36 +394,6 @@
         ["orner qch (qn) de qch", "украшать что-л. (кого-л.) чем-л.", 103]
       ];
     </script>
-    <style>
-      html, hr {
-        color: blanchedalmond;
-        background-color: black;
-      }
-      select, option {
-        background-color: blanchedalmond;
-        color: black;
-      }
-      button {
-        background-color:burlywood;
-        color: black;
-        cursor: pointer;
-        border-radius: 5px;
-        padding: 5px;
-      }
-      html, button, select, option {
-        font-size: 30px;
-        font-family: 'Courier New', Courier, monospace;
-      } 
-      button {
-        margin-right: 10px;
-      }
-      .error {
-        color:crimson;
-      }
-      #phrase {
-        margin-top: 20px;
-      }
-    </style>
   </head>
   <body>
     <div id="fr_a_de"></div>
@@ -434,15 +405,15 @@
       let itemWords;
 
       function variants(text) {
-        const regex = /( à | de | )(faire qch|qch|qn)/ig; 
+        const regex = /( à | de | | d’)(faire qch|qch|qn|avoir fait qch)/ig; 
         correctItemWords = text.replace(regex, "--$1--$2").split("--");
         itemWords = text.replace(regex, "-- --$2").split("--");
         return correctItemWords.map((word, index)  => {
-          if ([" à ", " de ", " "].includes(word)) {
+          if ([" à ", " de ", " ", " d’"].includes(word)) {
             return `&nbsp;<select name="part${index}" onChange="itemWords[${index}] = this.value">
               <option value=" " selected> </option>
               <option value=" à ">à</option>
-              <option value=" de ">de</option>
+              <option value="${ word === " d’" ? word : " de "}">de</option>
             </select>&nbsp;`;
           } else {
             return word;
