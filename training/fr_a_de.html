@@ -445,11 +445,14 @@
       }
 
       function errorHTML(item) {
-        speak(fullText(item[0]), LANG);
+        if (globalThis.autospeak) {
+          speak(fullText(item[0]), LANG);
+        }
         return `<div>${item[1]}</div><div class="error">${withSpeakButtonHTML(item[0])}</div>`;
       }
 
       smallSteps("fr_a_de", items, itemHTML, checkAnswer, errorHTML);
+      document.write(autospeakHTML());
     </script>
   </body>
 </html>

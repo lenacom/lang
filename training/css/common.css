@@ -1,22 +1,29 @@
-body, button, select, option {
+body, button, select, option, a {
   font-size: 30px;
   font-family: 'Courier New', Courier, monospace;
 }
-body {
+body, a {
   color: blanchedalmond;
   background-color: black;
+}
+a {
+  text-decoration: none;
 }
 select, option {
   background-color: blanchedalmond;
   color: black;
 }
 button {
-  font-weight: bold;
-  background-color:burlywood;
+  background-color: burlywood;
   color: black;
   cursor: pointer;
   border-radius: 5px;
   padding: 5px;
+}
+input[type=checkbox] {
+  width: 20px;
+  height: 20px;
+  accent-color: burlywood;
 }
 .error {
   color: #CC6600;

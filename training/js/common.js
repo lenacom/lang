@@ -1,13 +1,15 @@
+"use strict";
+
 function getConfig(name) {
 	const json = getCookie(name);
 	return json? JSON.parse(json) : {};
 }
 
 function saveConfig(name, data) {
-	setCookie(name, JSON.stringify(data), 90);
+	setCookie(name, JSON.stringify(data));
 }
 
-function setCookie(name, value, days) {
+function setCookie(name, value, days = 90) {
 	let expires = "";
 	if (days) {
 		let date = new Date();
@@ -43,6 +45,15 @@ function initSpeak(lang) {
 		const voices = window.speechSynthesis.getVoices();
 		globalThis[`${lang}__voice`] = voices.find(voice => voice.lang === lang);
 	});
+}
+
+function autospeakHTML() {
+	globalThis.autospeak = !!getCookie("autospeak");
+	const onClick = "globalThis.autospeak = !globalThis.autospeak; setCookie('autospeak', globalThis.autospeak);";
+	return `<div style="display: flex; align-items: center; gap: 10px;">
+    <label for="autospeak">Озвучивать автоматически</label>
+    <input type="checkbox" ${globalThis.autospeak ? "checked" : ""} id="autospeak" onClick="${onClick}"/>
+    </div>`;
 }
 
 function speak(text, lang) {
