@@ -5,67 +5,62 @@ function smallSteps(id,
     fnItemHTML,
     fnCheckAnswer,
     fnErrorHTML) {
+  const partSize = 5;
   const config = getConfig(id);
-  let start = config?.start ?? 0;
+  let limit = config?.limit ?? 2 * partSize;
   const errors = config?.errors ?? [];
   let part;
   let current;
-  const partSize = 10;
 
-  const html =
-    `<div id="part"></div>
+  const html = `<div id="test"></div>
     <div id="progress"></div>
     <hr/>
     <div id="item"></div>
     <div><button onClick="document.dispatchEvent(new Event('next'))">Дальше</button></div>
-    <div id="errors"></div>`;
+    <div id="error"></div>`;
   document.getElementById(id).innerHTML = html;
 
   document.addEventListener("next", checkAnswer);
 
-  function saveStartAndErrors() {
-    saveConfig(id, { start, errors: errors.slice(0, 100) });
+  function saveLimitAndErrors() {
+    saveConfig(id, { limit, errors: errors.slice(0, 100) });
   }
 
-  function pickRandomly(fromArray, howMany) {
-    if (howMany <= 0) {
-      return [];
-    }
-    const result = [];
+  function fillRandomly(toArray, fromArray, limit) {
     const fromArrayCopy = [...fromArray];
-    while (result.length < howMany && fromArrayCopy.length) {
+    while (toArray.length < limit && fromArrayCopy.length) {
       const index = Math.round(Math.random() * (fromArrayCopy.length - 1));
-      result.push(fromArrayCopy[index]);
+      toArray.push(fromArrayCopy[index]);
       fromArrayCopy.splice(index, 1);
     }
-    return result;
   }
 
-  function setPart() {
+  function setPart(newStep = false) {
     let messages = [];
-    if (part && part.length === 0) {
-      start += partSize;
-      if (start >= items.length) {
+    if (newStep) {
+      if (limit === items.length) {
         messages.push("Ура! Все тесты пройдены. Начинаем с начала.");
-        start = 0;
+        limit = partSize;
+      } else {
+        limit = Math.min(limit + partSize, items.length);
       }
+      part = Array.from({ length: partSize }, (_, i) => limit - partSize + i);
+    } else {
+      part = [];
     }
-    const end = Math.min(start + partSize, items.length);
-    part = Array.from({ length: end - start }, (_, i) => start + i);
-    if (start > 0) {
-      part = part.concat(pickRandomly(errors, partSize));
-      const previous = Array.from({ length: start }, (_, i) => i);
-      part = part.concat(pickRandomly(previous, 2 * partSize - part.length));
-    }
-    messages.push(`Тесты по ${end} из ${items.length}.`);
-    byId("part").innerHTML = messages.join(" ");
-    saveStartAndErrors();
+    fillRandomly(part, errors, 2 * partSize);
+    const previous = Array.from({ length: limit }, (_, i) => i)
+      .filter(it => !part.includes(it));
+    fillRandomly(part, previous, 2 * partSize);
+    messages.push(`Тесты по ${limit} из ${items.length}.`);
+    byId("test").innerHTML = messages.join(" ");
+    saveLimitAndErrors();
     setCurrent();
   }
 
   function setCurrent() {
     if (part.length === 0) {
-      setPart();
+      setPart(true);
     } else {
       byId("progress").innerHTML = `Осталось тестов: ${part.length}.`;
       const index = Math.round(Math.random() * (part.length - 1));
@@ -82,13 +77,13 @@ function smallSteps(id,
       const index = errors.findIndex(it => it === current);
       if (index) {
         errors.splice(index, 1);
-        saveStartAndErrors();
+        saveLimitAndErrors();
       }  
       setCurrent();
     } else {
       errors.unshift(current);
-      saveStartAndErrors()
-      byId("errors").innerHTML = fnErrorHTML(item);
+      saveLimitAndErrors()
+      byId("error").innerHTML = fnErrorHTML(item);
       setPart();
     }
   }
