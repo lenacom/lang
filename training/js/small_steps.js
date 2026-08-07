@@ -1,3 +1,5 @@
+"use strict";
+
 function smallSteps(id,
     items, 
     fnItemHTML,
@@ -5,8 +7,9 @@ function smallSteps(id,
     fnErrorHTML) {
   const config = getConfig(id);
   let start = config?.start ?? 0;
+  const errors = config?.errors ?? [];
   let part;
-  let item;
+  let current;
   const partSize = 10;
 
   const html =
@@ -20,6 +23,24 @@ function smallSteps(id,
 
   document.addEventListener("next", checkAnswer);
 
+  function saveStartAndErrors() {
+    saveConfig(id, { start, errors: errors.slice(0, 100) });
+  }
+
+  function pickRandomly(fromArray, howMany) {
+    if (howMany <= 0) {
+      return [];
+    }
+    const result = [];
+    const fromArrayCopy = [...fromArray];
+    while (result.length < howMany && fromArrayCopy.length) {
+      const index = Math.round(Math.random() * (fromArrayCopy.length - 1));
+      result.push(fromArrayCopy[index]);
+      fromArrayCopy.splice(index, 1);
+    }
+    return result;
+  }
+
   function setPart() {
     let messages = [];
     if (part && part.length === 0) {
@@ -30,40 +51,44 @@ function smallSteps(id,
       }
     }
     const end = Math.min(start + partSize, items.length);
-    part = [...items.slice(start, end)];
+    part = Array.from({ length: end - start }, (_, i) => start + i);
     if (start > 0) {
-      const previousItems = [...items.slice(0, start)];
-      while (previousItems.length > (start - partSize)) {
-        const index = Math.round(Math.random() * (previousItems.length - 1));
-        part.push(previousItems[index]);
-        previousItems.splice(index, 1);
-      }
+      part = part.concat(pickRandomly(errors, partSize));
+      const previous = Array.from({ length: start }, (_, i) => i);
+      part = part.concat(pickRandomly(previous, 2 * partSize - part.length));
     }
     messages.push(`Тесты по ${end} из ${items.length}.`);
     byId("part").innerHTML = messages.join(" ");
-    saveConfig(id, { start });
-    setItem();
+    saveStartAndErrors();
+    setCurrent();
   }
 
-  function setItem() {
+  function setCurrent() {
     if (part.length === 0) {
       setPart();
     } else {
       byId("progress").innerHTML = `Осталось тестов: ${part.length}.`;
       const index = Math.round(Math.random() * (part.length - 1));
-      item = part[index];
+      current = part[index];
       part.splice(index, 1);
-      byId("item").innerHTML = fnItemHTML(item);
+      byId("item").innerHTML = fnItemHTML(items[current]);
     }
   }
 
   function checkAnswer() {
+    const item = items[current];
     const ok = fnCheckAnswer(item);
     if (ok) {
-      setItem();
+      const index = errors.findIndex(it => it === current);
+      if (index) {
+        errors.splice(index, 1);
+        saveStartAndErrors();
+      }  
+      setCurrent();
     } else {
-      const errors = byId("errors");
-      errors.innerHTML = fnErrorHTML(item) + errors.innerHTML;
+      errors.unshift(current);
+      saveStartAndErrors()
+      byId("errors").innerHTML = fnErrorHTML(item);
       setPart();
     }
   }
