@@ -111,7 +111,7 @@ async function extractVerbs() {
   }
   console.log("failed irregular verbs:");
   console.log(failedVerbs);
-  fs.writeFileSync(`${SRC}/verbs/fr/irregular_verbs.json`, JSON.stringify(irregularVerbsTenses));
+  fs.writeFileSync(`${SRC}/fr/irregular_verbs.json`, JSON.stringify(irregularVerbsTenses));
 
   const regularVerbsEndings = {
     "1": await extractVerb("parler", "parl"),

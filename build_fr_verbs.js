@@ -3,11 +3,11 @@ const fs = require('fs');
 const SRC = "./src";
 const DEST = "./dest";
 
-const irregularVerbs = JSON.parse(fs.readFileSync(`${SRC}/verbs/fr/irregular_verbs.json`, "utf8"));
-const regularVerbs = JSON.parse(fs.readFileSync(`${SRC}/verbs/fr/regular_verbs.json`, "utf8"));
-const regularVerbs1 = fs.readFileSync(`${SRC}/verbs/fr/regular_verbs1.txt`, "utf8");
-const regularVerbs2 = fs.readFileSync(`${SRC}/verbs/fr/regular_verbs2.txt`, "utf8");
-const verbsCode = fs.readFileSync(`${SRC}/verbs/fr/verbs_code.js`, "utf8");
+const irregularVerbs = JSON.parse(fs.readFileSync(`${SRC}/fr/irregular_verbs.json`, "utf8"));
+const regularVerbs = JSON.parse(fs.readFileSync(`${SRC}/fr/regular_verbs.json`, "utf8"));
+const regularVerbs1 = fs.readFileSync(`${SRC}/fr/regular_verbs1.txt`, "utf8");
+const regularVerbs2 = fs.readFileSync(`${SRC}/fr/regular_verbs2.txt`, "utf8");
+const verbsCode = fs.readFileSync(`${SRC}/fr/verbs_code.js`, "utf8");
 
 function regularVerbBases(fileContent) {
   const lines = fileContent.split(/\r?\n/);

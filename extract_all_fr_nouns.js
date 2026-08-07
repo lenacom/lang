@@ -3,7 +3,7 @@ const fs = require('fs');
 const SRC = "./src";
 const DEST = "./dest";
 
-const rawWords = fs.readFileSync(`${SRC}/words/fr/raw_words.txt`, "utf8");
+const rawWords = fs.readFileSync(`${SRC}/fr/raw_words.txt`, "utf8");
 const lines = rawWords.split(/\r?\n/);
 
 const skipEndings = ["'", "-", "-ce", "-ci", "-je", "-te", "-vous", "-nous", "-le", "-la", "-les", 
@@ -70,16 +70,16 @@ function writeToFile(map, fileName) {
 		const row = [value.text, value.ts, value.gen, value.tr, value.count];
 		data.push(row);
 	};
-	data.sort((a, b) => b[1] - a[1]);
+	data.sort((a, b) => b[4] - a[4]);
 	let content = "const all_nouns = [\r\n";
 	content += data.map(it => `["${it[0]}", "${it[1]}", "${it[2]}", "${it[3]}", ${it[4]}],`).join("\r\n"); 
 	content += "]\r\n";
-	fs.writeFileSync(`${SRC}/verbs/fr/${fileName}.js`, content);
+	fs.writeFileSync(`${SRC}/fr/${fileName}.js`, content);
 }
 
 async function buildWords() {
 	const nouns = {};
-	for (const line of lines) { //.slice(0, 1000) 
+	for (const line of lines.slice(0, 1000) ) { //.slice(0, 1000) 
 		console.log(line);
 		const parts = line.split(/\s/);
 		const word = parts[0];
