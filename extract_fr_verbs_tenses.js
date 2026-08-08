@@ -117,7 +117,7 @@ async function extractVerbs() {
     "1": await extractVerb("parler", "parl"),
     "2": await extractVerb("finir", "fin"),
   };
-  fs.writeFileSync(`${SRC}/verbs/fr/regular_verbs.json`, JSON.stringify(regularVerbsEndings));
+  fs.writeFileSync(`${SRC}/fr/regular_verbs.json`, JSON.stringify(regularVerbsEndings));
 }
 
 extractVerbs();
