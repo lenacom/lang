@@ -61,6 +61,7 @@ function SmallSteps(configName, items) {
       }  
       setCurrent();
     } else {
+      errors.splice(errors.indexOf(current), 1);
       errors.unshift(current);
       saveLimitAndErrors();
       setPart();

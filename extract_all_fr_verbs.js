@@ -65,12 +65,12 @@ function addWordOrCount(map, data, count, irregular) {
 function writeToFile(map, fileName) {
 	const data = [];
 	for (const value of Object.values(map)) {
-		const row = [value.text, value.count, value.irregular];
+		const row = [value.text, value.tr, value.count, value.irregular];
 		data.push(row);
 	};
-	data.sort((a, b) => b[1] - a[1]);
+	data.sort((a, b) => b[2] - a[2]);
 	let content = "const all_verbs = [\r\n";
-	content += data.map(it => `["${it[0]}", ${it[1]}, ${it[2]}],`).join("\r\n"); 
+	content += data.map(it => `["${it[0]}", "${it[1]}", ${it[2]}, ${it[3]}],`).join("\r\n"); 
 	content += "]\r\n";
 	fs.writeFileSync(`${SRC}/fr/${fileName}.js`, content);
 }

@@ -13,6 +13,9 @@ select, option {
   background-color: blanchedalmond;
   color: black;
 }
+option:checked {
+  background-color: #CC6600;
+}
 button {
   background-color: burlywood;
   color: black;

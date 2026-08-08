@@ -56,7 +56,7 @@ function initSpeak(lang) {
 }
 
 function autospeakHTML() {
-	globalThis.autospeak = !!getCookie("autospeak");
+	globalThis.autospeak = getCookie("autospeak") === "true";
 	const onClick = "globalThis.autospeak = !globalThis.autospeak; setCookie('autospeak', globalThis.autospeak);";
 	return `<div style="display: flex; align-items: center; gap: 10px;">
     <label for="autospeak">Озвучивать автоматически</label>
