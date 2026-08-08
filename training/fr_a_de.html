@@ -41,11 +41,11 @@
       }
 
       function setItem() {
-        const state = getState();
-        byId("test").innerHTML = `Тесты по ${state.limit} из ${items.length}.`;
-        byId("progress").innerHTML = `Осталось тестов: ${state.part.length + 1}.`;
-        byId("item").innerHTML = `<div>${state.item[1]}</div>
-          <div style="display: flex; align-items: flex-start; flex-wrap: wrap;">${variants(state.item[0])}</div>`;
+        const { limit, part, item } = getState();
+        byId("test").innerHTML = `Тесты по ${limit} из ${items.length}.`;
+        byId("progress").innerHTML = `Осталось тестов: ${part.length + 1}.`;
+        byId("item").innerHTML = `<div>${item[1]}</div>
+          <div style="display: flex; align-items: flex-start; flex-wrap: wrap;">${variants(item[0])}</div>`;
       }
 
       function checkAnswer() {
@@ -58,22 +58,14 @@
         }
         if (!ok) {
           const { item } = getState();
+          const fullText = item[0].replace("qn", "quelqu’un").replace("qch", "quelquechose");
           if (globalThis.autospeak) {
-            speak(fullText(item[0]), LANG);
+            speak(fullText, LANG);
           }
-          byId("error").innerHTML = `<div>${item[1]}</div><div class="error">${withSpeakButtonHTML(item[0])}</div>`;
+          byId("error").innerHTML = `<div>${item[1]}</div><div class="error">${withSpeakButtonHTML(fullText, LANG)}</div>`;
         }
         setAnswered(ok);
         setItem();
-      }
-      
-      function fullText(text) {
-        return text.replace("qn", "quelqu’un").replace("qch", "quelquechose");
-      }
-
-      function withSpeakButtonHTML(text) {
-        return `<div><span style="display: flex; flex-direction: row; gap: 20px;">
-          <span>${text}</span>${speakButtonHTML(fullText(text), LANG)}</div>`;
       }
       
       setItem();
