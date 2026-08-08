@@ -1,6 +1,6 @@
 "use strict";
 
-function wordsInGroups(id, items, lang) {
+function WordsInGroups(id, items, lang) {
   let indexHtml = "";
   for (let key of Object.keys(items)) {
     indexHtml += `<div><a href="javascript:document.dispatchEvent(new CustomEvent('part', { detail: { name: '${key}' } }))">${key}</a></div>`;

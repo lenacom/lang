@@ -1,0 +1,458 @@
+<html>
+  <head>
+    <title>Слова</title>
+    <script>
+      const phrases = {};
+      phrases["1"] = [
+        ["Au commencement était la Parole", 
+        "В начале было Слово"], ["servir de témoin", "служить свидетелем"],
+        ["rendre témoignage à la lumière", "свидетельствовать о свете"],
+        ["elle a donné le pouvoir de devenir enfants de Dieu", 
+        "она (свет) дала власть быть чадами Божиими"],
+        ["Et nous avons tous reçu de sa plénitude", 
+        "И мы все получили от его полноты"],
+        ["Que dis-tu de toi-même?", 
+        "Что ты скажешь о себе самом?"],
+        ["au milieu de vous", "среди вас"],
+        ["je ne suis pas digne de délier la courroie de ses sandales", 
+        "я не достоин развязать ремень Его обуви"],
+        ["baptiser d’eau", "крестить водой"],
+        ["ils restèrent auprès de lui ce jour-là", 
+        "они остались у Него этот день"],
+        ["l’un des deux", "один из двух"],
+        ["quelque chose de bon", "что-то доброе"],
+        ["Avant que Philippe ne t’appelle, je t’ai vu", "Прежде чем  Филипп тебя позвал, Я тебя видел"],
+        ["tu verras de plus grandes choses que celles-ci", "ты увидишь большее, чем это"]
+      ];
+      phrases["2"] = [
+        ["Le vin venant à manquer", "вина не хватало"],
+        ["Remplissez d’eau ces vases", "Наполните водой эти сосуды"],
+        ["portez-en", "отнесите это"],
+        ["l’eau changée en vin", "вода превращённая в вино"],
+        ["d’où", "откуда"],
+        ["Ayant fait un fouet avec des cordes", "Сделав кнут из веревок"],
+        ["Ôtez cela d’ici", "уберите это отсюда"],
+        ["agir de la sorte", "поступать таким образом"],
+        ["ressuscité des morts", "воскресший из мёртвых"],
+        ["crurent à l’Écriture", "верили Писаниям"],
+        ["à la fête de la Pâque", "на праздник Пасхи"]
+      ];
+      phrases["3"] = [
+        ["un homme d’entre les pharisiens", "человек среди фарисеев"],
+        ["de nouveau", "снова"],
+        ["si un homme ne naît d’eau et d’Esprit", "если человек не родится от воды и Духа"],
+        ["Le vent souffle où il veut et tu en entends le bruit", 
+         "Ветер дует где хочет, и ты слышишь от этого шум"],
+        ["Il en est ainsi de tout homme", "Так (бывает) со всяким человеком"],
+        ["nous rendons témoignage de ce que", "мы свидетельствуем о том, что"],
+        ["de même", "так же"],
+        ["en effet", "действительно"],
+        ["les hommes ont préféré les ténèbres à la lumière", "люди предпочли мрак свету"],
+        ["près de", "рядом с"],
+        ["mis en prison", "помещён в тюрьму"],
+        ["de la part des disciples", "со стороны учеников"],
+        ["(étre) de l’autre côté du Jourdain", "(быть) на другой стороне Иордана"],
+        ["Un homme ne peut recevoir que ce qui lui a été donné du ciel", 
+        "Человек может получить только то, что ему дано с неба"],
+        ["Vous-mêmes m’êtes témoins ", "Вы сами мне свидетели"],
+        ["celui qui est de la terre est de la terre", "сущий от земли земной и есть"],
+        ["entre ses mains", "в своих руках"]
+      ];
+      phrases["4"] = [
+        ["Donne-moi à boire", "Дай мне пить"],
+        ["Les Juifs n’ont pas de relations avec les Samaritains", "Иудеи не сообщаются с Самарянами"],
+        ["demander à boire", "просить пить"],
+        ["donner de l’eau vive", "дать живую воду"],
+        ["boir de l’eau", "пить воду"],
+        ["avoir raison de dire", "сказать верно"],
+        ["aucun ne dit", "никто не сказал"],
+        ["le pressaient de manger", "понуждали его есть"],
+        ["ils le prièrent de rester", "они умоляли его остаться"],
+        ["sur le point de mourir", "на грани смерти"],
+        ["avant que mon enfant ne meure", "прежде чем мой ребёнок умрёт"],
+        ["venant à sa rencontre", "вышедший ему навстречу"],
+        ["il s’était trouvé mieux", "ему стало лучше"],
+      ];
+      phrases["5"] = [
+        ["en grand nombre", "в большом количестве"],
+        ["de temps en temps", "время от времени"],
+        ["quelle que soit sa maladie", "какова бы ни была его болезнь"],
+        ["il ne t’est pas permis d’emporter ton lit", "не позволено тебе уносить свою постель"],
+        ["Jésus avait disparu de la foule", "Иисус скрылся в толпе"],
+        ["de peur qu’il ne t’arrive quelque chose de pire", "чтобы с тобой не случилось чего-то хуже"],
+        ["un jour de sabbat - le jour du sabbat", "субботний день"],
+        ["jusqu’à présent", "до настоящего времени"],
+        ["cherchaient encore plus à le faire mourir", "ещё более искали убить его"],
+        ["se faisant lui-même égal à Dieu", "делающий себя равным Богу"],
+        ["le Fils ne peut rien faire de lui-même", "Сын не может ничего делать сам"],
+        ["ne vient pas en jugement", "не приходит на суд"],
+        ["il a donné au Fils d’avoir la vie en lui-même", "дал Сыну иметь жизнь в Самом Себе"],
+        ["le pouvoir de juger", "власть судить"],
+        ["réjouir une heure à sa lumière", "порадоваться час в его свете"],
+        ["témoignent à mon sujet que", "свидетельствовали обо мне, что"],
+        ["qui tirez votre gloire les uns des autres", "кто вытягиваете свою славу друг от друга"],
+        ["en qui vous avez mis votre espérance", "в ком вы положили свою надежду"]
+      ];
+      phrases["6"] = [
+        ["Jésus s’en alla de l’autre côté de la mer de Galilée, dite de Tibériade", 
+        "Иисус переправился на другую сторона моря Галилейского, называемую Тивериадой"],
+        ["avoir à manger", "иметь что есть"],
+        ["au nombre d’environ cinq mille hommes", "в числе около пяти тысяч человек"],
+        ["de même", "так же"],
+        ["afin que rien ne se perde", "чтобы ничего не пропало"],
+        ["au bord de la mer", "на берегу моря"],
+        ["s’approchant de la barque", "приближаясь к лодке"],
+        ["à la recherche de Jésus", "на поиски Иисуса"],
+        ["au-delà de la mer", "за морем"],
+        ["non pas parce que vous avez vu des miracles", "не потому что вы видели чудеса"],
+        ["le vrai pain du ciel", "истинный хлеб с небес"],
+        ["je les ressuscite au dernier jour", "Я их воскрешу в последний день"],
+        ["Les Juifs murmuraient à son sujet", "Иудеи роптали на него"],
+        ["Ne murmurez pas entre vous", "Не ропщите между собой"],
+        ["Si quelqu’un mange de ce pain", "Если кто-то ест этот хлеб"],
+        ["Plusieurs de", "несколько"],
+        ["la chair ne sert à rien", "плоть ничему не служит"]
+      ];
+      phrases["7"] = [
+        ["Personne n’agit en secret ", "Никто не действует тайно"],
+        ["je rends de lui le témoignage que ses œuvres sont mauvaises", 
+        "Я свидетельствую о нём, что его дела дурные"],
+        ["Les uns disaient: C’est un homme de bien. D’autres disaient: Non, il égare la multitude.", 
+        "Одни говорили: это хороший человек. Другие говорили: нет, он вводит в заблуждение толпу"],
+        ["Qui est-ce qui cherche à te faire mourir?", "Кто ищет убить тебя?"],
+        ["pourquoi vous irritez-vous contre moi", "почему вы раздражаетесь на меня"],
+        ["Je ne suis pas venu de moi-même", "Я пришёл не Сам от Себя"],
+        ["Ils cherchaient donc à se saisir de lui ", "Они искали поэтому схватить его"],
+        ["pour un peu de temps", "на короткое время"],
+        ["Que signifie cette parole qu’il a dite", "Что значит это слово, которое он сказал"],
+        ["de nuit", "ночью"],
+        ["qui était l’un d’entre eux", "кто был один из них"],
+        ["de la Galilée il ne sort pas de prophète", "из Галилеи не приходит пророк"]
+      ];
+      phrases["8"] = [
+        ["une femme surprise en adultère", "женщина застигнутая в прелюбодеянии"],
+        ["Moïse, dans la loi, nous a ordonné de lapider de telles femmes", 
+        "Моисей, в законе, приказал побивать таких женщин камнями"],
+        ["ils continuaient à l’interroger", "Они продолжали его допрашивать"],
+        ["Que celui de vous qui est sans péché jette le premier la pierre contre elle.", 
+        "Кто из вас без греха, пусть первый бросит в неё камень."],
+        ["ils se retirèrent un à un, depuis les plus âgés jusqu’aux derniers", 
+        "они удалились один за другим, начиная со старших до последних"],
+        ["Vous êtes d’en bas; moi, je suis d’en haut.", 
+        "Вы от низших, я от высших."],
+        ["J’ai beaucoup de choses à dire de vous et à juger en vous.", 
+        "Многое имею сказать о вас и судить в вас"],
+        ["nous n’avons jamais été esclaves de personne", 
+        "мы никогда не были никому рабами"],
+        ["quiconque se livre au péché est esclave du péché", "всякий кто отдаётся греху, есть раб греха"],
+        ["N’avons-nous pas raison de dire que tu es un Samaritain", "Разве мы не правы, говоря, что ты самарянин"],
+        ["semblable à vous", "похожий на вас"],
+        ["Abraham, votre père, a tressailli de joie à la pensée qu’il verrait mon jour", 
+        "Авраам, ваш отец, задрожал от радости при мысли, что увидел бы мой день"]
+      ];
+      phrases["9"] = [
+        ["un homme aveugle de naissance", "человек слепой от рождения"],
+        ["Après avoir dit cela, il cracha à terre", "Сказав это, Он плюнул на землю"],
+        ["Va et lave-toi au réservoir de Siloé", "Пойди и умойся в курпальне Силоам"],
+        ["Jésus a fait de la boue", "Иисус сделал грязь"],
+        ["Sur ce, quelques-uns des pharisiens dirent", "На это некоторые из фарисеев сказали"],
+        ["Comment un homme pécheur peut-il faire de tels miracles", 
+        "Как грешный человек может творить такие чудеса"],
+        ["Et il y eut division parmi eux", "И между ними было разделение"],
+        ["Jamais on n’a entendu dire que", "Никогда не слыхано было, чтобы говорили, что"],
+      ];
+      phrases["10"] = [
+        ["entrer par la porte", "входить дверью"],
+        ["il appelle par leur nom les brebis", "он зовёт своих овец по имени"],
+        ["prendre la fuite", "убегать"],
+        ["il ne se met pas en peine des brebis", "он не печётся об овцах"],
+        ["Personne ne me l’ôte (la vie), mais je la donne de moi-même", 
+        "Никто у меня её (жизнь) не отнимает, но я вам отдаю её"],
+        ["tenir qch en suspens", "держать в недоумении"],
+        ["personne ne les arrachera de ma main", "никто не вырвет их из моей руки"],
+        ["est plus grand que tous", "больше всех"],
+        ["quand bien même vous ne me croiriez pas, croyez à ces œuvres", 
+        "даже если не верите мне, верьте моим делам"],
+        ["il s’échappa de leurs mains", "он избежал их рук"]
+      ];
+      phrases["11"] = [
+        ["C’était cette Marie qui oignit de parfum le Seigneur", 
+        "Это была та Мария, которая помазала Господа благовонием"],
+        ["Les sœurs envoyèrent dire à Jésus", "Сёстры послали сказать Иисусу"],
+        ["il resta deux jours encore dans le lieu où il était", 
+        "Он пробыл ещё два дня на том месте, где был"],
+        ["N’y a-t-il pas douze heures au jour?", "Не двенадцать ли часов во дне?"],
+        ["je me réjouis de ce que", "я радуюсь тому, что"],
+        ["Allons-y aussi, afin de mourir avec lui", "Пойдём тоже, чтобы умереть вместе с ним"],
+        ["Béthanie était près de Jérusalem, à quinze stades environ", 
+        "Виафния была рядом с Иерусалимом, примерно в 15 стадиях"],
+        ["pour les consoler de la mort de leur frère", "чтобы утешать их в смерти их брата"],
+        ["au-devant de lui", "впереди него"],
+        ["tout ce que tu demanderas à Dieu, Dieu te l’accordera", 
+        "всё, что ты попросишь у Бога, Бог тебе даст"],
+        ["Le maître est ici et il te demande", "учитель здесь и зовёт тебя"],
+        ["à la maison", "дома"],
+        ["elle tomba à ses pieds", "она упала ему в ноги"],
+        ["Jésus leva les yeux vers le haut", "Иисус поднял глаза ввысь"],
+        ["Père, je te rends grâces de m’avoir exaucé.", 
+        "Отец, благодарю Тебя, что Ты даровал Мне"],
+        ["Pour ma part", "со своей стороны"],
+        ["il cria d’une voix forte: Lazare, sors!", "Он вскричал громким голосом: Лазарь, выходи!"],
+        ["les pieds et les mains liés de bandes", "ноги и руки связаные повязками"],
+        ["le visage enveloppé d’un linge", "лицо обёрнутое бельём"],
+        ["Si nous le laissons faire", "Если мы оставим его делать"],
+        ["les Romains viendront détruire et notre ville et notre nation", 
+        "Римляне придут разрушить и наш город, и наш народ"],
+        ["ils résolurent de le faire mourir", "они решили убить его"],
+        ["ils se disaient les uns aux autres", "они говорили друг другу"],
+        ["Qu’en pensez-vous?", "Что вы об этом думаете?"],
+        ["afin qu’on se saisisse de lui", "чтобы схватить его"],
+      ];
+      phrases["12"] = [
+        ["Lazare, qu’il avait ressuscité des morts", 
+        "Лазарь, которого он воскресил из мёртвых"],
+        ["à table", "за столом"],
+        ["une livre d’un parfum de nard pur de grand prix", 
+        "фунт благовония из чистого нарда за большую цену"],
+        ["la maison fut remplie de l’odeur du parfum", 
+        "дом наполнился запахом благовония"],
+        ["se mettre en peine de qch", "переживать о чём-то"],
+        ["délibérèrent de faire mourir aussi Lazare", "решили убитьт таеже и Лазаря"],
+        ["tout d’abord", "сначала"],
+        ["le monde est allé à sa suite", "мир идёт за ним"],
+        ["du nombre de ceux qui", "из числа тех, которые"],
+        ["Père, délivre-moi de cette heure", "Отец, избавь меня от этого часа"],
+        ["il indiquait de quelle mort il devait mourir", "он указал, какою смертью умрёт"],
+        ["La lumière est encore pour un peu de temps au milieu de vous.", 
+        "Свет ещё недолгое время с вами"],
+        ["Marchez pendant que vous avez la lumière", "Ходите, пока у вас есть свет"],
+        ["en leur présence", "в их присутствии"],
+        ["ils ne voient des yeux, ils ne comprennent du cœur", 
+        "они не видят глазами, они не понимают сердцем"],
+        ["de crainte d’être exclus de la synagogue", "из страха быть отлучёнными от синагоги"],
+      ];
+      phrases["13"] = [
+        ["son heure était venue de passer de ce monde au Père", "пришёл Его час перейти из этого мира к Отцу"],
+        ["le dessein de le livrer", "замысел предать Его"],
+        ["se leva de table", "встал из-за стола"],
+        ["Toi, Seigneur, tu me laves les pieds!", "Ты, Господи, Ты мне умываешь ноги!"],
+        ["Celui qui est lavé n’a besoin que de se laver les pieds", 
+        "Тому, что чист, нужно только вымыть ноги"],
+        ["il se remit à table", "он снова сел за стол"],
+        ["vous devez aussi vous laver les pieds les uns aux autres", "вы должны тоже умывать ноги друг другу"],
+        ["le serviteur n’est pas plus grand que son seigneur", 
+        "слуга не больше своего хозяина"],
+        ["a levé son talon contre moi", "поднял на меня свою пяту"],
+        ["Dès à présent", "отныне"],
+        ["je vous le dis avant que cela n’arrive", "я вам говорю это прежде чем сбудется"],
+        ["Les disciples se regardaient les uns les autres", "Ученики смотрели друг на друга"],
+        ["Simon Pierre lui fit signe de demander", "Симон Пётр сделал ему знак спросить"],
+        ["Un des disciples", "Один из учеников"],
+        ["il lui commandait de donner ", "он ему приказал дать"],
+        ["se hâta de sortir", "поспешил выйти"],
+        ["Il faisait nuit", "Была ночь"],
+        ["je suis pour peu de temps encore avec vous", "я ещё недолгое время с вами"],
+        ["À ceci tous reconnaîtront que", "По тому знают все, что"],
+        ["le coq ne chantera pas avant que tu ne m’aies renié trois fois", "петух не пропоёт прежде чем ты трижды отречёшься от Меня"]
+      ];
+      phrases["14"] = [
+        ["Il y a si longtemps", "Так давно"],
+        ["croyez du moins à cause de ces œuvres", "верьте хотя бы из-за моих дел"],
+        ["celui qui croit en moi fera aussi les œuvres que je fais, et il en fera de plus grandes", 
+        "кто верит в меня, также будет делать дела, что я делаю, и будет делать болшие"],
+        ["Je ne vous laisserai pas orphelins", "Я не оставлю вас сиротами"],
+        ["le monde ne me verra plus", "мир меня не больше не увидит"]
+      ];
+      phrases["15"] = [
+        ["Il n’y a pas de plus grand amour que de donner sa vie pour ses amis.", 
+        "Нет больше любви, чем отдать свою жизнь за своих друзей."],
+        ["demanderez au Père en mon nom", "просите у Отца во имя Моё"],
+        ["Si vous étiez du monde, le monde aimerait ce qui est à lui", 
+        "Если бы вы были от мира, мир любил бы своё"],
+        ["je vous ai choisis du milieu du monde", "я выбрал вас из мира"],
+        ["Souvenez-vous de la parole que je vous ai dite", "Помните слово которое я вам сказал"],
+        ["s’ils ont gardé ma parole, ils garderont aussi la vôtre", 
+        "если они сохранили моё слово, они сохранят также и ваше"],
+      ];
+      phrases["16"] = [
+        ["une occasion de chute", "повод к падению"],
+        ["rendre un culte à Dieu", "поклониться Богу"],
+        ["ils n’ont connu ni le Père ni moi", "Они не знали ни Отца, ни меня"],
+        ["aucun de vous ne me demande", "никто из вас не спрашивает меня"],
+        ["J’ai encore beaucoup de choses à vous dire", "Ещё многое имею сказать вам"],
+        ["il vous annoncera les choses à venir", "Он (Дух) вам возвестит будущее"],
+        ["il prendra de ce qui est à moi", "он возьмёт из того, что моё"],
+        ["quelques-uns de ses disciples dirent entre eux", "некоторые из его учеников говорили между собой"],
+        ["vous serez dans la tristesse, mais votre tristesse se changera en joie", 
+        "вы будете в печали, но ваша печаль сменится на радость"],
+        ["La femme, lorsqu’elle enfante, éprouve de la tristesse", "женщина, когда рождает, терпит скорбь"],
+        ["lorsqu’elle a donné le jour à l’enfant, elle ne se souvient plus de la souffrance", 
+        "когда она родила младенца, она больше не помнит страданий"],
+        ["la joie de ce que", "радость о том, что"],
+        ["en ce jour-là, vous ne m’interrogerez plus sur rien", "в этот день вы больше не спросите меня ни о чём"],
+        ["en paraboles", "в притчах"],
+        ["de son côté ", "со своей стороны"]
+      ];
+      phrases["17"] = [
+        ["l’œuvre que tu m’as donnée à faire", "дело, которое ты мн дал сделать"],
+        ["Et maintenant toi, Père, glorifie-moi auprès de toi-même de la gloire que j’avais auprès de toi avant que le monde soit.", 
+        "И теперь Ты, Отец, прославь меня у Тебя славой, которую я имел у Тебя прежде, чем мир есть"],
+        ["J’ai fait connaître ton nom aux hommes que tu m’as donnés du milieu du monde.", 
+        "Я открыл Твоё имя человекам, которых Ты мне дал из среды мира"],
+        ["prier pour qn", "молиться за кого-то"],
+        ["aucun d’eux ne s’est perdu", "никто из них не погиб"],
+        ["sinon", "за исключением"],
+        ["Je ne te prie pas de les ôter du monde mais de les préserver du mal.", 
+        "Я не прошу Тебя отнять их от мира, но сохранить от зла"],
+      ];
+      phrases["18"] = [
+        ["ce qui devait lui arriver", "то, что должно было случиться с ним"],
+        ["la coupe que le Père m’a donnée à boire", "чашу, которую Отец мне дал пить"],
+        ["se saisirent alors de Jésus", "тогда схватили Иисуса"],
+        ["en secret", "тайно"],
+        ["À ces mots", "На эти слова"],
+        ["fais voir ce que j’ai dit de mal", "покажи, что я сказал плохо"],
+        ["Quelle accusation portez-vous contre cet homme?", 
+        "Какое обвинение возводите вы на этого человека?"],
+        ["Il ne nous est pas permis de mettre quelqu’un à mort.", 
+        "Нам не позволено никого предавать смерти."],
+      ];
+      phrases["19"] = [
+        ["ils le revêtirent d’un manteau de pourpre", "они одели его в пурпурную мантию"],
+        ["la couronne d’épines", "терновый венец"],
+        ["je ne trouve pas de crime en lui", "я не нахожу в нём вины"],
+        ["il s’est fait Fils de Dieu", "он делает себя Сыном Бога"],
+        ["Jésus ne lui donna pas de réponse", "Иисус ничего ему не ответил"],
+        ["d’en haut", "свыше"],
+        ["avoir pouvoir sur qn", "иметь власть над кем-либо"],
+        ["Pilate chercha à le relâcher", "Пилат искал отпустить его"],
+        ["commettre un plus grand péché", "совершить более тяжкий грех"],
+        ["Alors il le leur livra pour être crucifié", "Тогда он им его предал чтобы его распяли"],
+        ["un de chaque côté", "один с каждой стороны"],
+        ["sa tunique, qui était sans couture, d’un seul tissu depuis le haut jusqu’en bas", 
+        "его хитон, который был без швов, из одной материи сверху донизу"],
+        ["tirons au sort à qui elle sera", "бросим жребий, кому она достанется"],
+        ["Dans la crainte que les corps ne restent sur la croix pendant le sabbat", 
+        "Боясь, что тела останутся на кресте во время субботы"],
+        ["rompre les jambes à qn", "сломать кому-то ноги"],
+        ["un des soldats lui perça le côté avec une lance", 
+        "один из солдат пронзил ему бок копьём"],
+        ["il en sortit du sang et de l’eau", "оттуда вышла кровь и вода"],
+        ["Celui qui l’a vu en a rendu témoignage", "Тот, кто это видел, засвидетельствовал это"],
+        ["qui était disciple de Jésus, mais en secret par crainte des Juifs", 
+        "который был учеником Иисуса, но тайным из-за страха перед иудеями"],
+        ["la permission de prendre", "разрешение взять"],
+        ["de nuit", "ночью"],
+        ["un mélange d’environ cent livres de myrrhe et d’aloès", "состав около 100 фунтов мира и алоэ"],
+        ["l’enveloppèrent de bandes", "обернули его повязками"],
+        ["comme c’est la coutume d’ensevelir chez les Juifs", "как обычно погребают иудеи"]
+      ];
+      phrases["20"] = [
+        ["il faisait encore obscur", "было ещё темно"],
+        ["Ils ont enlevé du sépulcre le Seigneur", "Они унесли из гроба Господа"],
+        ["à terre", "на земле"],
+        ["à part", "в стороне"],
+        ["à la place", "на месте"],
+        ["l’un à la tête, l’autre aux pieds", "один в голове, другой в ногах"],
+        ["Le soir de ce jour", "вечером того же дня"],
+        ["en présence de ses disciples", "в присутствии своих учеников"]
+      ];
+      phrases["21"] = [
+        ["voici de quelle manière", "вот каким образом"],
+        ["n’avez-vous rien à manger", "у вас не ничего поесть"],
+        ["Jetez le filet du côté droit de la barque", "Забросьте сеть справа от лодки"],
+        ["ils n’étaient éloignés de la terre que d’environ deux cents coudées", 
+        "они удалились от берега только на около сто локтей"],
+        ["descendus à terre", "сойти на берег"],
+        ["il fit de même du poisson", "и сделал то же с рыбой"],
+        ["C’était déjà la troisième fois que Jésus se montrait à ses disciples", 
+        "Это был уже трейти раз когда Иисус явился своим ученикам"],
+        ["m’aimes-tu plus que ne m’aiment ceux-ci?", "любишь ли меня больше, чем они?"],
+        ["Fais paître mes brebis", "Паси моих овец"],
+        ["Pierre fut attristé de ce", "Пётр огорчился от того, что"],
+        ["indiquer par quelle mort Pierre glorifierait Dieu", 
+        "показать, какой смертью Пётр прославил бы Бога"],
+        ["s’était penché sur la poitrine de Jésus", "склонился к груди Иисуса"],
+        ["Si je veux qu’il demeure jusqu’à ce que je vienne, que t’importe?", 
+        "Если Я хочу, чтобы он пребыл, пока я приду, что тебе до того?"],
+        ["beaucoup d’autres choses", "многое другое"],
+        ["en détail", "подробно"]
+      ];
+    </script>
+    <meta charset="UTF-8">
+    <style>
+      html, a {
+        background-color: black;
+        color: blanchedalmond;
+      }
+      input {
+        background-color:burlywood;
+        color: black;
+        cursor: pointer;
+      }
+      html, input {
+        font-size: xx-large;
+        font-family: 'Courier New', Courier, monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div id=index style="display:block" ></div>
+    <div id="phrase1"></div>
+    <div id="phrase2"></div>
+    <input id="next" style="display:none" type="button" value="Дальше" onclick="next()"/>
+    <script>
+      const index = document.getElementById("index");
+      const phrase1 = document.getElementById("phrase1");
+      const phrase2 = document.getElementById("phrase2");
+      const button = document.getElementById("next");
+      
+      let indexHtml = "";
+      for (let key of Object.keys(phrases)) {
+        indexHtml += `<a href="javascript:setPart('${key}')">${key}</a> `;
+      }
+      index.innerHTML = indexHtml;
+
+      let partIndex;
+      let phraseIndex;
+      let part;
+
+      function show(element) {
+        element.style.display = "block"; 
+      }
+
+      function hide(element) {
+        element.style.display = "none"; 
+      }
+
+      function setPart(_index) {
+        partIndex = _index;
+        part = phrases[partIndex].slice();
+        hide(index);
+        show(button);
+        setPhrase();
+      }
+
+      function setPhrase() {
+        phrase1.innerText = "";
+        phrase2.innerText = "";
+        if (part.length === 0) {
+          show(index);
+          hide(button);
+        } else {
+          phraseIndex = Math.round(Math.random() * (part.length - 1)); 
+          phrase1.innerText = part[phraseIndex][1];
+        } 
+      }
+
+      function next() {
+        if (phrase2.innerText === "") {
+          phrase2.innerText = part[phraseIndex][0];
+          part.splice(phraseIndex, 1); 
+        } else {
+          setPhrase();
+        }
+      }
+    </script> 
+  </body>
+</html>

@@ -8445,4 +8445,5 @@ const nouns = [
 ["déconnexion", "dekɔnɛksjɔ̃", "f", "отключение", 102],
 ["ciboulot", "sibulo", "m", "голова", 101],
 ["entropie", "ɑ̃tʁɔpi", "f", "энтропия", 101],
-["nationalisme", "nasjɔnalism", "m", "национализм", 101]];
+["nationalisme", "nasjɔnalism", "m", "национализм", 101]
+];
