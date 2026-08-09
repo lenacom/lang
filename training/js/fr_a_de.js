@@ -61,7 +61,7 @@ const items = [
 ["avoir raison de faire qch", "быть правым, делая что-л.", 153137],
 ["être seul à faire qch", "быть единственным делающим что-л.", 149265],
 ["avoir affaire à qch (qn)", "иметь дело с чем-л. (с кем-л.)", 145585],
-["changer de qch (de robe, de linge, de logis)", "сменить, переменить что-л. (платье, бельё, жильё)", 141487],
+["changer de qch (robe, linge, logis)", "сменить, переменить что-л. (платье, бельё, жильё)", 141487],
 ["le premier (dernier) à faire qch", "первым (последним) сделать что-л.", 141463],
 ["avoir peur de qch (qn)", "бояться чего-л. (кого-л.)", 139829],
 ["avoir peur de faire qch", "бояться делать что-л.", 139829],

@@ -43,9 +43,7 @@
       function checkAnswer(answer) {
         const { item } = getState();
         const ok = item[2] === answer;
-        if (!ok) {
-          byId("error").innerHTML = itemHTML(item) + `<div class="error">${item[2]}</div>`;
-        }
+        byId("error").innerHTML = ok? "" : itemHTML(item) + `<div class="error">${item[2]}</div>`;
         setAnswered(ok);
         setItem();
       }

@@ -1,90 +1,18 @@
 <html>
   <head>
-    <title>Спряжение французских глаголов</title>
+    <title>Французские слова</title>
     <meta charset="UTF-8">
     <script src="js/common.js"></script>
-    <script src="js/small_steps.js"></script>
+    <script src="js/words_in_groups.js"></script>
     <script src="js/fr_verbs.js"></script>
-    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/common.css">    
   </head>
   <body>
-    <div id="test"></div>
-    <div id="progress"></div>
-    <hr/>
-    <div id="item"></div>
-    <div><button onClick="checkAnswer()">Дальше</button></div>
-    <div id="error"></div>
+    <div id="fr_verbs"/>
     <script>
       const LANG = "fr-FR";
       initSpeak(LANG);
-      const { getState, setAnswered } = SmallSteps("fr_verbs_présent", verbs);
-
-      function shuffle(array) {
-        const shuffled = [...array]; 
-        
-        for (let i = shuffled.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1)); 
-          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; 
-        }
-        
-        return shuffled;
-      }
-
-      function variants(tenses) {
-        const result = [[], [], [], [], [], []];
-        for (const [tenseName, forms] of Object.entries(tenses)) {
-          if (tenseName !== "présent" && Array.isArray(forms) && forms.length === 6) {
-            for (let i = 0; i < 6; i++) {
-              if (forms[i] !== tenses["présent"][i]) {
-                result[i].push(forms[i]);
-              }
-            }
-          }
-        }
-        for (let i = 0; i < 6; i++) {
-          result[i] = [...new Set(result[i])]; // deduplicate
-          result[i] = shuffle(result[i]);
-          result[i].unshift(tenses["présent"][i]);
-          result[i] = shuffle(result[i].slice(0, 5));
-        }
-        return result.map((it1, index) => {
-          const options = it1.map(it2 => `<option value="${it2}">${it2}</option>`);
-          return `<select id="form${index}" size="5">${options}</select>`
-        }).join("");
-      }
-
-      function setItem() {
-        const { limit, part, item } = getState();
-        byId("test").innerHTML = `Тесты по ${limit} из ${verbs.length}.`;
-        byId("progress").innerHTML = `Осталось тестов: ${part.length + 1}.`;
-        byId("item").innerHTML = `<div>${item[0]} - ${item[1]}</div>
-          <div style="display: flex; align-items: flex-start; flex-wrap: wrap; gap: 20px; margin-bottom: 10px">
-          ${variants(tenses[item[0]])}</div>`;
-      }
-
-      function checkAnswer() {
-        const { item } = getState();
-        const correctTense = tenses[item[0]]["présent"];
-        let ok = true;
-        let forms = [];
-        for (let i = 0; i < 6; i++) {
-          let form = correctTense[i];
-          if (byId(`form${i}`).value !== form) {
-            form = `<span class="error">${form}</span>`;
-            ok = false;
-          }
-          forms.push(form);
-        }
-        if (!ok) {
-          byId("error").innerHTML = `<div>${item[0]} - ${item[1]}</div>
-          <div><span style="display: flex; flex-direction: row; gap: 20px;">
-		      <span>${forms.join(" ")}</span>${speakButtonHTML(correctTense.join(" "), LANG)}</div>`;
-        }
-        setAnswered(ok);
-        setItem();
-      }
-      
-      setItem();
+      WordsInGroups("fr_verbs", verbs, LANG);
     </script>
   </body>
 </html>

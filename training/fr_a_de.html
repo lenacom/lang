@@ -56,13 +56,16 @@
             break;
           }
         }
-        if (!ok) {
+        if (ok) {
+          byId("error").innerHTML = "";
+        } else {
           const { item } = getState();
-          const fullText = item[0].replace("qn", "quelqu’un").replace("qch", "quelquechose");
+          const speakText = item[0].replace("qn", "quelqu’un").replace("qch", "quelquechose");
           if (globalThis.autospeak) {
-            speak(fullText, LANG);
+            speak(speakText, LANG);
           }
-          byId("error").innerHTML = `<div>${item[1]}</div><div class="error">${withSpeakButtonHTML(fullText, LANG)}</div>`;
+          byId("error").innerHTML = `<div>${item[1]}</div>
+          <div class="error"><span>${item[0]}</span> ${speakButtonHTML(speakText, LANG)}</div>`;
         }
         setAnswered(ok);
         setItem();
