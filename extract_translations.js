@@ -1,8 +1,7 @@
 const fs = require('fs');
 
 const words = [
-	"громкий", 
-	"тихий",
+	"горло", "пятка", "локоть", "лоб", "бровь", "ресницы", "губы", "колено", "талия"
 ];
 
 async function getYandexJson(word) {
@@ -20,18 +19,18 @@ async function getYandexJson(word) {
 
 async function getWordMetadata(word) {
 	const json = await getYandexJson(word);
-	console.log(json);
 	const regular = json["ru-fr"]["regular"];
 	if (!regular || regular.length === 0) {
 		return undefined;
 	}
 	
-	return regular.filter(it => it.pos.code === "adj")
+	return regular.filter(it => it.pos.code === "nn") //"adj"
 	  .map(data => {
 			const text = data.text;
 			const ts = data.ts ?? "";
+			const gen = data.gen?.code ?? "";
 			const tr = data.tr.map(it => it.text).join(", ");
-			return { text, ts, tr };
+			return { text, ts, tr, gen };
 		});
 }
 
@@ -41,7 +40,7 @@ async function run() {
 		console.log(word);
 		const data = await getWordMetadata(word);
 		console.log(data)
-		content += data.map((it) => `["${it.tr + (it.ts? ` [${it.ts}]` : "")}", "${it.text}"],\r\n`); 
+		content += data.map((it) => `["${it.tr + (it.ts? ` [${it.ts}]` : "") + (it.gen? ` (${it.gen})` : "")}", "${it.text}"],\r\n`); 
 	}
 	content += "];\r\n";
 	fs.writeFileSync("translations.js", content);

@@ -58,7 +58,7 @@ function initSpeak(lang) {
 function autospeakHTML() {
 	globalThis.autospeak = getCookie("autospeak") === "true";
 	const onClick = "globalThis.autospeak = !globalThis.autospeak; setCookie('autospeak', globalThis.autospeak);";
-	return `<div style="display: flex; align-items: center; gap: 10px;">
+	return `<div style="margin-top: 20px; display: flex; align-items: center; gap: 10px;">
     <label for="autospeak">Озвучивать автоматически</label>
     <input type="checkbox" ${globalThis.autospeak ? "checked" : ""} id="autospeak" onClick="${onClick}"/>
     </div>`;
@@ -90,7 +90,7 @@ function speakButtonHTML(text, lang) {
 		</button>`;
 }
 
-function withSpeakButtonHTML(text, lang) {
-	return `<div><span style="display: flex; flex-direction: row; gap: 20px;">
-		<span>${text}</span>${speakButtonHTML(text, lang)}</div>`;
+function withSpeakButtonHTML(text, lang, textToSpeak) {
+	return `<div style="display: flex; flex-direction: row; gap: 20px;">
+		<span>${text}</span>${speakButtonHTML(textToSpeak ?? text, lang)}</div>`;
 }

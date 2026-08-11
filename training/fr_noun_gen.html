@@ -31,9 +31,12 @@
           it[0].endsWith("ence") && it[2] == "f" ||
           it[0].endsWith("euse") && it[2] == "f" ||
           it[0].endsWith("ie") && it[2] == "f" ||
-          it[0].endsWith("ure") &&  it[2] == "f" ||
-          it[0].endsWith("age") &&  it[2] == "m") ||
-          it[2] == "mf" || it[2] == ""
+          it[0].endsWith("ure") && it[2] == "f" ||
+          it[0].endsWith("age") && it[2] == "m" ||
+          it[0].endsWith("oir") && it[2] == "m" ||
+          it[0].endsWith("isme") && it[2] == "m" ||
+          it[0].endsWith("esse") && it[2] == "f")
+          || it[2] == "mf" || it[2] == ""
         );
       }).map(it => `["${it[0]}", "${it[1]}", "${it[2]}", "${it[3]}"],`).join("\r\n");
       console.log(x)*/
