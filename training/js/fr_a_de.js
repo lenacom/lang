@@ -52,7 +52,7 @@ const items = [
 ["tenir qch de qn", "унаследовать, иметь что-л. от кого-л.", 207026],
 ["tu ferais mieux de faire qch", "будет лучше сделать что-л.", 205274],
 ["chercher qch (qn)", "искать что-л. (кого-л.)", 201917],
-["chercher à faire qch", "стараться", 201917],
+["chercher à faire qch", "стараться сделать что-л.", 201917],
 ["il importe de faire qch", "важно сделать что-л.", 187996],
 ["finir de faire qch", "закончить делать что-л.", 179029],
 ["jouer à qch (la tenis)", "играть в какие-то спорт. игры", 176051],

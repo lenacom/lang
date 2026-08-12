@@ -198,14 +198,14 @@ function speakBtnHTML(text) {
 let started = false;
 let voice;
 
-document.addEventListener("pointerup", (event) => {
+document.addEventListener("pointerdown", (event) => {
   if (!started) speak(" ");
 });
 
 function speak(text) {
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "fr";
+  utterance.lang = "fr-FR";
   utterance.rate = 0.8; 
   utterance.volume = started? 1 : 0;
   if (voice) {

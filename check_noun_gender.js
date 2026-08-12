@@ -13,14 +13,15 @@ async function check(noun) {
 	const text = await getWiki(noun[0]);
 	const f = text.indexOf("<i>féminin</i>");
 	const m = text.indexOf("<i>masculin</i>");
-	if (f == -1 && m == -1) {
-		console.log(text)
+	const mf = text.indexOf("<i>masculin et féminin identiques</i>");
+	if (f == -1 && m == -1 && mf == -1) {
+		console.log(`${noun[0]} doesn't exist???!!!`);
 		return false;
 	}
-	const gen = (f > 0 && (f < m || m === -1))? "f" : "m";
+	const gen = ((f < mf || mf == -1) && f > 0 && (f < m || m == -1))? "f" : "m";
 	if (noun[2] !== gen) {
 		console.log(`${noun[0]} wrong!!!`);
-		console.log(`${f} ${m} ${gen} ${noun[2]}`)
+		console.log(`${mf} ${f} ${m} ${gen} ${noun[2]}`)
 	} else {
 		console.log(noun[0]);
 	}
@@ -28,10 +29,13 @@ async function check(noun) {
 }
 
 async function run() {
-	for (const noun of nouns.slice(400,600)) {
-		while(! await check(noun)) {
+	const index = nouns.findIndex(it => it[0] == "livraison");
+	const max = index + 1000;
+	for (let i = index; i < max; i++) {
+		await check(nouns[i]);
+		/*while(! await check(nouns[i])) {
 			await sleep(2000);
-		}
+		}*/
 	}
 }
 

@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <title>Французские слова</title>
+    <meta charset="UTF-8">
+    <script src="js/common.js"></script>
+    <link rel="stylesheet" href="css/common.css">
+    <script> 
+      async function getYandexJson(word, langFrom, langTo) {
+        const url = new URL("https://dictionary.yandex.net/dicservice.json/lookupMultiple");
+        url.searchParams.set("ui", "ru");
+        url.searchParams.set("srv", "tr-text");
+        url.searchParams.set("text", word);
+        url.searchParams.set("type", "regular");
+        url.searchParams.set("lang", `${langFrom}-${langTo}`);
+        url.searchParams.set("flags", "15399");
+        url.searchParams.set("dict", `${langFrom}-${langTo}.regular`);
+        const response = await fetch(url);
+        const json = await response.json();
+        const regular = json[`${langFrom}-${langTo}`]["regular"];
+        if (!regular || regular.length === 0) {
+          return undefined;
+        }
+        return regular;
+      }
+
+      async function translateTo(text, lang) {
+        const data = await getYandexJson(text, "ru", lang);
+
+        function itemHTML(item) {
+          const { text, gen, ts} = item;
+          const extended = `<b>${text}</b>${ts? ` [${ts}]` : ""}${gen?.code? ` ${gen?.code}` : ""}`;
+          return withSpeakButtonHTML(extended, lang, text);
+        }
+
+        const result = data.map(({ tr }) => {
+          return tr.slice(0, 3).map(x => {
+            const syn = x.syn ?? [];
+            const itemsHTML = [x, ...syn].map(z => itemHTML(z)).join("");
+            const mean = x.mean.map(z => z.text).join(", ");
+            return `<div>${itemsHTML}</div><div>${mean}</div>`;
+          }).join("");
+        }).join("");
+
+        byId(lang).innerHTML = result;
+      }
+
+      async function translateToAll() {
+        const text = byId("input").value;
+        await Promise.all([translateTo(text, "en"), translateTo(text, "fr")]);
+      }
+
+      initSpeak("en-EN");
+      initSpeak("fr-FR");
+    </script>   
+  </head>
+  <body>
+    <div><input type="text" id="input"/><button onClick="translateToAll()">Перевести</button></div> 
+    <h3>Французский</h3> 
+    <div id="fr"></div> 
+    <h3>Английский</h3> 
+    <div id="en"></div>
+    <script>
+      byId("input").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+          event.preventDefault(); 
+          translateToAll();
+        }
+      });
+    </script>  
+  </body>
+</html>

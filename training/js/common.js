@@ -41,11 +41,18 @@ function hide(id) {
 	byId(id).style.display = "none"; 
 }
 
+function normilizedLang(lang) {
+	if (lang === "fr") return "fr-FR";
+	if (lang === "en") return "en-US";
+	return lang;
+}
+
 function initSpeak(lang) {
+	lang = normilizedLang(lang);
 	globalThis[`${lang}__started`] = false;
 	globalThis[`${lang}__voice`] = false;
 
-	document.addEventListener("pointerup", (event) => {
+	document.addEventListener("pointerdown", (event) => {
 		if (!globalThis[`${lang}__started`]) speak(" ", lang);
 	});
 
@@ -65,9 +72,10 @@ function autospeakHTML() {
 }
 
 function speak(text, lang) {
+	lang = normilizedLang(lang);
 	window.speechSynthesis.cancel();
 	const utterance = new SpeechSynthesisUtterance(text);
-	utterance.lang = lang;
+	utterance.lang = normilizedLang(lang);
 	utterance.rate = 0.8; 
 	utterance.volume = globalThis[`${lang}__started`]? 1 : 0;
 	if (globalThis[`${lang}__voice`]) {
