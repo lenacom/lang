@@ -2,6 +2,7 @@
   <head>
     <title>Французские слова</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="js/common.js"></script>
     <link rel="stylesheet" href="css/common.css">
     <script> 
@@ -28,7 +29,7 @@
 
         function itemHTML(item) {
           const { text, gen, ts} = item;
-          const extended = `<b>${text}</b>${ts? ` [${ts}]` : ""}${gen?.code? ` ${gen?.code}` : ""}`;
+          const extended = `<span class="pill">${text}</span>${ts? ` [${ts}]` : ""}${gen?.code? ` ${gen?.code}` : ""}`;
           return withSpeakButtonHTML(extended, lang, text);
         }
 
@@ -36,8 +37,8 @@
           return tr.slice(0, 3).map(x => {
             const syn = x.syn ?? [];
             const itemsHTML = [x, ...syn].map(z => itemHTML(z)).join("");
-            const mean = x.mean.map(z => z.text).join(", ");
-            return `<div>${itemsHTML}</div><div>${mean}</div>`;
+            const mean = (x.mean ?? []).map(z => z.text).join(", ");
+            return `<div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 1rem;">${itemsHTML}</div><div>${mean}</div>`;
           }).join("");
         }).join("");
 
@@ -54,7 +55,10 @@
     </script>   
   </head>
   <body>
-    <div><input type="text" id="input"/><button onClick="translateToAll()">Перевести</button></div> 
+    <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 1rem;">
+      <input type="search" style="max-width: 90vw;" id="input"/>
+      <button onClick="translateToAll()">Перевести</button>
+    </div> 
     <h3>Французский</h3> 
     <div id="fr"></div> 
     <h3>Английский</h3> 

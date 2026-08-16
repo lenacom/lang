@@ -14,7 +14,7 @@ function WordsInGroups(id, items, lang) {
       <div id="progress"></div>
       <div id="text1"></div>
       <div id="text2"></div>
-      <div><button style="margin-top:10px" onClick="document.dispatchEvent(new Event('next'))">Дальше</button></div>
+      <div><button style="margin-top: 1rem" onClick="document.dispatchEvent(new Event('next'))">Дальше</button></div>
     </div>`;
 
   byId(id).innerHTML = html;
@@ -73,7 +73,7 @@ function WordsInGroups(id, items, lang) {
       const item = currentPart()[itemIndex];
       const text = item[2];
       const speakText = text.split("[")[0];
-      const checked = (repeatOftener[partName] ?? []).find(it => it === item[0]);
+      const checked = (repeatOftener[partName] ?? []).find(it => it === item[0]) !== undefined;
       byId("text2").innerHTML = `${withSpeakButtonHTML(text, lang, speakText)}
         <div>
           <label for="repeatOftener">Повторять чаще</label>

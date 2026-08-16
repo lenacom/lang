@@ -2,6 +2,7 @@
   <head>
     <title>Управление французских глаголов, предлоги à и de</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="js/common.js"></script>
     <script src="js/small_steps.js"></script>
     <script src="js/fr_a_de.js"></script>
@@ -30,7 +31,7 @@
         return correctItemWords.map((word, index)  => {
           if ([" à ", " de ", " ", " d’"].includes(word)) {
             return `&nbsp;<select name="part${index}" onChange="itemWords[${index}] = this.value">
-              <option value=" " selected> </option>
+              <option value=" " selected>&nbsp;</option>
               <option value=" à ">à</option>
               <option value="${ word === " d’" ? word : " de "}">de</option>
             </select>&nbsp;`;
