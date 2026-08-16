@@ -72,7 +72,7 @@ function WordsInGroups(id, items, lang) {
     if (byId("text2").innerHTML === "") {
       const item = currentPart()[itemIndex];
       const text = item[2];
-      const speakText = text.split("[")[0];
+      const speakText = text.split("[")[0].split("(")[0];
       const checked = (repeatOftener[partName] ?? []).find(it => it === item[0]) !== undefined;
       byId("text2").innerHTML = `${withSpeakButtonHTML(text, lang, speakText)}
         <div>
