@@ -24,11 +24,7 @@ function SmallSteps(configName, items) {
   function setPart(newStep = false) {
     let messages = [];
     if (newStep) {
-      if (limit === items.length) {
-        limit = partSize;
-      } else {
-        limit = Math.min(limit + partSize, items.length);
-      }
+      limit = Math.min(limit + partSize, items.length);
       part = Array.from({ length: partSize }, (_, i) => limit - partSize + i);
     } else {
       part = [];

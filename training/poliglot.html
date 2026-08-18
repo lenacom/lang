@@ -33,7 +33,7 @@
           return withSpeakButtonHTML(extended, lang, text);
         }
 
-        const result = data.map(({ tr }) => {
+        const result = data?.map(({ tr }) => {
           return tr.slice(0, 3).map(x => {
             const syn = x.syn ?? [];
             const itemsHTML = [x, ...syn].map(z => itemHTML(z)).join("");
