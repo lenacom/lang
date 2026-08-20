@@ -47,5 +47,7 @@ en bas вниз
 en danger
 en gloire
 en arrière
-
+en tout cas 
+à demi
+à distance
 Google français

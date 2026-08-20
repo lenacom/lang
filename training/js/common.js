@@ -71,7 +71,7 @@ function autospeakHTML() {
     </div>`;
 }
 
-function speak(text, lang) {
+function speak(text, lang, onend) {
 	lang = normilizedLang(lang);
 	window.speechSynthesis.cancel();
 	const utterance = new SpeechSynthesisUtterance(text);
@@ -82,6 +82,13 @@ function speak(text, lang) {
 		utterance.voice = globalThis[`${lang}__voice`];
 	}
 	globalThis[`${lang}__started`] = true;
+	utterance.onstart = (event) => {
+  	console.log(`Speech ${text} has started processing.`);
+	};
+	utterance.onend = (event) => {
+		console.log(`Speech ${text} has finished successfully.`);
+		onend();
+	};
 	window.speechSynthesis.speak(utterance);
 }
 
