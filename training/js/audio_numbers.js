@@ -10,7 +10,7 @@ function AudioNumbers(id, lang) {
     <label for="limit10000">10000</label>
   </div>
   <div style="margin-bottom: 1rem; display: flex; flex-direction: row; flex-wrap: wrap; gap: 1rem;">
-    <input id="response" type="text" size="4">
+    <input style="display: none" id="response" type="text" size="4">
     <button id="next" onClick="document.dispatchEvent(new Event('next'))">Начать</button>
   </div>
   <div id="time"></div>
@@ -38,10 +38,7 @@ function AudioNumbers(id, lang) {
   }
 
   function next() {
-    if (!startTime) {
-      newNumber();
-      byId("next").innerHTML = "Дальше";
-    } else if (byId("response").value !== "") {
+    if (byId("response").value !== "") {
       countResponses += 1;
       responsesTotalTime += performance.now() - startTime;
       const avgTime = Math.round(responsesTotalTime / countResponses / 1000);
@@ -51,8 +48,10 @@ function AudioNumbers(id, lang) {
       byId("response").value = "";
       newNumber();
     }
+    byId("next").innerHTML = "Дальше";
+    show("response");
     speak(number.toString(), LANG, () => startTime = performance.now());        
   }
 
-  next();
+  newNumber();
 }
