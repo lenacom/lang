@@ -1,5 +1,14 @@
 "use strict";
 
+function menu(up = 0) {
+	document.addEventListener("DOMContentLoaded", () => {
+		const path = window.location.pathname.split("/");
+		path.splice(-1 * (up + 1));
+    const menuHTML = `<div style="margin-bottom: 1rem"><a href="${path.join("/")}/index.html">Домой</a></div>`;
+		document.body.insertAdjacentHTML("afterbegin", menuHTML);
+	});
+}
+
 function getConfig(name) {
 	const json = getCookie(name);
 	return json? JSON.parse(json) : {};
@@ -83,11 +92,11 @@ function speak(text, lang, onend) {
 	}
 	globalThis[`${lang}__started`] = true;
 	utterance.onstart = (event) => {
-  	console.log(`Speech ${text} has started processing.`);
+  	console.log(`Speech "${text}" ${lang} has started processing.`);
 	};
 	utterance.onend = (event) => {
-		console.log(`Speech ${text} has finished successfully.`);
-		onend();
+		console.log(`Speech "${text}" ${lang} has finished successfully.`);
+		onend && onend();
 	};
 	window.speechSynthesis.speak(utterance);
 }

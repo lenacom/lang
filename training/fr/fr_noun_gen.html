@@ -3,10 +3,10 @@
     <title>Род французских существительных</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="js/common.js"></script>
-    <script src="js/small_steps.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/small_steps.js"></script>
     <script src="js/fr_nouns.js"></script>
-    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="../css/common.css">
   </head>
   <body>
     <div id="test"></div>
@@ -47,6 +47,7 @@
       console.log(x)*/
       const LANG = "fr-FR";
       initSpeak(LANG);
+      menu();
       document.write(autospeakHTML());
       const { getState, setAnswered } = SmallSteps("fr_noun_gen", nouns);
 

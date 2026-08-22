@@ -38,7 +38,7 @@ input[type=search], input[type=text] {
   padding: 0.25rem;
 }
 @media screen and (min-width: 640px) {
-  body, button, select, option, a, input, span, div {
+  body, button, select, option, option:checked, a, input, span, div {
     font-size: 3rem;
   }
   input[type=checkbox], input[type=radio] {

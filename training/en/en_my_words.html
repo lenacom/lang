@@ -3,9 +3,9 @@
     <title>Английские слова</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="js/common.js"></script>
-    <script src="js/words_in_groups.js"></script>
-    <link rel="stylesheet" href="css/common.css">
+    <script src="../js/common.js"></script>
+    <script src="../js/words_in_groups.js"></script>
+    <link rel="stylesheet" href="../css/common.css">
     <script>
       const items = {};
       items["Разное"] = [
@@ -34,6 +34,12 @@
         ["topple [tɒpl]", "опрокидывать"],
         ["oust [aʊst]", "вытеснять"],
         ["toss","бросать"],
+        ["muster", ""],
+        ["livestock", ""],
+        ["smoosh", ""],
+        ["wrangle", ""],
+        ["coalesce", ""],
+        ["", ""],
       ];
       items["Under the greenwood tree"] = [
         ["grumble [grʌmbl]", "ворчать"],
@@ -412,6 +418,7 @@
       const LANG = "en-US";
       initSpeak(LANG);
       WordsInGroups("en_words", items, LANG);
+      menu();
     </script>
   </body>
 </html>

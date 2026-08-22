@@ -1,0 +1,16 @@
+items[] = [
+["gorge f", "горло"],
+["talon f", "пятка"],
+,["cinq m", "пяток"],
+["coude, aune m", "локоть"],
+["front m", "лоб"],
+["sourcil f", "бровь"],
+,["sourcils f", "брови"],
+["cils f", "ресницы"],
+,["cil f", "ресница"],
+["lèvres f", "губы"],
+,["lèvre, labelle, baie, anse, ballon f", "губа"],
+["genou, tribu, articulation, jarreté, raccord coudé, retour, courbure, nœud, membre, branche, figure, truc, renvoi n", "колено"],
+["taille f", "талия"],
+,["Thalie f", "Талия"],
+];
