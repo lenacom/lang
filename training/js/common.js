@@ -1,10 +1,23 @@
 "use strict";
 
-function menu(up = 0) {
+function menu() {
+	const names = { "en": "English", "fr": "Français" };
+
+	function menuLink(pathParts, name = names[pathParts.at(-1)]) {
+		return `<a href="${pathParts.join("/") + "/"}">${name}</a>`;
+	}
+
+	const pathParts = window.location.pathname.split("/");
+	pathParts.splice(["", "index.html"].includes(pathParts.at(-1))? -2 : -1);
+	const menuLinks = [];
+	while (Object.keys(names).includes(pathParts.at(-1))) {
+		menuLinks.unshift(menuLink(pathParts));
+		pathParts.splice(-1);
+	}
+	menuLinks.unshift(menuLink(pathParts, "Главная"));
+
 	document.addEventListener("DOMContentLoaded", () => {
-		const path = window.location.pathname.split("/");
-		path.splice(-1 * (up + 1));
-    const menuHTML = `<div style="margin-bottom: 1rem"><a href="${path.join("/")}/index.html">Домой</a></div>`;
+    const menuHTML = `<div style="margin-bottom: 1rem; display: flex; gap: 1rem;">${menuLinks.join("")}</div>`;
 		document.body.insertAdjacentHTML("afterbegin", menuHTML);
 	});
 }
