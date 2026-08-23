@@ -73,18 +73,18 @@
         byId("translation").innerHTML = result.join("");
       }
 
-      initSpeak("en-EN");
       initSpeak("fr-FR");
+      initSpeak("en-EN");
       menu();
     </script>   
   </head>
   <body> 
     <div style="margin-bottom: 1rem; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 1rem;">
-    <input type="radio" id="ru" name="lang" value="ru" onClick="langFrom = 'ru'">
+    <input type="radio" id="ru" name="lang" onClick="langFrom = 'ru'">
     <label for="ru">ru</label>
-    <input type="radio" id="en" name="lang" value="en" onClick="langFrom = 'en'">
+    <input type="radio" id="en" name="lang" onClick="langFrom = 'en'">
     <label for="en">en</label>
-    <input type="radio" id="fr" name="lang" value="fr" onClick="langFrom = 'fr'">
+    <input type="radio" id="fr" name="lang" onClick="langFrom = 'fr'">
     <label for="fr">fr</label>
   </div>
     <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 1rem;">

@@ -1,13 +1,12 @@
 "use strict";
 
 function AudioNumbers(id, lang) {
+  const options = ["100", "1000", "1000"].map(it => {
+    return `<input type="radio" id="limit${it}" name="limit" checked onClick="document.dispatchEvent(new CustomEvent('limit', { detail: { limit: ${it} } }))">
+    <label for="limit${it}">${it}</label>`;
+  }).join("");
   const html = `<div style="margin-bottom: 1rem; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 1rem;">
-    <input type="radio" id="limit100" name="limit" value="100" checked onClick="document.dispatchEvent(new CustomEvent('limit', { detail: { limit: 100 } }))">
-    <label for="limit100">100</label>
-    <input type="radio" id="limit1000" name="limit" value="1000" onClick="document.dispatchEvent(new CustomEvent('limit', { detail: { limit: 1000 } }))">
-    <label for="limit1000">1000</label>
-    <input type="radio" id="limit10000" name="limit" value="10000" onClick="document.dispatchEvent(new CustomEvent('limit', { detail: { limit: 10000 } }))">
-    <label for="limit10000">10000</label>
+    ${options}
   </div>
   <div style="margin-bottom: 1rem; display: flex; flex-direction: row; flex-wrap: wrap; gap: 1rem;">
     <input style="display: none" id="response" type="text" size="4">

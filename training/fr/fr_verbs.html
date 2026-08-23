@@ -4,17 +4,119 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../js/common.js"></script>
-    <script src="../js/words_in_groups.js"></script>
+    <script src="../js/small_steps.js"></script>
     <script src="js/fr_verbs.js"></script>
     <link rel="stylesheet" href="../css/common.css">    
   </head>
   <body>
-    <div id="fr_verbs"/>
+    <div id="test"></div>
+    <div id="progress"></div>
+    <hr/>
+    <div id="verb" style="display: flex; gap: 1rem;"></div>
+    <div id="form" style="display: flex; flex-wrap: wrap; gap: 1rem;"></div>
+    <div id="error" class="error"></div>
+    <hr/>
+    <div id="tenses"></div>
     <script>
       const LANG = "fr-FR";
       initSpeak(LANG);
-      WordsInGroups("fr_verbs", verbs, LANG);
       menu();
+      document.write(autospeakHTML());
+
+      // "participe présent", "participe passé", "imperatif",
+      const tenseNames = ["présent", "imparfait", "futur simple", "conditionnel présent", 
+        "subjonctif présent", "subjonctif imparfait", "passé simple"];
+      let smallSteps;
+      let tenseName = getCookie("fr_verbs_tense") ?? "présent";
+      let forms;
+      let formIndex;
+      let formVariants;
+      const pronouns = ["je", "tu", "il", "nous", "vous", "ils"];
+
+      function setTenseName(__tenseName) {
+        tenseName = __tenseName;
+        setCookie("fr_verbs_tense", tenseName);
+        smallSteps = SmallSteps(`fr_verbs_${tenseName}`, verbs);
+        setVerb();
+      }
+
+      const tenseNameOptions = tenseNames.map(__tenseName => {
+        const selected = __tenseName === tenseName? "selected" : "";
+        return `<option ${selected}>${__tenseName}</option>`;
+      }).join("");
+      byId("tenses").innerHTML = `<select name="tenseName" onChange="setTenseName(this.value)">${tenseNameOptions}</select>`;
+
+      function setVerb() {
+        const { limit, part, item } = smallSteps.getState();
+        byId("test").innerHTML = `Глаголы по ${limit} из ${verbs.length}.`;
+        byId("progress").innerHTML = `Осталось глаголов: ${part.length + 1}.`;
+        byId("verb").innerHTML = `${withSpeakButtonHTML(item[0], LANG)}<span>${item[1]},</span><span id="pronoun"><span>`;
+        const verbTenses =  tenses[item[0]];
+        forms = verbTenses[tenseName];
+        formVariants = createFormVariants(verbTenses);
+        formIndex = 0;
+        setForm();
+      }
+
+      function setForm() {
+        if (forms[formIndex].trim() === "") {
+          checkAnswer("");
+        } else {
+          byId("pronoun").innerHTML = pronouns[formIndex];
+          const formHTML = formVariants[formIndex].map(it => `<button onClick="checkAnswer('${it}')">${it}</button>`).join("");
+          byId("form").innerHTML = formHTML;
+        }
+      }
+
+      function checkAnswer(form) {
+        const correctForm = forms[formIndex];
+        const pronoun = (formIndex === 0 && startsWithVowel(correctForm))? "j'" : pronouns[formIndex] + " ";
+        const formWithPronoun = `${pronoun}${correctForm}`;
+        if (globalThis.autospeak && form !== "") {
+          speak(formWithPronoun, LANG);
+        }
+        if (correctForm === form) {
+          if (formIndex === 5) {
+            smallSteps.setAnswered(true);
+            setVerb();
+          } else {
+            formIndex++;
+            setForm();
+          }
+          byId("error").innerHTML = "";
+        } else {
+          byId("error").innerHTML = withSpeakButtonHTML(formWithPronoun, LANG);
+          smallSteps.setAnswered(false);
+          setVerb();
+        }
+      }
+
+      function createFormVariants(verbTenses) {
+        const result = [[], [], [], [], [], []];
+        for (const [__tenseName, __forms] of Object.entries(verbTenses)) {
+          if (__tenseName !== tenseName && Array.isArray(__forms) && __forms.length === 6) {
+            for (let i = 0; i < 6; i++) {
+              if (__forms[i] !== forms[i]) {
+                result[i].push(__forms[i]);
+              }
+            }
+          }
+        }
+        for (let i = 0; i < 6; i++) {
+          result[i] = [...new Set(result[i])]; // deduplicate
+          result[i] = shuffle(result[i]);
+          result[i].unshift(forms[i]);
+          result[i] = shuffle(result[i].slice(0, 3));
+        }
+        return result;
+      }
+
+      function startsWithVowel(text) {
+        return "haeéêioôuy".includes(text.at(0));
+      }
+
+      setTenseName(tenseName);
+      setVerb();
     </script>
   </body>
 </html>

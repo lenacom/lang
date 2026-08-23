@@ -86,11 +86,12 @@ function speak(text, lang, onend) {
 	const utterance = new SpeechSynthesisUtterance(text);
 	utterance.lang = normilizedLang(lang);
 	utterance.rate = 0.8; 
-	utterance.volume = globalThis[`${lang}__started`]? 1 : 0;
+	utterance.volume = globalThis[`${lang}__started`] && text !== " "? 1 : 0;
 	if (globalThis[`${lang}__voice`]) {
 		utterance.voice = globalThis[`${lang}__voice`];
 	}
 	globalThis[`${lang}__started`] = true;
+	console.log(utterance)
 	utterance.onstart = (event) => {
   	console.log(`Speech "${text}" ${lang} has started processing.`);
 	};
@@ -117,4 +118,15 @@ function speakButtonHTML(text, lang) {
 function withSpeakButtonHTML(text, lang, textToSpeak) {
 	return `<div style="display: flex; flex-direction: row; gap: 1rem;">
 		<span>${text}</span>${speakButtonHTML(textToSpeak ?? text, lang)}</div>`;
+}
+
+function shuffle(array) {
+	const shuffled = [...array]; 
+	
+	for (let i = shuffled.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1)); 
+		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; 
+	}
+	
+	return shuffled;
 }
