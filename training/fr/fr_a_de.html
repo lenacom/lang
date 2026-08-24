@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="../css/common.css">
   </head>
   <body>
-    <div id="test"></div>
-    <div id="progress"></div>
+    <div id="test" class="small"></div>
+    <div id="progress" class="small"></div>
     <hr/>
     <div id="item"></div>
     <div><button style="margin-top:10px" onClick="checkAnswer()">Дальше</button></div>
@@ -47,7 +47,7 @@
         byId("test").innerHTML = `Тесты по ${limit} из ${items.length}.`;
         byId("progress").innerHTML = `Осталось тестов: ${part.length + 1}.`;
         byId("item").innerHTML = `<div>${item[1]}</div>
-          <div style="display: flex; align-items: flex-start; flex-wrap: wrap;">${variants(item[0])}</div>`;
+          <div style="display: flex; align-items: baseline; flex-wrap: wrap;">${variants(item[0])}</div>`;
       }
 
       function checkAnswer() {

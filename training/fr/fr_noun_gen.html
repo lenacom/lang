@@ -7,15 +7,29 @@
     <script src="../js/small_steps.js"></script>
     <script src="js/fr_nouns.js"></script>
     <link rel="stylesheet" href="../css/common.css">
+    <style>
+      .m { color: #87CEFA; }
+      .f { color: #F08080; }
+      button.m {
+        color: black;
+        background-color: #87CEFA;
+        min-width: 7rem;
+      }
+      button.f {
+        color: black;
+        background-color: #F08080;
+        min-width: 7rem;
+      }
+    </style>
   </head>
   <body>
-    <div id="test"></div>
-    <div id="progress"></div>
+    <div id="test" class="small"></div>
+    <div id="progress" class="small"></div>
     <hr/>
     <div id="item"></div>
-    <div>
-      <button style="min-width: 60px" onClick="checkAnswer('m')">m</button>
-      <button style="min-width: 60px" onClick="checkAnswer('f')">f</button>
+    <div style="margin: 1rem 0">
+      <button class="m" onClick="checkAnswer('m')">m</button>
+      <button class="f" onClick="checkAnswer('f')">f</button>
     </div>
     <div id="error"></div>
     <script>
@@ -48,7 +62,6 @@
       const LANG = "fr-FR";
       initSpeak(LANG);
       menu();
-      document.write(autospeakHTML());
       const { getState, setAnswered } = SmallSteps("fr_noun_gen", nouns);
 
       function setItem() {
@@ -56,21 +69,27 @@
         byId("test").innerHTML = `Тесты по ${limit} из ${nouns.length}.`;
         byId("progress").innerHTML = `Осталось тестов: ${part.length + 1}.`;
         byId("item").innerHTML = itemHTML(item);
-        if (globalThis.autospeak) {
-          speak(item[0], LANG);
-        }
       }
 
       function itemHTML(item) {
+        return `<div><span style="display: flex; flex-direction: row; gap: 20px; flex-wrap: wrap;">
+		      <span>${item[0]} ${item[1]? `[${item[1]}]` : ""}</span>
+          ${speakButtonHTML(item[0], LANG)} ${item[3]}</div>`;
+      }
+
+      function errorHTML(item) {
         const trans = item[1]? `[${item[1]}]` : "";
-        return `<div><span style="display: flex; flex-direction: row; gap: 20px;">
-		      <span>${item[0]} ${trans}</span>${speakButtonHTML(item[0], LANG)}</div><div>${item[3]}</div>`;
+        return `<div style="display: flex; flex-direction: row; gap: 20px; flex-wrap: wrap;">
+          <span class="${item[2]}">${item[0]} ${item[2]}</span> ${item[1]? `[${item[1]}]` : ""} 
+          ${speakButtonHTML(item[0], LANG)} ${item[3]}</div>`;
       }
 
       function checkAnswer(answer) {
         const { item } = getState();
         const ok = item[2] === answer;
-        byId("error").innerHTML = ok? "" : itemHTML(item) + `<div class="error">${item[2]}</div>`;
+        if (!ok) {
+          byId("error").innerHTML = errorHTML(item) + byId("error").innerHTML;
+        }
         setAnswered(ok);
         setItem();
       }

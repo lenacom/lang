@@ -9,14 +9,13 @@
     <link rel="stylesheet" href="../css/common.css">    
   </head>
   <body>
+    <div id="tenses"></div>
     <div id="test"></div>
     <div id="progress"></div>
     <hr/>
     <div id="verb" style="display: flex; gap: 1rem;"></div>
     <div id="form" style="display: flex; flex-wrap: wrap; gap: 1rem;"></div>
     <div id="error" class="error"></div>
-    <hr/>
-    <div id="tenses"></div>
     <script>
       const LANG = "fr-FR";
       initSpeak(LANG);
@@ -50,7 +49,7 @@
         const { limit, part, item } = smallSteps.getState();
         byId("test").innerHTML = `Глаголы по ${limit} из ${verbs.length}.`;
         byId("progress").innerHTML = `Осталось глаголов: ${part.length + 1}.`;
-        byId("verb").innerHTML = `${withSpeakButtonHTML(item[0], LANG)}<span>${item[1]},</span><span id="pronoun"><span>`;
+        byId("verb").innerHTML = `${withSpeakButtonHTML(item[0], LANG)}<span>${item[1]}<span>`;
         const verbTenses =  tenses[item[0]];
         forms = verbTenses[tenseName];
         formVariants = createFormVariants(verbTenses);
@@ -62,18 +61,17 @@
         if (forms[formIndex].trim() === "") {
           checkAnswer("");
         } else {
-          byId("pronoun").innerHTML = pronouns[formIndex];
-          const formHTML = formVariants[formIndex].map(it => `<button onClick="checkAnswer('${it}')">${it}</button>`).join("");
+          const formHTML = formVariants[formIndex].map(it => {
+            return `<button onClick="checkAnswer('${it}')">${withPronoun(it)}</button>`;
+          }).join("");
           byId("form").innerHTML = formHTML;
         }
       }
 
       function checkAnswer(form) {
         const correctForm = forms[formIndex];
-        const pronoun = (formIndex === 0 && startsWithVowel(correctForm))? "j'" : pronouns[formIndex] + " ";
-        const formWithPronoun = `${pronoun}${correctForm}`;
-        if (globalThis.autospeak && form !== "") {
-          speak(formWithPronoun, LANG);
+        if (globalThis.autospeak && correctForm !== "") {
+          speak(withPronoun(correctForm), LANG);
         }
         if (correctForm === form) {
           if (formIndex === 5) {
@@ -85,7 +83,7 @@
           }
           byId("error").innerHTML = "";
         } else {
-          byId("error").innerHTML = withSpeakButtonHTML(formWithPronoun, LANG);
+          byId("error").innerHTML = withSpeakButtonHTML(withPronoun(correctForm), LANG);
           smallSteps.setAnswered(false);
           setVerb();
         }
@@ -111,8 +109,9 @@
         return result;
       }
 
-      function startsWithVowel(text) {
-        return "haeéêioôuy".includes(text.at(0));
+      function withPronoun(form) {
+        const pronoun = formIndex === 0 && "haeéêioôuy".includes(form.at(0))? "j'" : pronouns[formIndex] + " ";
+        return `${pronoun}${form}`;
       }
 
       setTenseName(tenseName);

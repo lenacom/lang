@@ -378,3 +378,5 @@ S'envoler — улетать
 Se syndiquer — вступать в профсоюз
 se morfondre
 */
+
+//s’entretenaient не находит
