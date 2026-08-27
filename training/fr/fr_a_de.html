@@ -24,7 +24,7 @@
 
       let correctItemWords;
       let itemWords;
-
+      
       function variants(text) {
         const regex = /( à | de | | d’)(faire qch|qch|qn|avoir fait qch)/ig; 
         correctItemWords = text.replace(regex, "--$1--$2").split("--");
@@ -50,6 +50,20 @@
           <div style="display: flex; align-items: baseline; flex-wrap: wrap;">${variants(item[0])}</div>`;
       }
 
+      function similarItems(item) {
+        const regex = /^(?:se |s’)?(.*?)( à | de | | d’)(faire qch|qch|qn|avoir fait qch).*$/i; 
+        const key = item[0].replace(regex, "$1");
+        //console.log(`key '${key}'`);
+        return items.filter(it => it[0].includes(key) && it[0] !== item[0]);
+      }
+
+      //const xitem = items.find(it => it[0] === "répondre de qch")
+      //console.log(similarItems(xitem));
+
+      function speakText(text) {
+        return text.replace("qn", "quelqu’un").replace("qch", "quelquechose");
+      }
+
       function checkAnswer() {
         let ok = true;
         for (let i = 0; i < itemWords.length; i++) {
@@ -62,12 +76,13 @@
           byId("error").innerHTML = "";
         } else {
           const { item } = getState();
-          const speakText = item[0].replace("qn", "quelqu’un").replace("qch", "quelquechose");
           if (globalThis.autospeak) {
-            speak(speakText, LANG);
+            speak(speakText(item[0]), LANG);
           }
-          byId("error").innerHTML = `<div>${item[1]}</div>
-          <div class="error"><span>${item[0]}</span> ${speakButtonHTML(speakText, LANG)}</div>`;
+          byId("error").innerHTML = [item, ...similarItems(item)].map(it => {
+            return `<div>${it[1]}</div>
+              <div class="error"><span>${it[0]}</span> ${speakButtonHTML(speakText(it[0]), LANG)}</div>`;
+          }).join("");
         }
         setAnswered(ok);
         setItem();
