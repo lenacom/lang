@@ -341,14 +341,22 @@ async function showHelper(selection) {
   Array.from(document.getElementsByClassName(prefix("conjugation"))).forEach(it => it.click());
 }
 
-const listener = async () => {
+function isInsideHelper(node) {
+  const helper = document.getElementById('fr-helper');
+  return !!(helper && node && helper.contains(node));
+}
+
+const listener = async (event) => {
+  if (isInsideHelper(event.target)) {
+    return;
+  }
   await showHelper(document.getSelection());
 };
 document.addEventListener("contextmenu", listener);
 document.addEventListener("pointerup", listener);
 document.addEventListener("selectionchange", async () => {
-  const selection = document.getSelection()
-  if (!selection.toString()) {
+  const selection = document.getSelection();
+  if (!selection.toString() && !isInsideHelper(selection.anchorNode)) {
     await showHelper(document.getSelection());
   }
 });
