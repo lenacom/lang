@@ -1,64 +1,80 @@
 <html>
   <head>
     <title>Управление французских глаголов, предлоги à и de</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="../js/common.js"></script>
     <script src="../js/small_steps.js"></script>
     <script src="js/fr_a_de.js"></script>
-    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/common.css" />
   </head>
   <body>
+    <script>
+      menu();
+    </script>
     <div id="test" class="small"></div>
     <div id="progress" class="small"></div>
-    <hr/>
+    <hr />
     <div id="item"></div>
-    <div><button style="margin-top:10px" onClick="checkAnswer()">Дальше</button></div>
+    <div>
+      <button style="margin-top: 10px" onClick="checkAnswer()">Дальше</button>
+    </div>
     <div id="error"></div>
     <script>
       const LANG = "fr-FR";
       initSpeak(LANG);
-      menu();
       document.write(autospeakHTML());
       const { getState, setAnswered } = SmallSteps("fr_a_de", items);
 
       let correctItemWords;
       let itemWords;
-      
+
       function variants(text) {
-        const regex = /( à | de | | d’)(faire qch|qch|qn|avoir fait qch)/ig; 
+        const regex = /( à | de | | d’)(faire qch|qch|qn|avoir fait qch)/gi;
         correctItemWords = text.replace(regex, "--$1--$2").split("--");
         itemWords = text.replace(regex, "-- --$2").split("--");
-        return correctItemWords.map((word, index)  => {
-          if ([" à ", " de ", " ", " d’"].includes(word)) {
-            return `&nbsp;<select name="part${index}" onChange="itemWords[${index}] = this.value">
+        return correctItemWords
+          .map((word, index) => {
+            if ([" à ", " de ", " ", " d’"].includes(word)) {
+              return `&nbsp;<select name="part${index}" onChange="itemWords[${index}] = this.value">
               <option value=" " selected>&nbsp;</option>
               <option value=" à ">à</option>
-              <option value="${ word === " d’" ? word : " de "}">de</option>
+              <option value="${word === " d’" ? word : " de "}">de</option>
             </select>&nbsp;`;
-          } else {
-            return word;
-          }
-        }).join("");
+            } else {
+              return word;
+            }
+          })
+          .join("");
       }
 
       function setItem() {
-        const { limit, part, item } = getState();
-        byId("test").innerHTML = `Тесты по ${limit} из ${items.length}.`;
-        byId("progress").innerHTML = `Осталось тестов: ${part.length + 1}.`;
+        const { limit, part, item, countTests } = getState();
+        if (limit < items.length) {
+          byId("test").innerHTML = `Тесты по ${limit} из ${items.length}.`;
+          byId("progress").innerHTML = `Осталось тестов: ${part.length + 1}.`;
+        } else {
+          byId("test").innerHTML = `Всего тестов: ${items.length}.`;
+          byId("progress").innerHTML = `Выполнено тестов: ${countTests}`;
+        }
+
         byId("item").innerHTML = `<div>${item[1]}</div>
           <div style="display: flex; align-items: baseline; flex-wrap: wrap;">${variants(item[0])}</div>`;
       }
 
       function similarItems(item) {
-        const regex = /^(?:se |s’)?(.*?)( à | de | | d’)(faire qch|qch|qn|avoir fait qch).*$/i; 
+        const regex =
+          /^(?:se |s’)?(.*?)( à | de | | d’)(faire qch|qch|qn|avoir fait qch).*$/i;
         const key = item[0].replace(regex, "$1");
         //console.log(`key '${key}'`);
-        return items.filter(it => it[0].includes(key) && it[0] !== item[0]);
+        const regexp = new RegExp(`(^|\s|’)${key}[^s]`);
+        return items.filter((it) => regexp.test(it[0]) && it[0] !== item[0]);
       }
 
-      //const xitem = items.find(it => it[0] === "répondre de qch")
-      //console.log(similarItems(xitem));
+      /*let xitem = items.find(it => it[0] === "rêver de qch (qn)")
+      console.log(similarItems(xitem));
+      xitem = items.find(it => it[0] === "s’user à faire qch")
+      console.log(similarItems(xitem));*/
 
       function speakText(text) {
         return text.replace("qn", "quelqu’un").replace("qch", "quelquechose");
@@ -79,15 +95,17 @@
           if (globalThis.autospeak) {
             speak(speakText(item[0]), LANG);
           }
-          byId("error").innerHTML = [item, ...similarItems(item)].map(it => {
-            return `<div>${it[1]}</div>
+          byId("error").innerHTML = [item, ...similarItems(item)]
+            .map((it) => {
+              return `<div>${it[1]}</div>
               <div class="error"><span>${it[0]}</span> ${speakButtonHTML(speakText(it[0]), LANG)}</div>`;
-          }).join("");
+            })
+            .join("");
         }
         setAnswered(ok);
         setItem();
       }
-      
+
       setItem();
     </script>
   </body>

@@ -11,6 +11,7 @@ function WordsInGroups(id, items, lang) {
 
   const html = `<div id="index" style="display: block;">${indexHtml}</div>
     <div id="part" style="display: none;">
+      <div id="name" class="header"></div>
       <div id="progress"></div>
       <div id="text1"></div>
       <div id="text2"></div>
@@ -25,7 +26,7 @@ function WordsInGroups(id, items, lang) {
     if (detail.value) {
       if (!repeatOftener[detail.partName]) {
         repeatOftener[detail.partName] = [];
-      }      
+      }
       repeatOftener[detail.partName].push(detail.index);
     } else {
       const index = repeatOftener[detail.partName].indexOf(detail.index);
@@ -42,16 +43,19 @@ function WordsInGroups(id, items, lang) {
 
   function setPart(name) {
     partName = name;
-    part = items[name].map((it, id) => [id, it[1], it[0]]);
-    partRepeatOftener = part.filter(it => (repeatOftener[partName] ?? []).includes(it[0]));
+    part = items[name].map((it, id) => [id, it[1], it[0], it[2]]);
+    partRepeatOftener = part.filter((it) =>
+      (repeatOftener[partName] ?? []).includes(it[0]),
+    );
     remained = partRepeatOftener.length + part.length;
     hide("index");
+    byId("name").innerHTML = partName;
     show("part");
     setItem();
   }
 
   function currentPart() {
-    return partRepeatOftener.length? partRepeatOftener : part;
+    return partRepeatOftener.length ? partRepeatOftener : part;
   }
 
   function setItem() {
@@ -65,24 +69,47 @@ function WordsInGroups(id, items, lang) {
       remained -= 1;
       itemIndex = Math.round(Math.random() * (currentPart().length - 1));
       byId("text1").innerHTML = currentPart()[itemIndex][1];
-    } 
+    }
   }
+  console.log(
+    "une epaule vvv".replace(/(.*\b)([mf])\b/, '<span class="$2">$1$2</span>'),
+  );
 
   function next() {
     if (byId("text2").innerHTML === "") {
       const item = currentPart()[itemIndex];
-      const text = item[2];
-      const speakText = text.split("[")[0].split("(")[0];
-      const checked = (repeatOftener[partName] ?? []).find(it => it === item[0]) !== undefined;
+      let text = item[2].replace(
+        /(.*?\b)([mf])\b/,
+        '<span class="$2">$1$2</span>',
+      );
+      if (/\b(une|la)\b/.test(text)) {
+        text = `<span class="f">${text}</span>`;
+      }
+      if (/\b(un|le)\b/.test(text)) {
+        text = `<span class="m">${text}</span>`;
+      }
+      const speakText = item[2]
+        .split(" ")
+        .filter(
+          (it) =>
+            !["m", "f"].includes(it) &&
+            !/^\[.*$/i.test(it) &&
+            !/^.*\]$/i.test(it),
+        )
+        .join(" ");
+      const checked =
+        (repeatOftener[partName] ?? []).find((it) => it === item[0]) !==
+        undefined;
+      const addition = item[3] ? `<div class="small">${item[3]}</div>` : "";
       byId("text2").innerHTML = `${withSpeakButtonHTML(text, lang, speakText)}
-        <div>
+        ${addition}      
+        <div class="valign">
           <label for="repeatOftener">Повторять чаще</label>
-            <input type="checkbox" ${checked ? "checked" : ""} id="repeatOftener" 
-              onClick="document.dispatchEvent(new CustomEvent('repeatOftener', { detail: { partName: '${partName}', index: ${item[0]}, value: ${!checked} } }))"/>
-          </label>
+          <input type="checkbox" ${checked ? "checked" : ""} id="repeatOftener" 
+            onClick="document.dispatchEvent(new CustomEvent('repeatOftener', { detail: { partName: '${partName}', index: ${item[0]}, value: ${!checked} } }))"/>
         <div>`;
- 
-      currentPart().splice(itemIndex, 1); 
+
+      currentPart().splice(itemIndex, 1);
 
       if (globalThis.autospeak) {
         speak(speakText, lang);

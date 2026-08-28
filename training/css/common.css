@@ -109,3 +109,13 @@ a {
 .error {
   color: #CC6600;
 }
+.header {
+  color: brown;
+}
+.valign {
+  display: flex; 
+  align-items: center; 
+  gap: 1rem;
+}
+.m { color: #87CEFA; }
+.f { color: #F08080; }

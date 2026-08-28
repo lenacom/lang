@@ -1,16 +1,16 @@
 <html>
   <head>
     <title>Полиглот</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="js/common.js"></script>
-    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/common.css" />
     <script>
       const langs = {
-        "ru": "Русский",
-        "en": "Английский",
-        "fr": "Французский"
-      }
+        ru: "Русский",
+        en: "Английский",
+        fr: "Французский",
+      };
 
       const urlParams = new URLSearchParams(window.location.search);
       let langFrom = urlParams.get("lang_from");
@@ -27,7 +27,9 @@
       });
 
       async function getYandexJson(word, langFrom, langTo) {
-        const url = new URL("https://dictionary.yandex.net/dicservice.json/lookupMultiple");
+        const url = new URL(
+          "https://dictionary.yandex.net/dicservice.json/lookupMultiple",
+        );
         url.searchParams.set("ui", "ru");
         url.searchParams.set("srv", "tr-text");
         url.searchParams.set("text", word);
@@ -48,57 +50,75 @@
         const data = await getYandexJson(text, langFrom, lang);
 
         function itemHTML(item) {
-          const { text, gen, ts} = item;
+          const { text, gen, ts } = item;
           const href = `?text=${encodeURIComponent(text)}&lang_from=${lang}`;
-          const extended = `<a href="${href}"><span class="pill">${text}</span></a>${ts? ` [${ts}]` : ""}${gen?.code? ` ${gen?.code}` : ""}`;
+          const extended = `<a href="${href}"><span class="pill">${text}</span></a>${ts ? ` [${ts}]` : ""}${gen?.code ? ` ${gen?.code}` : ""}`;
           return withSpeakButtonHTML(extended, lang, text);
         }
 
-        const result = data?.map(({ tr }) => {
-          return tr.slice(0, 3).map(x => {
-            const syn = x.syn ?? [];
-            const itemsHTML = [x, ...syn].map(z => itemHTML(z)).join("");
-            const mean = (x.mean ?? []).map(z => z.text).join(", ");
-            return `<div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 1rem;">${itemsHTML}</div><div>${mean}</div>`;
-          }).join("");
-        }).join("");
+        const result = data
+          ?.map(({ tr }) => {
+            return tr
+              .slice(0, 3)
+              .map((x) => {
+                const syn = x.syn ?? [];
+                const itemsHTML = [x, ...syn].map((z) => itemHTML(z)).join("");
+                const mean = (x.mean ?? []).map((z) => z.text).join(", ");
+                return `<div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 1rem;">${itemsHTML}</div><div>${mean}</div>`;
+              })
+              .join("");
+          })
+          .join("");
 
         return `<h3>${langs[lang]}</h3><div>${result}</div>`;
       }
 
       async function translateToAll() {
         const text = byId("input").value;
-        const langsTo = Object.keys(langs).filter(it => it !== langFrom);
-        const result = await Promise.all(langsTo.map(it => translateTo(text, it)));
+        const langsTo = Object.keys(langs).filter((it) => it !== langFrom);
+        const result = await Promise.all(
+          langsTo.map((it) => translateTo(text, it)),
+        );
         byId("translation").innerHTML = result.join("");
       }
 
       initSpeak("fr-FR");
       initSpeak("en-EN");
-      menu();
-    </script>   
+    </script>
   </head>
-  <body> 
-    <div style="margin-bottom: 1rem; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 1rem;">
-    <input type="radio" id="ru" name="lang" onClick="langFrom = 'ru'">
-    <label for="ru">ru</label>
-    <input type="radio" id="en" name="lang" onClick="langFrom = 'en'">
-    <label for="en">en</label>
-    <input type="radio" id="fr" name="lang" onClick="langFrom = 'fr'">
-    <label for="fr">fr</label>
-  </div>
-    <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 1rem;">
-      <input type="search" style="max-width: 90vw;" id="input"/>
+  <body>
+    <script>
+      menu();
+    </script>
+    <div
+      style="
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 1rem;
+      "
+    >
+      <input type="radio" id="ru" name="lang" onClick="langFrom = 'ru'" />
+      <label for="ru">ru</label>
+      <input type="radio" id="en" name="lang" onClick="langFrom = 'en'" />
+      <label for="en">en</label>
+      <input type="radio" id="fr" name="lang" onClick="langFrom = 'fr'" />
+      <label for="fr">fr</label>
+    </div>
+    <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 1rem">
+      <input type="search" style="max-width: 90vw" id="input" />
       <button onClick="translateToAll()">Перевести</button>
-    </div> 
+    </div>
     <div id="translation"></div>
     <script>
-      byId("input").addEventListener("keydown", function(event) {
+      byId("input").addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
-          event.preventDefault(); 
+          event.preventDefault();
           translateToAll();
         }
       });
-    </script>  
+    </script>
   </body>
 </html>

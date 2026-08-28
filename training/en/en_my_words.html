@@ -1,11 +1,11 @@
 <html>
   <head>
     <title>Английские слова</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="../js/common.js"></script>
     <script src="../js/words_in_groups.js"></script>
-    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/common.css" />
     <script>
       const items = {};
       items["Разное"] = [
@@ -23,24 +23,28 @@
         ["pleasurably", "приятно"],
         ["concede [kənˈsiːd]", "уступить"],
         ["triage [triːˈɑːʒ]", "сортировка"],
-        ["churn [ʧɜːn]", "взбивать"],
-        ["cerebrate [ˈserɪbreɪt]", "думать"],
-        ["spelunking", "спелеология, caving"],
         ["crux [krʌks]", "главный вопрос"],
         ["sort out", "разбираться"],
         ["how to tease this apart", "как разделить это на части"],
         ["topple [tɒpl]", "опрокидывать"],
         ["oust [aʊst]", "вытеснять"],
-        ["toss","бросать"],
-      ];
-      items["Разное"] = [
-        ["muster [ˈmʌstə]", "собрать"],
+        ["toss", "бросать"],
         ["livestock [ˈlaɪvstɒk]", "домашний скот"],
+        ["deets", ""],
+        ["immersive", ""],
+        ["span", ""],
+        ["provenance", ""],
+      ];
+      items["Claude"] = [
+        ["muster [ˈmʌstə]", "собрать"],
         ["wrangle [ræŋgl]", "спорить"],
         ["coalesce [kəʊəˈles]", "объединять(ся)"],
         ["cogitate [ˈkɒʤɪteɪt]", "размышлять"],
         ["ruminate [ˈruːmɪneɪt]", "размышлять"],
         ["interim [ˈɪntərɪm]", "промежуточный"],
+        ["churn [ʧɜːn]", "взбивать"],
+        ["cerebrate [ˈserɪbreɪt]", "думать"],
+        ["spelunking", "спелеология, caving"],
       ];
       items["Under the greenwood tree"] = [
         ["grumble [grʌmbl]", "ворчать"],
@@ -53,7 +57,7 @@
         ["gobble [gɒbl]", "поглотить"],
         ["squirt [skwɜːt]", "разбрызгивать"],
         ["clamor [ˈklæmə]", "кричать, требовать"],
-        ["wheeze [wiːz]", "хрипеть"],      
+        ["wheeze [wiːz]", "хрипеть"],
         ["shear [ʃɪə]", "ножницы"],
         ["libation", "возлияние"],
         ["mistletoe [ˈmɪst(ə)ltəʊ]", "омела"],
@@ -176,7 +180,10 @@
         ["gravitas [ˈɡrævɪtɑːs]", "серьёзность"],
         ["will turn you out of the house", ""],
         ["meagre [ˈmiːgə]", "скудный"],
-        ["It has very much stayed with me", "Это очень сильно запало мне в душу."],
+        [
+          "It has very much stayed with me",
+          "Это очень сильно запало мне в душу.",
+        ],
         ["vex", "досаждать"],
         ["precipitate [prɪˈsɪpɪtɪt]", "поспешный"],
         ["what make you of", "что вы думаете о"],
@@ -259,8 +266,14 @@
         ["dusky [ˈdʌskɪ]", "тёмный"],
         ["host [həʊst]", "проводить, организовывать"],
         ["riddle[rɪdl]", "загадка"],
-        ["I resolved not to send the letter to mother just yet.", "Я решила пока не отправлять письмо матери."],
-        ["I didn't realise there was a line.", "Я не заметила, что есть очередь."],
+        [
+          "I resolved not to send the letter to mother just yet.",
+          "Я решила пока не отправлять письмо матери.",
+        ],
+        [
+          "I didn't realise there was a line.",
+          "Я не заметила, что есть очередь.",
+        ],
         ["restrained", "сдержанный"],
         ["bowl [bəʊl]", "чаша"],
         ["counterfeit [ˈkaʊntəfɪt]", "подделка"],
@@ -274,7 +287,10 @@
         ["deprive of [dɪˈpraɪv]", "лишать"],
         ["convoluted [ˈkɒnvəluːtɪd]", "извилистый"],
         ["eligible [ˈelɪʤəbl]", "приемлемый"],
-        ["there could be more to life than just marriage or misery", "В жизни может быть нечто большее, чем брак или несчастье."],
+        [
+          "there could be more to life than just marriage or misery",
+          "В жизни может быть нечто большее, чем брак или несчастье.",
+        ],
         ["overrun [əʊvəˈrʌn]", "переполнять"],
         ["tutelage [ˈtjuːtɪlɪʤ]", "опека"],
         ["pipkin [ˈpɪpkɪn]", "глиняный горшочек"],
@@ -283,7 +299,10 @@
         ["fleetingly [ˈfliːtɪŋlɪ]", "мимолётно"],
         ["nonchalant", "беззаботный"],
         ["grisly [ˈgrɪzlɪ]", "жуткий"],
-        ["there was a bold and curious side to you", "в тебе есть смелая и любопытная сторона"],
+        [
+          "there was a bold and curious side to you",
+          "в тебе есть смелая и любопытная сторона",
+        ],
         ["trip [trɪp]", "споткнуться"],
         ["crunchy [ˈkrʌnʧɪ]", "хрустящий"],
         ["flavour [ˈfleɪvə]", "вкус, запах"],
@@ -414,12 +433,14 @@
     </script>
   </head>
   <body>
-    <div id="en_words"/>
+    <script>
+      menu();
+    </script>
+    <div id="en_words" />
     <script>
       const LANG = "en-US";
       initSpeak(LANG);
       WordsInGroups("en_words", items, LANG);
-      menu();
     </script>
   </body>
 </html>

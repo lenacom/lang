@@ -1,10 +1,12 @@
 "use strict";
 
 function AudioNumbers(id, lang) {
-  const options = ["100", "1000", "10000"].map(it => {
-    return `<input type="radio" id="limit${it}" name="limit" ${it === "100"? "checked" : ""} onClick="document.dispatchEvent(new CustomEvent('limit', { detail: { limit: ${it} } }))">
+  const options = ["100", "1000", "10000"]
+    .map((it) => {
+      return `<input type="radio" id="limit${it}" name="limit" ${it === "100" ? "checked" : ""} onClick="document.dispatchEvent(new CustomEvent('limit', { detail: { limit: ${it} } }))">
     <label for="limit${it}">${it}</label>`;
-  }).join("");
+    })
+    .join("");
   const html = `<div style="margin-bottom: 1rem; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 1rem;">
     ${options}
   </div>
@@ -17,7 +19,7 @@ function AudioNumbers(id, lang) {
   byId(id).innerHTML = html;
 
   document.addEventListener("next", next);
-  document.addEventListener("part", ({ detail }) => limit = detail.limit);
+  document.addEventListener("part", ({ detail }) => (limit = detail.limit));
 
   let limit = 100;
   let number;
@@ -25,9 +27,9 @@ function AudioNumbers(id, lang) {
   let countResponses = 0;
   let responsesTotalTime = 0;
 
-  byId("response").addEventListener("keydown", function(event) {
+  byId("response").addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
-      event.preventDefault(); 
+      event.preventDefault();
       next();
     }
   });
@@ -43,13 +45,14 @@ function AudioNumbers(id, lang) {
       const avgTime = Math.round(responsesTotalTime / countResponses / 1000);
       byId("time").innerHTML = `Среднее время ответа: ${avgTime} c`;
       const response = Number(byId("response").value);
-      byId("error").innerHTML = response === number? "" : withSpeakButtonHTML(number.toString(), LANG);
+      byId("error").innerHTML =
+        response === number ? "" : withSpeakButtonHTML(number.toString(), LANG);
       byId("response").value = "";
       newNumber();
     }
     byId("next").innerHTML = "Дальше";
     show("response");
-    speak(number.toString(), LANG, () => startTime = performance.now());        
+    speak(number.toString(), LANG, () => (startTime = performance.now()));
   }
 
   newNumber();
