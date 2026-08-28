@@ -170,16 +170,36 @@ async function getTranslation(text) {
 	return regular;
 }
 
-function getTranslationHTML(data) {
-	return data.map(item => {
+function learnDialogHTML(id, item) {
     const { text, ts, tr, gen } = item;
-		const result = [`<b>${text}</b>`,
+    const part1 = `"${text}${gen? ` ${gen?.code}`: ''}${ts? ` [${ts}]` : ''}"`;
+
+    const buttons = tr.map(it => {
+      return `<button style="margin: 0; padding: 0.5rem;" 
+        onClick="navigator.clipboard.writeText('[' +document.getElementById('${id}_part1').innerText + ', ' + this.innerText + '],'); 
+        document.getElementById('${id}').close();">"${it.text}"</button>`;
+    }).join("");
+    
+    return `<dialog id="${id}">
+      <div id="${id}_part1">${part1}</div>
+      <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 0.5rem;">${buttons}</div>
+    </dialog>`;
+}
+
+function getTranslationHTML(data) {
+	return data.map((item, index) => {
+    const { text, ts, tr, gen } = item;
+		const result = [`<b>${text}</b>`, gen?.code,
       ts? `[${ts}]` : "",
-      gen?.code].filter(it => it).map(it => `<div>${it}</div>`);
-    result.splice(1, 0, speakBtnHTML(text));
-    return `<div style="display:flex; flex-wrap:wrap; flex-direction:row; align-items:center; gap:10px;">
+      ].filter(it => it).map(it => `<div>${it}</div>`);
+    result.push(speakBtnHTML(text));
+    const learnId = prefix(`learn${index}`);
+    result.push(`<button style="margin: 0; padding: 0 0.5rem;" onClick="document.getElementById('${learnId}').showModal();">Учить</button>`);
+    return `<div style="display: flex; flex-wrap: wrap; flex-direction: row; align-items: baseline; gap: 0.5rem;">
       ${result.join("")}
-    </div><div style="max-width:${Math.min(document.documentElement.clientWidth, 500)}px">${tr.map(it => it.text).join(", ")}</div>`;
+    </div><div style="max-width:${Math.min(document.documentElement.clientWidth, 500)}px">${tr.map(it => it.text).join(", ")}</div>
+    ${learnDialogHTML(learnId, item)}
+    `;
 	}).join("");
 }
 
@@ -188,7 +208,7 @@ function speakBtnHTML(text) {
     return "";
   }
   return `
-    <button style="font-size:0; margin: auto 0 0 0; padding:5px;" onClick="speak('${text.replace("'", "\\'")}')">
+    <button style="font-size:0; margin: 0; padding: 0.5rem;" onClick="speak('${text.replace("'", "\\'")}')">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20px" height="20px">
         <path fill="currentColor" d="M48 352l48 0 134.1 119.2c6.4 5.7 14.6 8.8 23.1 8.8 19.2 0 34.8-15.6 34.8-34.8l0-378.4c0-19.2-15.6-34.8-34.8-34.8-8.5 0-16.7 3.1-23.1 8.8L96 160 48 160c-26.5 0-48 21.5-48 48l0 96c0 26.5 21.5 48 48 48zM441.1 107c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C443.3 170.7 464 210.9 464 256s-20.7 85.3-53.2 111.8c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5c43.2-35.2 70.9-88.9 70.9-149s-27.7-113.8-70.9-149zm-60.5 74.5c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C361.1 227.6 368 241 368 256s-6.9 28.4-17.7 37.3c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5C402.1 312.9 416 286.1 416 256s-13.9-56.9-35.5-74.5z"/>
       </svg>
@@ -387,4 +407,6 @@ Se syndiquer — вступать в профсоюз
 se morfondre
 */
 
-//s’entretenaient не находит
+// s’entretenaient не находит
+// prosternaient не находит
+// sourd ошибка

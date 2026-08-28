@@ -42,7 +42,7 @@ function WordsInGroups(id, items, lang) {
 
   function setPart(name) {
     partName = name;
-    part = items[name].map((it, id) => [id, it[1], it[0]]);
+    part = items[name].map((it, id) => [id, it[1], it[0], it[2]]);
     partRepeatOftener = part.filter(it => (repeatOftener[partName] ?? []).includes(it[0]));
     remained = partRepeatOftener.length + part.length;
     hide("index");
@@ -72,14 +72,15 @@ function WordsInGroups(id, items, lang) {
     if (byId("text2").innerHTML === "") {
       const item = currentPart()[itemIndex];
       const text = item[2];
-      const speakText = text.split("[")[0].split("(")[0];
+      const speakText = text.split(" ").filter(it => !["m", "f"].includes(it) && !/^\[.*$/i.test(it) && !/^.*\]$/i.test(it)).join(" ");
       const checked = (repeatOftener[partName] ?? []).find(it => it === item[0]) !== undefined;
+      const addition = item[3]? `<div class="small">${item[3]}</div>` : "";
       byId("text2").innerHTML = `${withSpeakButtonHTML(text, lang, speakText)}
-        <div>
+        ${addition}      
+        <div class="valign">
           <label for="repeatOftener">Повторять чаще</label>
-            <input type="checkbox" ${checked ? "checked" : ""} id="repeatOftener" 
-              onClick="document.dispatchEvent(new CustomEvent('repeatOftener', { detail: { partName: '${partName}', index: ${item[0]}, value: ${!checked} } }))"/>
-          </label>
+          <input type="checkbox" ${checked ? "checked" : ""} id="repeatOftener" 
+            onClick="document.dispatchEvent(new CustomEvent('repeatOftener', { detail: { partName: '${partName}', index: ${item[0]}, value: ${!checked} } }))"/>
         <div>`;
  
       currentPart().splice(itemIndex, 1); 

@@ -6,6 +6,8 @@
     <script src="../js/common.js"></script>
     <script src="../js/small_steps.js"></script>
     <script src="js/fr_nouns.js"></script>
+    <script src="../../src/fr/all_nouns.js"></script>
+    
     <link rel="stylesheet" href="../css/common.css">
     <style>
       .m { color: #87CEFA; }
@@ -23,58 +25,100 @@
     </style>
   </head>
   <body>
+    <script>menu();</script> 
     <div id="test" class="small"></div>
     <div id="progress" class="small"></div>
     <hr/>
     <div id="item"></div>
-    <div style="margin: 1rem 0">
-      <button class="m" onClick="checkAnswer('m')">m</button>
-      <button class="f" onClick="checkAnswer('f')">f</button>
+    <div style="margin: 2rem 0">
+      <button class="m" onClick="checkAnswer(this, 'm')">m</button>
+      <button class="f" onClick="checkAnswer(this, 'f')">f</button>
     </div>
     <div id="error"></div>
     <script>
-      //const x = nouns.filter(it => it[0].endsWith("ette")  && it[2] == "m");
-      //console.log(x)
-      /*const x = nouns.filter(it => {
-        return !(
-          it[0].length > 7 && (
-          it[0].endsWith("ette")  && it[2] == "f" ||
-          it[0].endsWith("er")  && it[2] == "m" ||
-          it[0].endsWith("sion") && it[2] == "f" ||
-          it[0].endsWith("tion") && it[2] == "f" ||
-          it[0].endsWith("eau") && it[2] == "m" ||
-          it[0].endsWith("té") && it[2] == "f" ||
-          it[0].endsWith("ment") && it[2] == "m" ||
-          it[0].endsWith("eur") && it[2] == "m" ||
-          it[0].endsWith("ance") && it[2] == "f" ||
-          it[0].endsWith("ence") && it[2] == "f" ||
-          it[0].endsWith("euse") && it[2] == "f" ||
-          it[0].endsWith("ie") && it[2] == "f" ||
-          it[0].endsWith("ure") && it[2] == "f" ||
-          it[0].endsWith("age") && it[2] == "m" ||
-          it[0].endsWith("oir") && it[2] == "m" ||
-          it[0].endsWith("isme") && it[2] == "m" ||
-          it[0].endsWith("esse") && it[2] == "f")
-          || it[2] == "mf" || it[2] == ""
-        );
+      ["ense"].forEach(ending => {
+       const x = nouns.filter(it => it[0].endsWith(ending)  && it[2] == "m").length;
+       const y = nouns.filter(it => it[0].endsWith(ending)  && it[2] == "f").length;
+        console.log(`${ending}  f ${y} m ${x}`);
+      });
+      
+      /*let count = 0;
+      const x = nouns.filter(it => {
+        let skip = it[0].length < 3 && it[0] !== "an";
+        if (it[0].length > 9 ) {
+          ["ence", "té","ade", "aison", "ance", "esse", "ine", "ison", "itude", "ose", "sion", "tion", "ure", "aille", "eille", "elle", "enne", "ère", "ette", "euse", "ie", "ille", "ise", "ière", "onne", "trice"].forEach(ending => {
+            if (it[0].endsWith(ending) && it[2] == "f") {
+              console.log(it[0])
+              skip = true;
+              count++;
+            }
+          });
+          if (!skip) {
+            ["it","ir","ou","au","o", "eu", "ut","at","in","ent", "ing", "age", "ard", "aire", "eau", "ème", "gramme", "isme", "ment", "ot", "on", "ail", "al", "eil", "el", "en", "er", "et", "eur", "i", "il", "is", "ier", "oir", "teur", "u", "é", "ing"].forEach(ending => {
+              if (it[0].endsWith(ending) && it[2] == "m") {
+                console.log(it[0])
+                skip = true;
+                count++;
+              }
+            });
+          }
+        }
+        return !skip && it[2] !== "mf" && it[2] !== "";
       }).map(it => `["${it[0]}", "${it[1]}", "${it[2]}", "${it[3]}"],`).join("\r\n");
-      console.log(x)*/
+      console.log(x);*/
+      
       const LANG = "fr-FR";
       initSpeak(LANG);
-      menu();
       const { getState, setAnswered } = SmallSteps("fr_noun_gen", nouns);
+
+      function markEnding(word) {
+        const regexps = [
+          [
+            /^(.{2,}?)(aine|ance|ence|té|ade|aison|ance|esse|ine|ison|itude|ose|sion|tion|aille|eille|elle|enne|ère|ette|euse|ie|ille|ise|ière|onne|trice)$/,
+            "$1<span class='f'>$2</span>"
+          ],
+          [
+            /^(.{1,}?[^àâaéèêëeîïiôoùûü])(ure)$/,
+            "$1<span class='f'>$2</span>"
+          ],
+          [ 
+            /^(.{2,}?)(age|ard|aire|eau|ème|isme|ot|ail|al|an|eil|el|en|ien|er|ier|et|il|ait|ain|ier|oir|ing|ent|oin|ain|eu|at|ut|au|ou|o|ir)$/,
+            "$1<span class='m'>$2</span>"
+          ],
+          [ 
+            /^(.{1,}?[^i])(on)$/,
+            "$1<span class='m'>$2</span>"
+          ],
+          [
+            /^(.{1,}?[^àâaéèêëeîïiôoùûü])(i|u|é|in|is|it)$/,
+            "$1<span class='m'>$2</span>"
+          ],
+          [
+            /^(.{2,}?)(gramme|ment|teur)$/,
+            "$1<span class='m'>$2</span>"
+          ]
+        ];
+
+        for (let regexp of regexps) {
+          const updated = word.replace(regexp[0], regexp[1]);
+          if (updated !== word) {
+            return updated;
+          }
+        }
+        return word;
+      }   
 
       function setItem() {
         const { limit, part, item } = getState();
-        byId("test").innerHTML = `Тесты по ${limit} из ${nouns.length}.`;
-        byId("progress").innerHTML = `Осталось тестов: ${part.length + 1}.`;
+        byId("test").innerHTML = `Слова по ${limit} из ${nouns.length}.`;
+        byId("progress").innerHTML = `Осталось слов: ${part.length + 1}.`;
         byId("item").innerHTML = itemHTML(item);
       }
 
       function itemHTML(item) {
         return `<div><span style="display: flex; flex-direction: row; gap: 20px; flex-wrap: wrap;">
-		      <span>${item[0]} ${item[1]? `[${item[1]}]` : ""}</span>
-          ${speakButtonHTML(item[0], LANG)} ${item[3]}</div>`;
+		      <span>${markEnding(item[0])} ${item[1]? `[${item[1]}]` : ""}</span>
+          ${speakButtonHTML(item[0], LANG)}</div><div>${item[3]}</div>`;
       }
 
       function errorHTML(item) {
@@ -84,7 +128,8 @@
           ${speakButtonHTML(item[0], LANG)} ${item[3]}</div>`;
       }
 
-      function checkAnswer(answer) {
+      async function checkAnswer(button, answer) {
+        button.disabled = true;
         const { item } = getState();
         const ok = item[2] === answer;
         if (!ok) {
@@ -92,6 +137,8 @@
         }
         setAnswered(ok);
         setItem();
+        await sleep(500);
+        button.disabled = false;
       }
 
       setItem();

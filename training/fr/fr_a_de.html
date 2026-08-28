@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../css/common.css">
   </head>
   <body>
+    <script>menu();</script> 
     <div id="test" class="small"></div>
     <div id="progress" class="small"></div>
     <hr/>
@@ -18,7 +19,6 @@
     <script>
       const LANG = "fr-FR";
       initSpeak(LANG);
-      menu();
       document.write(autospeakHTML());
       const { getState, setAnswered } = SmallSteps("fr_a_de", items);
 
@@ -43,9 +43,15 @@
       }
 
       function setItem() {
-        const { limit, part, item } = getState();
-        byId("test").innerHTML = `Тесты по ${limit} из ${items.length}.`;
-        byId("progress").innerHTML = `Осталось тестов: ${part.length + 1}.`;
+        const { limit, part, item, countTests } = getState();
+        if (limit < items.length) {
+          byId("test").innerHTML = `Тесты по ${limit} из ${items.length}.`;
+          byId("progress").innerHTML = `Осталось тестов: ${part.length + 1}.`;
+        } else {
+          byId("test").innerHTML = `Всего тестов: ${items.length}.`;
+          byId("progress").innerHTML = `Выполнено тестов: ${countTests}`;
+        }
+        
         byId("item").innerHTML = `<div>${item[1]}</div>
           <div style="display: flex; align-items: baseline; flex-wrap: wrap;">${variants(item[0])}</div>`;
       }
@@ -54,11 +60,14 @@
         const regex = /^(?:se |s’)?(.*?)( à | de | | d’)(faire qch|qch|qn|avoir fait qch).*$/i; 
         const key = item[0].replace(regex, "$1");
         //console.log(`key '${key}'`);
-        return items.filter(it => it[0].includes(key) && it[0] !== item[0]);
+        const regexp = new RegExp(`(^|\s|’)${key}[^s]`);
+        return items.filter(it => regexp.test(it[0]) && it[0] !== item[0]);
       }
 
-      //const xitem = items.find(it => it[0] === "répondre de qch")
-      //console.log(similarItems(xitem));
+      /*let xitem = items.find(it => it[0] === "rêver de qch (qn)")
+      console.log(similarItems(xitem));
+      xitem = items.find(it => it[0] === "s’user à faire qch")
+      console.log(similarItems(xitem));*/
 
       function speakText(text) {
         return text.replace("qn", "quelqu’un").replace("qch", "quelquechose");

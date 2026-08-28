@@ -5,11 +5,16 @@ function SmallSteps(configName, items) {
   const config = getConfig(configName);
   let limit = config?.limit ?? 2 * partSize;
   const errors = config?.errors ?? [];
+  let order = config?.order ?? "direct";
+  if (order === "reverse") {
+    items.reverse();
+  }
   let part;
   let current;
+  let countTests = 0;
 
-  function saveLimitAndErrors() {
-    saveConfig(configName, { limit, errors: errors.slice(0, 100) });
+  function saveSmallStepsConfig() {
+    saveConfig(configName, { limit, errors: errors.slice(0, 100), order });
   }
 
   function fillRandomly(toArray, fromArray, limit) {
@@ -22,18 +27,23 @@ function SmallSteps(configName, items) {
   }
 
   function setPart(newStep = false) {
-    let messages = [];
     if (newStep) {
-      limit = Math.min(limit + partSize, items.length);
+      if (limit === items.length) {
+        order = order === "direct"? "reverse" : "direct";
+        items.reverse();
+        limit = 2 * partSize;
+      } else {
+        limit = Math.min(limit + partSize, items.length);
+      }
       part = Array.from({ length: partSize }, (_, i) => limit - partSize + i);
     } else {
       part = [];
     }
-    fillRandomly(part, errors, 2 * partSize);
+    fillRandomly(part, errors.map(it => it[0]), 2 * partSize);
     const previous = Array.from({ length: limit }, (_, i) => i)
       .filter(it => !part.includes(it));
     fillRandomly(part, previous, 2 * partSize);
-    saveLimitAndErrors();
+    saveSmallStepsConfig();
     setCurrent();
   }
 
@@ -48,24 +58,29 @@ function SmallSteps(configName, items) {
   }
 
   function setAnswered(correct) {
-    const item = items[current];
+    countTests++;
+    const index = errors.findIndex(it => it[0] === current);
     if (correct) {
-      const index = errors.findIndex(it => it === current);
-      if (index) {
-        errors.splice(index, 1);
-        saveLimitAndErrors();
+      if (index >= 0) {
+        if (errors[index][1] === 5) {
+          errors.splice(index, 1);
+        } else {
+          errors[index][1]++;
+        }
+        saveSmallStepsConfig();
       }  
       setCurrent();
     } else {
-      errors.splice(errors.indexOf(current), 1);
-      errors.unshift(current);
-      saveLimitAndErrors();
+      if (index == -1) {
+        errors.push([current, 0]);
+      }
+      saveSmallStepsConfig();
       setPart();
     }
   }
 
   function getState() {
-    return { item: items[current], part, limit };
+    return { item: items[current], part, limit, countTests };
   }
 
   setPart();

@@ -109,3 +109,8 @@ a {
 .error {
   color: #CC6600;
 }
+.valign {
+  display: flex; 
+  align-items: center; 
+  gap: 1rem;
+}

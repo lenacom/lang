@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../css/common.css">    
   </head>
   <body>
+    <script>menu();</script> 
     <div id="tenses"></div>
     <div id="test"></div>
     <div id="progress"></div>
@@ -19,7 +20,6 @@
     <script>
       const LANG = "fr-FR";
       initSpeak(LANG);
-      menu();
       document.write(autospeakHTML());
 
       // "participe présent", "participe passé", "imperatif",
