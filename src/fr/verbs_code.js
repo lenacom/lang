@@ -411,16 +411,13 @@ async function getHelperData(text) {
   return { translation, conjugation };
 }
 
-function translationHTML(text, translation, conjugation) {
-  if (translation) {
-    return getTranslationHTML(translation);
-  }
-  return conjugation ? "" : speakBtnHTML(text);
+function translationSlotHTML(text, translation) {
+  return getTranslationHTML(translation ?? [{ text, tr: [] }]);
 }
 
 function helperParts(text, translation, conjugation) {
   const parts = [
-    `<div id="${prefix("translation")}">${translationHTML(text, translation, conjugation)}</div>`,
+    `<div id="${prefix("translation")}">${translationSlotHTML(text, translation)}</div>`,
   ];
   if (conjugation) {
     parts.push(`<div>${getConjugationHTML(text, conjugation)}</div>`);
@@ -502,7 +499,7 @@ async function showHelper(selection) {
 
   const elm = byPrefixId("translation");
   if (elm) {
-    elm.innerHTML = translationHTML(text, data.translation, conjugation);
+    elm.innerHTML = translationSlotHTML(text, data.translation);
   }
 }
 
