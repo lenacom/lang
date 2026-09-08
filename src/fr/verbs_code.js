@@ -42,6 +42,11 @@ function buildVerbs() {
       for (const ending of Array.isArray(endings) ? endings : [endings]) {
         endingToVerbType[ending] = verbType;
       }
+      if (["participe présent", "participe passé"].includes(tense)) {
+        for (const agreement of ["e", "s", "es"]) {
+          endingToVerbType[endings + agreement] = verbType;
+        }
+      }
     }
   }
 }
@@ -315,14 +320,23 @@ function startsWithVowel(text) {
   return "haeéêioôuy".includes(text.at(0));
 }
 
+function participleAgreementMatches(form, text) {
+  return ["", "e", "s", "es"].some((agreement) => form + agreement === text);
+}
+
 function getConjugationHTML(text, data) {
   return data
     ?.map(({ infinitive, type, tenses }) => {
       const tensesHTML = Object.entries(tenses).map(([tenseName, __forms]) => {
         const forms = Array.isArray(__forms) ? __forms : [__forms];
+        const isParticiple = ["participe présent", "participe passé"].includes(
+          tenseName,
+        );
+        const matches = (form) =>
+          isParticiple ? participleAgreementMatches(form, text) : form === text;
 
         let formsHTML = forms.map((form) => {
-          return form === text
+          return matches(form)
             ? `<span style='color:red; font-weight:bold;'>${form}</span>`
             : form;
         });
@@ -345,7 +359,7 @@ function getConjugationHTML(text, data) {
         } else {
           formsHTML = formsHTML.join("");
         }
-        const found = forms.find((form) => form === text);
+        const found = forms.find(matches);
         return `<div class="${found ? "" : prefix(infinitive)}">
           <div style="display:flex; flex-direction:row; align-items:center; gap:10px; font-weight:bold">
             <span>${tenseName}</span>
@@ -461,9 +475,6 @@ document.addEventListener("selectionchange", async () => {
   }
 });
 
-// TODO proférée
-// enivrante - не находит
-// enivrant
 /*
 
 s’efforcer ?
