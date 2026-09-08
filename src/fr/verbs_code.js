@@ -249,15 +249,19 @@ function learnDialogHTML(id, item) {
   const { text, ts, tr, gen } = item;
   const part1 = `"${text}${gen ? ` ${gen?.code}` : ""}${ts ? ` [${ts}]` : ""}"`;
 
-  const buttons = tr
-    .map((it) => {
-      return `<button style="margin: 0; padding: 0.5rem;" 
-        onClick="navigator.clipboard.writeText('[' +document.getElementById('${id}_part1').innerText + ', ' + this.innerText + '],'); 
+  const buttons = tr.length
+    ? tr
+        .map((it) => {
+          return `<button style="margin: 0; padding: 0.5rem;"
+        onClick="navigator.clipboard.writeText('[' +document.getElementById('${id}_part1').innerText + ', ' + this.innerText + '],');
         document.getElementById('${id}').close();">"${it.text}"</button>`;
-    })
-    .join("");
+        })
+        .join("")
+    : `<button style="margin: 0; padding: 0.5rem;"
+        onClick="navigator.clipboard.writeText('[' +document.getElementById('${id}_part1').innerText + '],');
+        document.getElementById('${id}').close();">Скопировать</button>`;
 
-  return `<dialog id="${id}">
+  return `<dialog id="${id}" style="border-radius: 5px;">
       <div id="${id}_part1">${part1}</div>
       <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 0.5rem;">${buttons}</div>
     </dialog>`;
