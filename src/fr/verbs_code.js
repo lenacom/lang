@@ -71,6 +71,7 @@ function verbTenses(infinitive, form = "") {
       tenses: regularVerbTenses(base, verbType, form),
     };
   }
+  return { infinitive, type: "unknown", tenses: {} };
 }
 
 function regularVerbTenses(base, verbType, form) {
@@ -390,9 +391,12 @@ async function getHelperData(text) {
     translation = await getTranslation(reflexiveVerb);
   }
   if (translation && !conjugation) {
-    const verbs = translation.filter((it) => it.pos.code === "vrb");
-    if (verbs.length) {
-      conjugation = [verbTenses(verbs[0].text)];
+    const verbs = translation.filter((it) => it.pos?.code === "vrb");
+    const verbTense = verbs
+      .map((it) => verbTenses(it.text))
+      .find((it) => Object.keys(it.tenses).length > 0);
+    if (verbTense) {
+      conjugation = [verbTense];
     }
   }
   return { translation, conjugation };
@@ -500,4 +504,3 @@ se morfondre
 
 // s’entretenaient не находит
 // prosternaient не находит
-// sourd ошибка
