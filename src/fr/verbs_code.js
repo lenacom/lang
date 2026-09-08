@@ -257,7 +257,8 @@ function learnDialogHTML(id, item) {
     })
     .join("");
 
-  return `<dialog id="${id}">
+  return `<dialog id="${id}" style="position: relative;">
+      <button style="position: absolute; top: 0.25rem; right: 0.25rem; margin: 0; padding: 0.25rem 0.5rem; border: none; background: transparent; cursor: pointer;" onClick="document.getElementById('${id}').close();">✕</button>
       <div id="${id}_part1">${part1}</div>
       <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 0.5rem;">${buttons}</div>
     </dialog>`;
