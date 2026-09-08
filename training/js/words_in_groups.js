@@ -71,23 +71,16 @@ function WordsInGroups(id, items, lang) {
       byId("text1").innerHTML = currentPart()[itemIndex][1];
     }
   }
-  console.log(
-    "une epaule vvv".replace(/(.*\b)([mf])\b/, '<span class="$2">$1$2</span>'),
-  );
 
   function next() {
     if (byId("text2").innerHTML === "") {
       const item = currentPart()[itemIndex];
       let text = item[2].replace(
-        /(.*?\b)([mf])\b/,
+        /(.*?)(?<![\p{L}\d_'’])([mf])(?![\p{L}\d_'’])/gu,
         '<span class="$2">$1$2</span>',
       );
-      if (/\b(une|la)\b/.test(text)) {
-        text = `<span class="f">${text}</span>`;
-      }
-      if (/\b(un|le)\b/.test(text)) {
-        text = `<span class="m">${text}</span>`;
-      }
+      text = text.replace(/\b(une|la)\s+(\S+)/gi, '<span class="f">$1 $2</span>');
+      text = text.replace(/\b(un|le)\s+(\S+)/gi, '<span class="m">$1 $2</span>');
       const speakText = item[2]
         .split(" ")
         .filter(
