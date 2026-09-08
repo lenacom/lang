@@ -226,15 +226,19 @@ function getYandexTranslationURL(text) {
 }
 
 async function getTranslation(text) {
-  const response = await fetch(getYandexTranslationURL(text));
-  const json = await response.json();
+  try {
+    const response = await fetch(getYandexTranslationURL(text));
+    const json = await response.json();
 
-  const regular = json[LANG]["regular"];
-  if (!regular || regular.length === 0) {
+    const regular = json[LANG]["regular"];
+    if (!regular || regular.length === 0) {
+      return undefined;
+    }
+
+    return regular;
+  } catch (e) {
     return undefined;
   }
-
-  return regular;
 }
 
 function learnDialogHTML(id, item) {
@@ -402,23 +406,7 @@ async function getHelperData(text) {
   return { translation, conjugation };
 }
 
-async function showHelper(selection) {
-  const text = selection.toString().trim().toLowerCase();
-  const helper = document.getElementById("fr-helper"); //TODO
-
-  if (text && helper.getAttribute("text") === text) {
-    return;
-  }
-
-  if (!text) {
-    helper.removeAttribute("text");
-    helper.innerHTML = ""; // TODO
-    return;
-  }
-
-  helper.setAttribute("text", text);
-  const { translation, conjugation } = await getHelperData(text);
-
+function helperParts(text, translation, conjugation) {
   const parts = [];
   if (translation) {
     parts.push(`<div>${getTranslationHTML(translation)}</div>`);
@@ -429,14 +417,16 @@ async function showHelper(selection) {
   if (parts.length === 0) {
     parts.push(`<div>${speakBtnHTML(text)}</div>`);
   }
+  return parts;
+}
 
-  const { clientWidth: screenWidth, clientHeight: screenHeight } =
-    document.documentElement;
+function renderHelper(helper, selection, parts) {
+  const { clientWidth: screenWidth } = document.documentElement;
   const selRange = selection.getRangeAt(0);
   const selRect = selRange.getBoundingClientRect();
   const style = (left, top, position) => {
-    return `background-color:black; color:#fff8dc; border:1px solid #fff8dc; padding:10px; margin:0; 
-    border-radius:5px; position:${position}; 
+    return `background-color:black; color:#fff8dc; border:1px solid #fff8dc; padding:10px; margin:0;
+    border-radius:5px; position:${position};
     left:${left}px; top:${top}px; max-width:${screenWidth};`;
   };
   const helperHTML = (style) => {
@@ -457,6 +447,35 @@ async function showHelper(selection) {
   Array.from(document.getElementsByClassName(prefix("conjugation"))).forEach(
     (it) => it.click(),
   );
+}
+
+async function showHelper(selection) {
+  const text = selection.toString().trim().toLowerCase();
+  const helper = document.getElementById("fr-helper"); //TODO
+
+  if (text && helper.getAttribute("text") === text) {
+    return;
+  }
+
+  if (!text) {
+    helper.removeAttribute("text");
+    helper.innerHTML = ""; // TODO
+    return;
+  }
+
+  helper.setAttribute("text", text);
+
+  // Show the conjugation immediately (it's computed locally, no network
+  // needed), so the helper isn't blocked on the translation request and
+  // still shows something useful when offline.
+  const conjugation = getConjugation(text);
+  renderHelper(helper, selection, helperParts(text, undefined, conjugation));
+
+  const data = await getHelperData(text);
+  if (helper.getAttribute("text") !== text) {
+    return; // selection moved on while the translation was loading
+  }
+  renderHelper(helper, selection, helperParts(text, data.translation, data.conjugation));
 }
 
 function isInsideHelper(node) {
