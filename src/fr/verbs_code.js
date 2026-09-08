@@ -9,6 +9,10 @@ function prefix(value) {
   return `frh__${value}`;
 }
 
+function byPrefixId(value) {
+  return document.getElementById(prefix(value));
+}
+
 function buildVerbs() {
   function getId(array, item) {
     const id = array.indexOf(item);
@@ -406,16 +410,19 @@ async function getHelperData(text) {
   return { translation, conjugation };
 }
 
-function helperParts(text, translation, conjugation) {
-  const parts = [];
+function translationHTML(text, translation, conjugation) {
   if (translation) {
-    parts.push(`<div>${getTranslationHTML(translation)}</div>`);
+    return getTranslationHTML(translation);
   }
+  return conjugation ? "" : speakBtnHTML(text);
+}
+
+function helperParts(text, translation, conjugation) {
+  const parts = [
+    `<div id="${prefix("translation")}">${translationHTML(text, translation, conjugation)}</div>`,
+  ];
   if (conjugation) {
     parts.push(`<div>${getConjugationHTML(text, conjugation)}</div>`);
-  }
-  if (parts.length === 0) {
-    parts.push(`<div>${speakBtnHTML(text)}</div>`);
   }
   return parts;
 }
@@ -436,7 +443,7 @@ function renderHelper(helper, selection, parts) {
   let left = selRect.left;
   let top = selRect.top + selRect.height;
   helper.innerHTML = helperHTML(style(left, top, "fixed"));
-  const pnl = document.getElementById(prefix("helper"));
+  const pnl = byPrefixId("helper");
   while (pnl.getBoundingClientRect().right + 10 > screenWidth && left > 0) {
     left -= 1;
     pnl.style = style(left, top, "fixed");
@@ -467,15 +474,35 @@ async function showHelper(selection) {
 
   // Show the conjugation immediately (it's computed locally, no network
   // needed), so the helper isn't blocked on the translation request and
-  // still shows something useful when offline.
+  // still shows something useful when offline. The translation slot starts
+  // out as a loading placeholder and gets updated in place once it loads.
   const conjugation = getConjugation(text);
-  renderHelper(helper, selection, helperParts(text, undefined, conjugation));
+  const parts = [`<div id="${prefix("translation")}">Перевожу...</div>`];
+  if (conjugation) {
+    parts.push(`<div>${getConjugationHTML(text, conjugation)}</div>`);
+  }
+  renderHelper(helper, selection, parts);
 
   const data = await getHelperData(text);
   if (helper.getAttribute("text") !== text) {
     return; // selection moved on while the translation was loading
   }
-  renderHelper(helper, selection, helperParts(text, data.translation, data.conjugation));
+
+  if (!conjugation && data.conjugation) {
+    // Conjugation was only discoverable via the translation lookup, so the
+    // initial render had no slot for it - rebuild the whole panel.
+    renderHelper(
+      helper,
+      selection,
+      helperParts(text, data.translation, data.conjugation),
+    );
+    return;
+  }
+
+  const elm = byPrefixId("translation");
+  if (elm) {
+    elm.innerHTML = translationHTML(text, data.translation, conjugation);
+  }
 }
 
 function isInsideHelper(node) {
