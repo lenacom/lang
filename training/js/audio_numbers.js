@@ -19,7 +19,7 @@ function AudioNumbers(id, lang) {
   byId(id).innerHTML = html;
 
   document.addEventListener("next", next);
-  document.addEventListener("part", ({ detail }) => (limit = detail.limit));
+  document.addEventListener("limit", ({ detail }) => (limit = detail.limit));
 
   let limit = 100;
   let number;

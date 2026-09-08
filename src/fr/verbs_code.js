@@ -142,6 +142,8 @@ function regularVerbTenses(base, verbType, form) {
           (cond1 || cond2)
         ) {
           tenseForms[i] = replaceLastOccurance(base, "y", "i");
+        } else if (/oy$|uy$/.test(base) && (cond1 || cond2)) {
+          tenseForms[i] = replaceLastOccurance(base, "y", "i");
         }
       }
       tenseForms[i] += normalizedEndings[i];
@@ -182,7 +184,7 @@ function getConjugation(form) {
               bases[1] = replaceLastOccurance(base, "è", "é");
             } else if (/ç$/i.test(base)) {
               bases[1] = replaceLastOccurance(base, "ç", "c");
-            } else if (/ai$/i.test(base)) {
+            } else if (/ai$|oi$|ui$/i.test(base)) {
               bases[1] = replaceLastOccurance(base, "i", "y");
             }
           }
