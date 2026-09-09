@@ -84,7 +84,7 @@ for (const lang of langs) {
         countChapters,
       );
       const body =
-        `<h1>${metadata.name}</h1><h2>${metadata.chapter} ${currentIndex}</h2>` +
+        `<h1 class="title">${metadata.name}</h1><h2 class="chapter">${metadata.chapter} ${currentIndex}</h2>` +
         chapterLinks(currentIndex, countChapters) +
         nextPrevious +
         chapter +

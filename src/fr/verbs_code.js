@@ -245,28 +245,364 @@ async function getTranslation(text) {
   }
 }
 
+const LEARNED_WORDS_KEY = "learnedWords";
+let learnedSession = null;
+
+function getLearnedWords() {
+  return JSON.parse(localStorage.getItem(LEARNED_WORDS_KEY) ?? "{}");
+}
+
+function setLearnedWords(data) {
+  localStorage.setItem(LEARNED_WORDS_KEY, JSON.stringify(data));
+}
+
+function generateLearnedWordId() {
+  return `${Date.now()}_${Math.random().toString(36).slice(2)}`;
+}
+
+function saveLearnedWord(word, translation) {
+  const book = document.querySelector(".title")?.textContent ?? "";
+  const chapter = document.querySelector(".chapter")?.textContent ?? "";
+  const data = getLearnedWords();
+  if (!data[book]) {
+    data[book] = {};
+  }
+  if (!data[book][chapter]) {
+    data[book][chapter] = [];
+  }
+  data[book][chapter].push([word, translation, false, generateLearnedWordId()]);
+  setLearnedWords(data);
+  refreshLearnedWordsLink();
+}
+
+function getLearnedEntry(book, chapter, id) {
+  const data = getLearnedWords();
+  return (data[book]?.[chapter] ?? []).find((entry) => entry[3] === id);
+}
+
+function escJs(text) {
+  return text.replace(/'/g, "\\'");
+}
+
+function refreshLearnedWordsLink() {
+  const book = document.querySelector(".title")?.textContent ?? "";
+  const chapterLinksEl = document.querySelector(".chapter-links");
+  if (!chapterLinksEl) {
+    return;
+  }
+  const existingLink = byPrefixId("learnedWordsLink");
+  const data = getLearnedWords();
+  const hasWords = Object.values(data[book] ?? {}).some(
+    (list) => list.length > 0,
+  );
+
+  if (!hasWords) {
+    existingLink?.parentElement?.remove();
+    return;
+  }
+  if (existingLink) {
+    return;
+  }
+
+  chapterLinksEl.insertAdjacentHTML(
+    "beforebegin",
+    `<div><a id="${prefix("learnedWordsLink")}" href="javascript:void(0)" onclick="openLearnedWordsChooser()">Учить слова</a></div>`,
+  );
+}
+
+function initLearnedWordsUI() {
+  if (!document.querySelector(".chapter-links")) {
+    return;
+  }
+  if (!byPrefixId("learnedWordsDialog")) {
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      `<dialog id="${prefix("learnedWordsDialog")}" style="border-radius: 0.31rem; background-color: black; color: #fff8dc; border: 1px solid #fff8dc; padding: 0.63rem; max-width: ${document.documentElement.clientWidth}px;">
+        <div id="${prefix("learnedWordsContent")}" style="display: flex; flex-direction: column; gap: 0.5rem; width: ${Math.min(document.documentElement.clientWidth / 16, 25)}rem;"></div>
+      </dialog>`,
+    );
+  }
+  refreshLearnedWordsLink();
+}
+
+function learnedWordsChooserHTML() {
+  const book = document.querySelector(".title")?.textContent ?? "";
+  const data = getLearnedWords();
+  const chapters = Object.keys(data[book] ?? {}).filter(
+    (chapter) => (data[book][chapter] ?? []).length > 0,
+  );
+  const totalCount = chapters.reduce(
+    (sum, chapter) => sum + data[book][chapter].length,
+    0,
+  );
+
+  const items = [];
+  if (totalCount > 0) {
+    items.push(
+      `<div><a href="javascript:void(0)" onclick="startLearnedWordsStudy('${escJs(book)}', null)">Учить все слова (${totalCount})</a></div>`,
+    );
+  }
+  for (const chapter of chapters) {
+    items.push(
+      `<div><a href="javascript:void(0)" onclick="startLearnedWordsStudy('${escJs(book)}', '${escJs(chapter)}')">Учить слова: ${chapter} (${data[book][chapter].length})</a></div>`,
+    );
+  }
+  items.push(
+    `<div style="display: flex; flex-direction: row; justify-content: space-between; gap: 0.5rem;">
+      <button style="margin: 0; padding: 0.5rem;" onClick="showLearnedWordsDeleteMenu()">Удалить слова</button>
+      <button style="margin: 0; padding: 0.5rem;" onClick="document.getElementById('${prefix("learnedWordsDialog")}').close();">Закрыть</button>
+    </div>`,
+  );
+  return items.join("");
+}
+
+function learnedWordsDeleteMenuHTML() {
+  const book = document.querySelector(".title")?.textContent ?? "";
+  const data = getLearnedWords();
+  const chapters = Object.keys(data[book] ?? {}).filter(
+    (chapter) => (data[book][chapter] ?? []).length > 0,
+  );
+
+  const items = [];
+  items.push(
+    `<div><button style="margin: 0; padding: 0.5rem;" onClick="deleteBookWordsFromChooser('${escJs(book)}')">Удалить все слова в ${book}</button></div>`,
+  );
+  for (const chapter of chapters) {
+    items.push(
+      `<div><button style="margin: 0; padding: 0.5rem;" onClick="deleteChapterWordsFromChooser('${escJs(book)}', '${escJs(chapter)}')">Удалить слова в ${chapter}</button></div>`,
+    );
+  }
+  items.push(
+    `<div style="display: flex; flex-direction: row; justify-content: space-between; gap: 0.5rem;">
+      <button style="margin: 0; padding: 0.5rem;" onClick="openLearnedWordsChooser()">Назад</button>
+      <button style="margin: 0; padding: 0.5rem;" onClick="document.getElementById('${prefix("learnedWordsDialog")}').close();">Закрыть</button>
+    </div>`,
+  );
+  return items.join("");
+}
+
+function showLearnedWordsDeleteMenu() {
+  byPrefixId("learnedWordsContent").innerHTML = learnedWordsDeleteMenuHTML();
+}
+
+function openLearnedWordsChooser() {
+  byPrefixId("learnedWordsContent").innerHTML = learnedWordsChooserHTML();
+  const dialog = byPrefixId("learnedWordsDialog");
+  if (!dialog.open) {
+    dialog.showModal();
+  }
+}
+
+function collectLearnedWordsSessionRefs() {
+  const { book, chapterFilter, shown } = learnedSession;
+  const data = getLearnedWords();
+  const chapters = chapterFilter ? [chapterFilter] : Object.keys(data[book] ?? {});
+  const refs = [];
+  for (const chapter of chapters) {
+    for (const entry of data[book]?.[chapter] ?? []) {
+      if (!shown.has(entry[3])) {
+        refs.push({ chapter, id: entry[3] });
+      }
+    }
+  }
+  return refs;
+}
+
+function pickNextLearnedWord() {
+  const refs = collectLearnedWordsSessionRefs();
+  if (refs.length === 0) {
+    learnedSession.currentRef = null;
+    learnedSession.revealed = false;
+    return;
+  }
+  const repeatRefs = refs.filter(
+    (ref) => getLearnedEntry(learnedSession.book, ref.chapter, ref.id)?.[2],
+  );
+  const pool = repeatRefs.length ? repeatRefs : refs;
+  learnedSession.currentRef = pool[Math.floor(Math.random() * pool.length)];
+  learnedSession.revealed = false;
+}
+
+function startLearnedWordsStudy(book, chapterFilter) {
+  learnedSession = { book, chapterFilter, shown: new Set() };
+  pickNextLearnedWord();
+  renderLearnedWordsStudy();
+}
+
+function nextLearnedWord() {
+  if (!learnedSession.revealed) {
+    learnedSession.revealed = true;
+    if (getLearnedWordsAutospeak()) {
+      const { book, currentRef } = learnedSession;
+      speak(speechText(getLearnedEntry(book, currentRef.chapter, currentRef.id)[0]));
+    }
+  } else {
+    learnedSession.shown.add(learnedSession.currentRef.id);
+    pickNextLearnedWord();
+  }
+  renderLearnedWordsStudy();
+}
+
+function toggleLearnedWordRepeat(checked) {
+  const { book, currentRef } = learnedSession;
+  const data = getLearnedWords();
+  const entry = data[book]?.[currentRef.chapter]?.find(
+    (it) => it[3] === currentRef.id,
+  );
+  if (entry) {
+    entry[2] = checked;
+    setLearnedWords(data);
+  }
+}
+
+function deleteLearnedWord() {
+  const { book, currentRef } = learnedSession;
+  const word = getLearnedEntry(book, currentRef.chapter, currentRef.id)?.[0];
+  if (!confirm(`Удалить слово "${word}"?`)) {
+    return;
+  }
+  const data = getLearnedWords();
+  const list = data[book]?.[currentRef.chapter];
+  if (list) {
+    const index = list.findIndex((it) => it[3] === currentRef.id);
+    if (index !== -1) {
+      list.splice(index, 1);
+    }
+  }
+  setLearnedWords(data);
+  pickNextLearnedWord();
+  renderLearnedWordsStudy();
+  refreshLearnedWordsLink();
+}
+
+function deleteChapterWordsFromChooser(book, chapter) {
+  if (!confirm(`Удалить все слова главы "${chapter}"?`)) {
+    return;
+  }
+  const data = getLearnedWords();
+  if (data[book]) {
+    delete data[book][chapter];
+  }
+  setLearnedWords(data);
+  openLearnedWordsChooser();
+  refreshLearnedWordsLink();
+}
+
+function deleteBookWordsFromChooser(book) {
+  if (!confirm("Удалить все слова этой книги?")) {
+    return;
+  }
+  const data = getLearnedWords();
+  delete data[book];
+  setLearnedWords(data);
+  openLearnedWordsChooser();
+  refreshLearnedWordsLink();
+}
+
+function getLearnedWordsAutospeak() {
+  return localStorage.getItem("learnedWordsAutospeak") === "true";
+}
+
+function toggleLearnedWordsAutospeak(checked) {
+  localStorage.setItem("learnedWordsAutospeak", checked);
+}
+
+function speechText(text) {
+  return text
+    .split(" ")
+    .filter(
+      (it) =>
+        !["m", "f"].includes(it) &&
+        !/^\[.*$/.test(it) &&
+        !/^.*\]$/.test(it),
+    )
+    .join(" ");
+}
+
+function highlightGender(text) {
+  text = text.replace(
+    /(.*?)(?<![\p{L}\d_'’])([mf])(?![\p{L}\d_'’])/gu,
+    (_match, before, marker) =>
+      `<span style="color: ${marker === "m" ? "#87CEFA" : "#F08080"};">${before}${marker}</span>`,
+  );
+  text = text.replace(
+    /\b(une|la)\s+(\S+)/gi,
+    '<span style="color: #F08080;">$1 $2</span>',
+  );
+  text = text.replace(
+    /\b(un|le)\s+(\S+)/gi,
+    '<span style="color: #87CEFA;">$1 $2</span>',
+  );
+  return text;
+}
+
+function renderLearnedWordsStudy() {
+  const contentEl = byPrefixId("learnedWordsContent");
+  const dialogId = prefix("learnedWordsDialog");
+
+  if (!learnedSession.currentRef) {
+    openLearnedWordsChooser();
+    return;
+  }
+
+  const { book, currentRef, revealed } = learnedSession;
+  const entry = getLearnedEntry(book, currentRef.chapter, currentRef.id);
+  const [word, translation, repeatOften] = entry;
+  const remaining = collectLearnedWordsSessionRefs().length;
+
+  contentEl.innerHTML = `
+    <div>Осталось: ${remaining}</div>
+    <div>${translation}</div>
+    <div style="display: flex; align-items: center; gap: 0.5rem; visibility: ${revealed ? "visible" : "hidden"};"><span>${revealed ? highlightGender(word) : ""}</span>${speakBtnHTML(speechText(word))}</div>
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 0.2rem;">
+        <label for="${prefix("learnedWordsRepeat")}" style="padding: 0;">Повторять чаще</label>
+        <input type="checkbox" id="${prefix("learnedWordsRepeat")}" style="padding: 0;" ${repeatOften ? "checked" : ""} onChange="toggleLearnedWordRepeat(this.checked)">
+      </div>
+      <a href="javascript:void(0)" onclick="deleteLearnedWord()">Удалить</a>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.2rem;">
+      <label for="${prefix("learnedWordsAutospeak")}" style="padding: 0;">Озвучивать автоматически</label>
+      <input type="checkbox" id="${prefix("learnedWordsAutospeak")}" style="padding: 0;" ${getLearnedWordsAutospeak() ? "checked" : ""} onChange="toggleLearnedWordsAutospeak(this.checked)">
+    </div>
+    <div style="display: flex; flex-direction: row; justify-content: space-between; gap: 0.5rem;">
+      <button style="margin: 0; padding: 0.5rem;" onClick="nextLearnedWord()">Дальше</button>
+      <div style="display: flex; flex-direction: row; gap: 0.5rem;">
+        <button style="margin: 0; padding: 0.5rem;" onClick="openLearnedWordsChooser()">Назад</button>
+        <button style="margin: 0; padding: 0.5rem;" onClick="document.getElementById('${dialogId}').close();">Закрыть</button>
+      </div>
+    </div>`;
+}
+
+document.addEventListener("DOMContentLoaded", initLearnedWordsUI);
+
 function learnDialogHTML(id, item) {
   const { text, ts, tr, gen } = item;
   const wordValue = `${text}${gen ? ` ${gen?.code}` : ""}${ts ? ` [${ts}]` : ""}`;
   const inputStyle =
     "background-color: black; color: #fff8dc; border: 1px solid #fff8dc; padding: 0.5rem; border-radius: 0.31rem;";
 
-  const links = tr
-    .map((it) => {
-      return `<a href="javascript:void(0)" style="margin: 0; padding: 0;"
+  const translationValue = tr.length === 1 ? tr[0].text : "";
+  const links =
+    tr.length === 1
+      ? ""
+      : tr
+          .map((it) => {
+            return `<a href="javascript:void(0)" style="margin: 0; padding: 0;"
         onClick="const el = document.getElementById('${id}_part2'); el.value = el.value ? el.value + ', ' + this.textContent : this.textContent;">${it.text}</a>`;
-    })
-    .join("");
+          })
+          .join("");
 
   return `<dialog id="${id}" style="border-radius: 0.31rem; background-color: black; color: #fff8dc; border: 1px solid #fff8dc; padding: 0.63rem; max-width: ${document.documentElement.clientWidth}px;">
       <div style="display: flex; flex-direction: column; gap: 0.5rem; width: ${Math.min(document.documentElement.clientWidth / 16, 25)}rem;">
         <input type="text" id="${id}_part1" placeholder="Слова" value="${wordValue}" style="${inputStyle}">
-        <input type="text" id="${id}_part2" placeholder="Перевод" style="${inputStyle}">
+        <input type="text" id="${id}_part2" placeholder="Перевод" value="${translationValue}" style="${inputStyle}">
         <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 0.5rem;">${links}</div>
         <div style="display: flex; flex-direction: row; justify-content: flex-end; gap: 0.5rem;">
           <button style="margin: 0; padding: 0.5rem;"
-            onClick="navigator.clipboard.writeText('[&quot;' + document.getElementById('${id}_part1').value + '&quot;, &quot;' + document.getElementById('${id}_part2').value + '&quot;],');
-            document.getElementById('${id}').close();">Скопировать</button>
+            onClick="const word = document.getElementById('${id}_part1').value; const translation = document.getElementById('${id}_part2').value;
+            saveLearnedWord(word, translation);
+            document.getElementById('${id}').close();">Сохранить</button>
           <button style="margin: 0; padding: 0.5rem;" onClick="document.getElementById('${id}').close();">Закрыть</button>
         </div>
       </div>
