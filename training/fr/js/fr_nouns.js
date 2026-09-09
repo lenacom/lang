@@ -1223,7 +1223,6 @@ const nouns = [
   ["superman", "sypɛʁman", "m", "супермен"],
   ["halte", "alt", "f", "привал"],
   ["foudre", "fudʁ", "f", "молния"],
-  ["ciao", "tʃao, tʃaw", "m", "чао"],
   ["round", "ʁawnd, ʁund", "m", "раунд"],
   ["centime", "sɑ̃tim", "m", "цент"],
   ["gré", "ɡʁe", "m", "воля"],
