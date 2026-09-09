@@ -247,23 +247,29 @@ async function getTranslation(text) {
 
 function learnDialogHTML(id, item) {
   const { text, ts, tr, gen } = item;
-  const part1 = `"${text}${gen ? ` ${gen?.code}` : ""}${ts ? ` [${ts}]` : ""}"`;
+  const wordValue = `${text}${gen ? ` ${gen?.code}` : ""}${ts ? ` [${ts}]` : ""}`;
+  const inputStyle =
+    "background-color: black; color: #fff8dc; border: 1px solid #fff8dc; padding: 0.5rem; border-radius: 0.31rem;";
 
-  const buttons = tr.length
-    ? tr
-        .map((it) => {
-          return `<button style="margin: 0; padding: 0.5rem;"
-        onClick="navigator.clipboard.writeText('[' +document.getElementById('${id}_part1').innerText + ', ' + this.innerText + '],');
-        document.getElementById('${id}').close();">"${it.text}"</button>`;
-        })
-        .join("")
-    : `<button style="margin: 0; padding: 0.5rem;"
-        onClick="navigator.clipboard.writeText('[' +document.getElementById('${id}_part1').innerText + '],');
-        document.getElementById('${id}').close();">Скопировать</button>`;
+  const links = tr
+    .map((it) => {
+      return `<a href="javascript:void(0)" style="margin: 0; padding: 0;"
+        onClick="const el = document.getElementById('${id}_part2'); el.value = el.value ? el.value + ', ' + this.textContent : this.textContent;">${it.text}</a>`;
+    })
+    .join("");
 
-  return `<dialog id="${id}" style="border-radius: 5px;">
-      <div id="${id}_part1">${part1}</div>
-      <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 0.5rem;">${buttons}</div>
+  return `<dialog id="${id}" style="border-radius: 0.31rem; background-color: black; color: #fff8dc; border: 1px solid #fff8dc; padding: 0.63rem; max-width: ${document.documentElement.clientWidth}px;">
+      <div style="display: flex; flex-direction: column; gap: 0.5rem; width: ${Math.min(document.documentElement.clientWidth / 16, 25)}rem;">
+        <input type="text" id="${id}_part1" placeholder="Слова" value="${wordValue}" style="${inputStyle}">
+        <input type="text" id="${id}_part2" placeholder="Перевод" style="${inputStyle}">
+        <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 0.5rem;">${links}</div>
+        <div style="display: flex; flex-direction: row; justify-content: flex-end; gap: 0.5rem;">
+          <button style="margin: 0; padding: 0.5rem;"
+            onClick="navigator.clipboard.writeText('[&quot;' + document.getElementById('${id}_part1').value + '&quot;, &quot;' + document.getElementById('${id}_part2').value + '&quot;],');
+            document.getElementById('${id}').close();">Скопировать</button>
+          <button style="margin: 0; padding: 0.5rem;" onClick="document.getElementById('${id}').close();">Закрыть</button>
+        </div>
+      </div>
     </dialog>`;
 }
 
@@ -277,11 +283,11 @@ function getTranslationHTML(data) {
       result.push(speakBtnHTML(text));
       const learnId = prefix(`learn${index}`);
       result.push(
-        `<button style="margin: 0; padding: 0 0.5rem;" onClick="document.getElementById('${learnId}').showModal();">Учить</button>`,
+        `<button style="margin: 0; padding: 0 0.5rem; height: 2rem; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center;" onClick="document.getElementById('${learnId}').showModal(); document.getElementById('${learnId}_part2').focus();">Учить</button>`,
       );
-      return `<div style="display: flex; flex-wrap: wrap; flex-direction: row; align-items: baseline; gap: 0.5rem;">
+      return `<div style="display: flex; flex-wrap: wrap; flex-direction: row; align-items: baseline; gap: 0.5rem; width: max-content; max-width: ${document.documentElement.clientWidth}px;">
       ${result.join("")}
-    </div><div style="max-width:${Math.min(document.documentElement.clientWidth, 500)}px">${tr.map((it) => it.text).join(", ")}</div>
+    </div><div style="max-width:${Math.min(document.documentElement.clientWidth / 16, 31.25)}rem">${tr.map((it) => it.text).join(", ")}</div>
     ${learnDialogHTML(learnId, item)}
     `;
     })
@@ -293,7 +299,7 @@ function speakBtnHTML(text) {
     return "";
   }
   return `
-    <button style="font-size:0; margin: 0; padding: 0.5rem;" onClick="speak('${text.replace("'", "\\'")}')">
+    <button style="font-size:0; margin: 0; padding: 0 0.5rem; height: 2rem; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center;" onClick="speak('${text.replace("'", "\\'")}')">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20px" height="20px">
         <path fill="currentColor" d="M48 352l48 0 134.1 119.2c6.4 5.7 14.6 8.8 23.1 8.8 19.2 0 34.8-15.6 34.8-34.8l0-378.4c0-19.2-15.6-34.8-34.8-34.8-8.5 0-16.7 3.1-23.1 8.8L96 160 48 160c-26.5 0-48 21.5-48 48l0 96c0 26.5 21.5 48 48 48zM441.1 107c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C443.3 170.7 464 210.9 464 256s-20.7 85.3-53.2 111.8c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5c43.2-35.2 70.9-88.9 70.9-149s-27.7-113.8-70.9-149zm-60.5 74.5c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C361.1 227.6 368 241 368 256s-6.9 28.4-17.7 37.3c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5C402.1 312.9 416 286.1 416 256s-13.9-56.9-35.5-74.5z"/>
       </svg>
@@ -365,7 +371,7 @@ function getConjugationHTML(text, data) {
         }
         formsHTML = formsHTML.map((it) => `<div>${it}</div>`);
         if (formsHTML.length === 6) {
-          formsHTML = `<div style="display:flex; gap:20px">
+          formsHTML = `<div style="display:flex; gap:1.25rem">
           <div>${formsHTML.slice(0, 3).join("")}</div>
           <div>${formsHTML.slice(3, 6).join("")}</div>
           </div>`;
@@ -374,7 +380,7 @@ function getConjugationHTML(text, data) {
         }
         const found = forms.find(matches);
         return `<div class="${found ? "" : prefix(infinitive)}">
-          <div style="display:flex; flex-direction:row; align-items:center; gap:10px; font-weight:bold">
+          <div style="display:flex; flex-direction:row; align-items:center; gap:0.63rem; font-weight:bold">
             <span>${tenseName}</span>
             ${speakBtnHTML(formsToSpeak.join(", "))}
           </div>
@@ -386,7 +392,7 @@ function getConjugationHTML(text, data) {
       .forEach(it => { it.style.display = it.style.display === 'none'? 'block' : 'none'});`;
       return `<div>
       ${infinitive + (type === "irregular" ? "*" : "")}
-      <button style="border-radius:5px; padding:5px; margin:0;" class="${prefix("conjugation")}" onClick="${onClick}">Меньше</button>
+      <button style="border-radius:0.31rem; padding:0.31rem; margin:0;" class="${prefix("conjugation")}" onClick="${onClick}">Меньше</button>
       </div>
       ${tensesHTML.join("")}`;
     })
@@ -428,14 +434,22 @@ function helperParts(text, translation, conjugation) {
   return parts;
 }
 
+function keepOnScreen(pnl) {
+  const { clientWidth: screenWidth } = document.documentElement;
+  const overflow = pnl.getBoundingClientRect().right + 10 - screenWidth;
+  if (overflow > 0) {
+    pnl.style.left = `${parseFloat(pnl.style.left) - overflow}px`;
+  }
+}
+
 function renderHelper(helper, selection, parts) {
   const { clientWidth: screenWidth } = document.documentElement;
   const selRange = selection.getRangeAt(0);
   const selRect = selRange.getBoundingClientRect();
   const style = (left, top, position) => {
-    return `background-color:black; color:#fff8dc; border:1px solid #fff8dc; padding:10px; margin:0;
-    border-radius:5px; position:${position};
-    left:${left}px; top:${top}px; max-width:${screenWidth};`;
+    return `background-color:black; color:#fff8dc; border:1px solid #fff8dc; padding:0.63rem; margin:0;
+    border-radius:0.31rem; position:${position};
+    left:${left}px; top:${top}px; max-width:${screenWidth}px;`;
   };
   const helperHTML = (style) => {
     return `<div id="${prefix("helper")}" style="${style}">${parts.join("<hr/>")}</div>`;
@@ -473,18 +487,42 @@ async function showHelper(selection) {
 
   helper.setAttribute("text", text);
 
-  // Show the conjugation immediately (it's computed locally, no network
-  // needed), so the helper isn't blocked on the translation request and
-  // still shows something useful when offline. The translation slot starts
-  // out as a loading placeholder and gets updated in place once it loads.
   const conjugation = getConjugation(text);
+  const dataPromise = getHelperData(text);
+
+  // Give the translation half a second to arrive before showing anything -
+  // if it's fast enough, we can render the final result in one go instead of
+  // popping up a loading placeholder that immediately jerks/resizes once the
+  // translation lands.
+  const timedOut = Symbol("timedOut");
+  const raceResult = await Promise.race([
+    dataPromise,
+    new Promise((resolve) => setTimeout(resolve, 500)).then(() => timedOut),
+  ]);
+  if (helper.getAttribute("text") !== text) {
+    return; // selection moved on while we were waiting
+  }
+
+  if (raceResult !== timedOut) {
+    renderHelper(
+      helper,
+      selection,
+      helperParts(text, raceResult.translation, raceResult.conjugation),
+    );
+    return;
+  }
+
+  // Translation is taking a while - show the conjugation now (it's computed
+  // locally, no network needed) so the helper still shows something useful
+  // while offline or slow. The translation slot starts out as a loading
+  // placeholder and gets updated in place once it loads.
   const parts = [`<div id="${prefix("translation")}">Перевожу...</div>`];
   if (conjugation) {
     parts.push(`<div>${getConjugationHTML(text, conjugation)}</div>`);
   }
   renderHelper(helper, selection, parts);
 
-  const data = await getHelperData(text);
+  const data = await dataPromise;
   if (helper.getAttribute("text") !== text) {
     return; // selection moved on while the translation was loading
   }
@@ -503,6 +541,7 @@ async function showHelper(selection) {
   const elm = byPrefixId("translation");
   if (elm) {
     elm.innerHTML = translationSlotHTML(text, data.translation);
+    keepOnScreen(byPrefixId("helper"));
   }
 }
 
