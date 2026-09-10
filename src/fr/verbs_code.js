@@ -245,53 +245,89 @@ async function getTranslation(text) {
   }
 }
 
-const LEARNED_WORDS_KEY = "learnedWords";
+const WORD_TO_LEARN_KEY = "wordsToLearn";
 let learnedSession = null;
 
-function getLearnedWords() {
-  return JSON.parse(localStorage.getItem(LEARNED_WORDS_KEY) ?? "{}");
+function migrateWordsToLearnStorage() {
+  const oldRaw = localStorage.getItem("learnedWords");
+  if (oldRaw === null) {
+    return;
+  }
+  const oldData = JSON.parse(oldRaw);
+  const newData = JSON.parse(localStorage.getItem(WORD_TO_LEARN_KEY) ?? "{}");
+  for (const [book, chapters] of Object.entries(oldData)) {
+    if (!newData[book]) {
+      newData[book] = {};
+    }
+    for (const [chapter, entries] of Object.entries(chapters)) {
+      if (!newData[book][chapter]) {
+        newData[book][chapter] = [];
+      }
+      newData[book][chapter].push(...entries);
+    }
+  }
+  localStorage.setItem(WORD_TO_LEARN_KEY, JSON.stringify(newData));
+  localStorage.removeItem("learnedWords");
 }
 
-function setLearnedWords(data) {
-  localStorage.setItem(LEARNED_WORDS_KEY, JSON.stringify(data));
+function getWordsToLearn() {
+  migrateWordsToLearnStorage();
+  return JSON.parse(localStorage.getItem(WORD_TO_LEARN_KEY) ?? "{}");
 }
 
-function generateLearnedWordId() {
+function setWordsToLearn(data) {
+  localStorage.setItem(WORD_TO_LEARN_KEY, JSON.stringify(data));
+}
+
+function generateWordToLearnId() {
   return `${Date.now()}_${Math.random().toString(36).slice(2)}`;
 }
 
-function saveLearnedWord(word, translation) {
+function saveWordToLearn(word, translation) {
   const book = document.querySelector(".title")?.textContent ?? "";
   const chapter = document.querySelector(".chapter")?.textContent ?? "";
-  const data = getLearnedWords();
+  const data = getWordsToLearn();
   if (!data[book]) {
     data[book] = {};
   }
   if (!data[book][chapter]) {
     data[book][chapter] = [];
   }
-  data[book][chapter].push([word, translation, false, generateLearnedWordId()]);
-  setLearnedWords(data);
-  refreshLearnedWordsLink();
+  data[book][chapter].push([word, translation, false, generateWordToLearnId()]);
+  setWordsToLearn(data);
+  refreshWordsToLearnLink();
 }
 
 function getLearnedEntry(book, chapter, id) {
-  const data = getLearnedWords();
+  const data = getWordsToLearn();
   return (data[book]?.[chapter] ?? []).find((entry) => entry[3] === id);
+}
+
+function findWordToLearnLocation(word) {
+  const normalized = stripAnnotations(word);
+  const data = getWordsToLearn();
+  for (const [book, chapters] of Object.entries(data)) {
+    for (const [chapter, entries] of Object.entries(chapters)) {
+      if (entries.some((entry) => stripAnnotations(entry[0]) === normalized)) {
+        return { book, chapter };
+      }
+    }
+  }
+  return null;
 }
 
 function escJs(text) {
   return text.replace(/'/g, "\\'");
 }
 
-function refreshLearnedWordsLink() {
+function refreshWordsToLearnLink() {
   const book = document.querySelector(".title")?.textContent ?? "";
   const chapterLinksEl = document.querySelector(".chapter-links");
   if (!chapterLinksEl) {
     return;
   }
-  const existingLink = byPrefixId("learnedWordsLink");
-  const data = getLearnedWords();
+  const existingLink = byPrefixId("wordsToLearnLink");
+  const data = getWordsToLearn();
   const hasWords = Object.values(data[book] ?? {}).some(
     (list) => list.length > 0,
   );
@@ -306,28 +342,28 @@ function refreshLearnedWordsLink() {
 
   chapterLinksEl.insertAdjacentHTML(
     "beforebegin",
-    `<div><a id="${prefix("learnedWordsLink")}" href="javascript:void(0)" onclick="openLearnedWordsChooser()">Учить слова</a></div>`,
+    `<div><a id="${prefix("wordsToLearnLink")}" href="javascript:void(0)" onclick="openWordsToLearnChooser()">Учить слова</a></div>`,
   );
 }
 
-function initLearnedWordsUI() {
+function initWordsToLearnUI() {
   if (!document.querySelector(".chapter-links")) {
     return;
   }
-  if (!byPrefixId("learnedWordsDialog")) {
+  if (!byPrefixId("wordsToLearnDialog")) {
     document.body.insertAdjacentHTML(
       "beforeend",
-      `<dialog id="${prefix("learnedWordsDialog")}" style="border-radius: 0.31rem; background-color: black; color: #fff8dc; border: 1px solid #fff8dc; padding: 0.63rem; max-width: ${document.documentElement.clientWidth}px;">
-        <div id="${prefix("learnedWordsContent")}" style="display: flex; flex-direction: column; gap: 0.5rem; width: ${Math.min(document.documentElement.clientWidth / 16, 25)}rem;"></div>
+      `<dialog id="${prefix("wordsToLearnDialog")}" style="border-radius: 0.31rem; background-color: black; color: #fff8dc; border: 1px solid #fff8dc; padding: 0.63rem; max-width: ${document.documentElement.clientWidth}px;">
+        <div id="${prefix("wordsToLearnContent")}" style="display: flex; flex-direction: column; gap: 0.5rem; width: ${Math.min(document.documentElement.clientWidth / 16, 20)}rem;"></div>
       </dialog>`,
     );
   }
-  refreshLearnedWordsLink();
+  refreshWordsToLearnLink();
 }
 
-function learnedWordsChooserHTML() {
+function wordsToLearnChooserHTML() {
   const book = document.querySelector(".title")?.textContent ?? "";
-  const data = getLearnedWords();
+  const data = getWordsToLearn();
   const chapters = Object.keys(data[book] ?? {}).filter(
     (chapter) => (data[book][chapter] ?? []).length > 0,
   );
@@ -337,65 +373,36 @@ function learnedWordsChooserHTML() {
   );
 
   const items = [];
+  items.push(`<h3 style="margin: 0; padding: 0;">Учить слова</h3>`);
   if (totalCount > 0) {
     items.push(
-      `<div><a href="javascript:void(0)" onclick="startLearnedWordsStudy('${escJs(book)}', null)">Учить все слова (${totalCount})</a></div>`,
+      `<div><a href="javascript:void(0)" onclick="startWordsToLearnStudy('${escJs(book)}', null)">${book} (${totalCount})</a></div>`,
     );
   }
   for (const chapter of chapters) {
     items.push(
-      `<div><a href="javascript:void(0)" onclick="startLearnedWordsStudy('${escJs(book)}', '${escJs(chapter)}')">Учить слова: ${chapter} (${data[book][chapter].length})</a></div>`,
+      `<div><a href="javascript:void(0)" onclick="startWordsToLearnStudy('${escJs(book)}', '${escJs(chapter)}')">${chapter} (${data[book][chapter].length})</a></div>`,
     );
   }
   items.push(
-    `<div style="display: flex; flex-direction: row; justify-content: space-between; gap: 0.5rem;">
-      <button style="margin: 0; padding: 0.5rem;" onClick="showLearnedWordsDeleteMenu()">Удалить слова</button>
-      <button style="margin: 0; padding: 0.5rem;" onClick="document.getElementById('${prefix("learnedWordsDialog")}').close();">Закрыть</button>
+    `<div style="display: flex; flex-direction: row; justify-content: flex-end; gap: 0.5rem; padding-top: 0.5rem;">
+      <button style="margin: 0;" onClick="document.getElementById('${prefix("wordsToLearnDialog")}').close();">Закрыть</button>
     </div>`,
   );
   return items.join("");
 }
 
-function learnedWordsDeleteMenuHTML() {
-  const book = document.querySelector(".title")?.textContent ?? "";
-  const data = getLearnedWords();
-  const chapters = Object.keys(data[book] ?? {}).filter(
-    (chapter) => (data[book][chapter] ?? []).length > 0,
-  );
-
-  const items = [];
-  items.push(
-    `<div><button style="margin: 0; padding: 0.5rem;" onClick="deleteBookWordsFromChooser('${escJs(book)}')">Удалить все слова в ${book}</button></div>`,
-  );
-  for (const chapter of chapters) {
-    items.push(
-      `<div><button style="margin: 0; padding: 0.5rem;" onClick="deleteChapterWordsFromChooser('${escJs(book)}', '${escJs(chapter)}')">Удалить слова в ${chapter}</button></div>`,
-    );
-  }
-  items.push(
-    `<div style="display: flex; flex-direction: row; justify-content: space-between; gap: 0.5rem;">
-      <button style="margin: 0; padding: 0.5rem;" onClick="openLearnedWordsChooser()">Назад</button>
-      <button style="margin: 0; padding: 0.5rem;" onClick="document.getElementById('${prefix("learnedWordsDialog")}').close();">Закрыть</button>
-    </div>`,
-  );
-  return items.join("");
-}
-
-function showLearnedWordsDeleteMenu() {
-  byPrefixId("learnedWordsContent").innerHTML = learnedWordsDeleteMenuHTML();
-}
-
-function openLearnedWordsChooser() {
-  byPrefixId("learnedWordsContent").innerHTML = learnedWordsChooserHTML();
-  const dialog = byPrefixId("learnedWordsDialog");
+function openWordsToLearnChooser() {
+  byPrefixId("wordsToLearnContent").innerHTML = wordsToLearnChooserHTML();
+  const dialog = byPrefixId("wordsToLearnDialog");
   if (!dialog.open) {
     dialog.showModal();
   }
 }
 
-function collectLearnedWordsSessionRefs() {
+function collectWordsToLearnSessionRefs() {
   const { book, chapterFilter, shown } = learnedSession;
-  const data = getLearnedWords();
+  const data = getWordsToLearn();
   const chapters = chapterFilter ? [chapterFilter] : Object.keys(data[book] ?? {});
   const refs = [];
   for (const chapter of chapters) {
@@ -408,8 +415,8 @@ function collectLearnedWordsSessionRefs() {
   return refs;
 }
 
-function pickNextLearnedWord() {
-  const refs = collectLearnedWordsSessionRefs();
+function pickNextWordToLearn() {
+  const refs = collectWordsToLearnSessionRefs();
   if (refs.length === 0) {
     learnedSession.currentRef = null;
     learnedSession.revealed = false;
@@ -423,45 +430,45 @@ function pickNextLearnedWord() {
   learnedSession.revealed = false;
 }
 
-function startLearnedWordsStudy(book, chapterFilter) {
+function startWordsToLearnStudy(book, chapterFilter) {
   learnedSession = { book, chapterFilter, shown: new Set() };
-  pickNextLearnedWord();
-  renderLearnedWordsStudy();
+  pickNextWordToLearn();
+  renderWordsToLearnStudy();
 }
 
-function nextLearnedWord() {
+function nextWordToLearn() {
   if (!learnedSession.revealed) {
     learnedSession.revealed = true;
-    if (getLearnedWordsAutospeak()) {
+    if (getWordsToLearnAutospeak()) {
       const { book, currentRef } = learnedSession;
-      speak(speechText(getLearnedEntry(book, currentRef.chapter, currentRef.id)[0]));
+      speak(stripAnnotations(getLearnedEntry(book, currentRef.chapter, currentRef.id)[0]));
     }
   } else {
     learnedSession.shown.add(learnedSession.currentRef.id);
-    pickNextLearnedWord();
+    pickNextWordToLearn();
   }
-  renderLearnedWordsStudy();
+  renderWordsToLearnStudy();
 }
 
-function toggleLearnedWordRepeat(checked) {
+function toggleWordToLearnRepeat(checked) {
   const { book, currentRef } = learnedSession;
-  const data = getLearnedWords();
+  const data = getWordsToLearn();
   const entry = data[book]?.[currentRef.chapter]?.find(
     (it) => it[3] === currentRef.id,
   );
   if (entry) {
     entry[2] = checked;
-    setLearnedWords(data);
+    setWordsToLearn(data);
   }
 }
 
-function deleteLearnedWord() {
+function deleteWordToLearn() {
   const { book, currentRef } = learnedSession;
   const word = getLearnedEntry(book, currentRef.chapter, currentRef.id)?.[0];
   if (!confirm(`Удалить слово "${word}"?`)) {
     return;
   }
-  const data = getLearnedWords();
+  const data = getWordsToLearn();
   const list = data[book]?.[currentRef.chapter];
   if (list) {
     const index = list.findIndex((it) => it[3] === currentRef.id);
@@ -469,45 +476,45 @@ function deleteLearnedWord() {
       list.splice(index, 1);
     }
   }
-  setLearnedWords(data);
-  pickNextLearnedWord();
-  renderLearnedWordsStudy();
-  refreshLearnedWordsLink();
+  setWordsToLearn(data);
+  pickNextWordToLearn();
+  renderWordsToLearnStudy();
+  refreshWordsToLearnLink();
 }
 
 function deleteChapterWordsFromChooser(book, chapter) {
   if (!confirm(`Удалить все слова главы "${chapter}"?`)) {
     return;
   }
-  const data = getLearnedWords();
+  const data = getWordsToLearn();
   if (data[book]) {
     delete data[book][chapter];
   }
-  setLearnedWords(data);
-  openLearnedWordsChooser();
-  refreshLearnedWordsLink();
+  setWordsToLearn(data);
+  openWordsToLearnChooser();
+  refreshWordsToLearnLink();
 }
 
 function deleteBookWordsFromChooser(book) {
-  if (!confirm("Удалить все слова этой книги?")) {
+  if (!confirm(`Удалить все слова ${book}?`)) {
     return;
   }
-  const data = getLearnedWords();
+  const data = getWordsToLearn();
   delete data[book];
-  setLearnedWords(data);
-  openLearnedWordsChooser();
-  refreshLearnedWordsLink();
+  setWordsToLearn(data);
+  openWordsToLearnChooser();
+  refreshWordsToLearnLink();
 }
 
-function getLearnedWordsAutospeak() {
-  return localStorage.getItem("learnedWordsAutospeak") === "true";
+function getWordsToLearnAutospeak() {
+  return localStorage.getItem("wordsToLearnAutospeak") === "true";
 }
 
-function toggleLearnedWordsAutospeak(checked) {
-  localStorage.setItem("learnedWordsAutospeak", checked);
+function toggleWordsToLearnAutospeak(checked) {
+  localStorage.setItem("wordsToLearnAutospeak", checked);
 }
 
-function speechText(text) {
+function stripAnnotations(text) {
   return text
     .split(" ")
     .filter(
@@ -536,51 +543,81 @@ function highlightGender(text) {
   return text;
 }
 
-function renderLearnedWordsStudy() {
-  const contentEl = byPrefixId("learnedWordsContent");
-  const dialogId = prefix("learnedWordsDialog");
+function renderWordsToLearnStudy() {
+  const contentEl = byPrefixId("wordsToLearnContent");
+  const dialogId = prefix("wordsToLearnDialog");
 
   if (!learnedSession.currentRef) {
-    openLearnedWordsChooser();
+    openWordsToLearnChooser();
     return;
   }
 
-  const { book, currentRef, revealed } = learnedSession;
+  const { book, chapterFilter, currentRef, revealed } = learnedSession;
   const entry = getLearnedEntry(book, currentRef.chapter, currentRef.id);
   const [word, translation, repeatOften] = entry;
-  const remaining = collectLearnedWordsSessionRefs().length;
+  const remaining = collectWordsToLearnSessionRefs().length;
 
   contentEl.innerHTML = `
-    <div>Осталось: ${remaining}</div>
-    <div>${translation}</div>
-    <div style="display: flex; align-items: center; gap: 0.5rem; visibility: ${revealed ? "visible" : "hidden"};"><span>${revealed ? highlightGender(word) : ""}</span>${speakBtnHTML(speechText(word))}</div>
-    <div style="display: flex; align-items: center; justify-content: space-between;">
-      <div style="display: flex; align-items: center; gap: 0.2rem;">
-        <label for="${prefix("learnedWordsRepeat")}" style="padding: 0;">Повторять чаще</label>
-        <input type="checkbox" id="${prefix("learnedWordsRepeat")}" style="padding: 0;" ${repeatOften ? "checked" : ""} onChange="toggleLearnedWordRepeat(this.checked)">
+    <h4 style="margin: 0; padding: 0;">${chapterFilter ?? book}</h4>
+    <div style="display: flex; flex-direction: row; align-items: flex-start; justify-content: space-between; gap: 0.5rem;">
+      <div>
+        <div>Осталось: ${remaining}</div>
+        <div>${translation}</div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; visibility: ${revealed ? "visible" : "hidden"};"><span>${revealed ? highlightGender(word) : ""}</span>${speakBtnHTML(stripAnnotations(word))}</div>
       </div>
-      <a href="javascript:void(0)" onclick="deleteLearnedWord()">Удалить</a>
+      <button style="margin: 0;" onClick="nextWordToLearn()">Дальше</button>
     </div>
-    <div style="display: flex; align-items: center; gap: 0.2rem;">
-      <label for="${prefix("learnedWordsAutospeak")}" style="padding: 0;">Озвучивать автоматически</label>
-      <input type="checkbox" id="${prefix("learnedWordsAutospeak")}" style="padding: 0;" ${getLearnedWordsAutospeak() ? "checked" : ""} onChange="toggleLearnedWordsAutospeak(this.checked)">
+    <div style="display: flex; flex-direction: column; gap: 0;">
+      <div style="display: flex; align-items: center; gap: 0.2rem;">
+        <label for="${prefix("wordsToLearnRepeat")}" style="padding: 0;">Повторять чаще</label>
+        <input type="checkbox" id="${prefix("wordsToLearnRepeat")}" style="padding: 0;" ${repeatOften ? "checked" : ""} onChange="toggleWordToLearnRepeat(this.checked)">
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.2rem;">
+        <label for="${prefix("wordsToLearnAutospeak")}" style="padding: 0;">Озвучивать автоматически</label>
+        <input type="checkbox" id="${prefix("wordsToLearnAutospeak")}" style="padding: 0;" ${getWordsToLearnAutospeak() ? "checked" : ""} onChange="toggleWordsToLearnAutospeak(this.checked)">
+      </div>
     </div>
-    <div style="display: flex; flex-direction: row; justify-content: space-between; gap: 0.5rem;">
-      <button style="margin: 0; padding: 0.5rem;" onClick="nextLearnedWord()">Дальше</button>
+    <div style="display: flex; flex-direction: row; align-items: flex-end; justify-content: space-between; gap: 0.5rem; padding-top: 0.5rem;">
+      <a href="javascript:void(0)" style="color: #F08080;" onclick="showWordToLearnDeleteOptions()">Удалить</a>
       <div style="display: flex; flex-direction: row; gap: 0.5rem;">
-        <button style="margin: 0; padding: 0.5rem;" onClick="openLearnedWordsChooser()">Назад</button>
-        <button style="margin: 0; padding: 0.5rem;" onClick="document.getElementById('${dialogId}').close();">Закрыть</button>
+        <button style="margin: 0;" onClick="openWordsToLearnChooser()">Назад</button>
+        <button style="margin: 0;" onClick="document.getElementById('${dialogId}').close();">Закрыть</button>
       </div>
     </div>`;
 }
 
-document.addEventListener("DOMContentLoaded", initLearnedWordsUI);
+function wordToLearnDeleteOptionsHTML() {
+  const { book, currentRef } = learnedSession;
+  const { chapter } = currentRef;
+  const word = getLearnedEntry(book, chapter, currentRef.id)[0];
+  return `
+    <div><a href="javascript:void(0)" style="color: #F08080;" onclick="deleteWordToLearn()">Удалить ${word}?</a></div>
+    <div><a href="javascript:void(0)" style="color: #F08080;" onclick="deleteChapterWordsFromChooser('${escJs(book)}', '${escJs(chapter)}')">Удалить все слова в ${chapter}?</a></div>
+    <div><a href="javascript:void(0)" style="color: #F08080;" onclick="deleteBookWordsFromChooser('${escJs(book)}')">Удалить все слова в ${book}?</a></div>
+    <div style="display: flex; flex-direction: row; justify-content: flex-end; padding-top: 0.5rem;">
+      <button style="margin: 0;" onClick="renderWordsToLearnStudy()">Назад</button>
+    </div>`;
+}
+
+function showWordToLearnDeleteOptions() {
+  byPrefixId("wordsToLearnContent").innerHTML = wordToLearnDeleteOptionsHTML();
+}
+
+document.addEventListener("DOMContentLoaded", initWordsToLearnUI);
+
+function isIrregularVerb(text) {
+  if (verbTenses(text).type === "irregular") {
+    return true;
+  }
+  return !!getConjugation(text)?.some((it) => it.type === "irregular");
+}
 
 function learnDialogHTML(id, item) {
   const { text, ts, tr, gen } = item;
-  const wordValue = `${text}${gen ? ` ${gen?.code}` : ""}${ts ? ` [${ts}]` : ""}`;
+  const irregular = isIrregularVerb(text);
+  const wordValue = `${text}${irregular ? "*" : ""}${gen ? ` ${gen?.code}` : ""}${ts ? ` [${ts}]` : ""}`;
   const inputStyle =
-    "background-color: black; color: #fff8dc; border: 1px solid #fff8dc; padding: 0.5rem; border-radius: 0.31rem;";
+    "background-color: black; color: #fff8dc; border: 1px solid #fff8dc; margin: 0; padding: 0.5rem; border-radius: 0.31rem;";
 
   const translationValue = tr.length === 1 ? tr[0].text : "";
   const links =
@@ -594,16 +631,19 @@ function learnDialogHTML(id, item) {
           .join("");
 
   return `<dialog id="${id}" style="border-radius: 0.31rem; background-color: black; color: #fff8dc; border: 1px solid #fff8dc; padding: 0.63rem; max-width: ${document.documentElement.clientWidth}px;">
-      <div style="display: flex; flex-direction: column; gap: 0.5rem; width: ${Math.min(document.documentElement.clientWidth / 16, 25)}rem;">
+      <div style="display: flex; flex-direction: column; gap: 0.5rem; width: ${Math.min(document.documentElement.clientWidth / 16, 20)}rem;">
         <input type="text" id="${id}_part1" placeholder="Слова" value="${wordValue}" style="${inputStyle}">
         <input type="text" id="${id}_part2" placeholder="Перевод" value="${translationValue}" style="${inputStyle}">
         <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 0.5rem;">${links}</div>
-        <div style="display: flex; flex-direction: row; justify-content: flex-end; gap: 0.5rem;">
-          <button style="margin: 0; padding: 0.5rem;"
+        <div style="display: flex; flex-direction: row; justify-content: space-between; gap: 0.5rem; margin-top: 0.5rem;">
+          <button style="margin: 0;"
             onClick="const word = document.getElementById('${id}_part1').value; const translation = document.getElementById('${id}_part2').value;
-            saveLearnedWord(word, translation);
+            if (!translation.trim()) { alert('Введите перевод.'); return; }
+            const existing = findWordToLearnLocation(word);
+            if (existing && !confirm('Слово уже сохранено в книге ' + existing.book + ', глава ' + existing.chapter + '. Сохранить ещё раз?')) { return; }
+            saveWordToLearn(word, translation);
             document.getElementById('${id}').close();">Сохранить</button>
-          <button style="margin: 0; padding: 0.5rem;" onClick="document.getElementById('${id}').close();">Закрыть</button>
+          <button style="margin: 0;" onClick="document.getElementById('${id}').close();">Закрыть</button>
         </div>
       </div>
     </dialog>`;
@@ -613,7 +653,11 @@ function getTranslationHTML(data) {
   return data
     .map((item, index) => {
       const { text, ts, tr, gen } = item;
-      const result = [`<b>${text}</b>`, gen?.code, ts ? `[${ts}]` : ""]
+      const result = [
+        `<b>${text}${isIrregularVerb(text) ? "*" : ""}</b>`,
+        gen?.code,
+        ts ? `[${ts}]` : "",
+      ]
         .filter((it) => it)
         .map((it) => `<div>${it}</div>`);
       result.push(speakBtnHTML(text));
@@ -898,6 +942,14 @@ document.addEventListener("selectionchange", async () => {
   const selection = document.getSelection();
   if (!selection.toString() && !isInsideHelper(selection.anchorNode)) {
     await showHelper(document.getSelection());
+  }
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    const helper = document.getElementById("fr-helper");
+    helper.removeAttribute("text");
+    helper.innerHTML = "";
+    document.getSelection().removeAllRanges();
   }
 });
 
