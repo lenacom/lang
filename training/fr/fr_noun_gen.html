@@ -123,12 +123,16 @@
           ${speakButtonHTML(item[0], LANG)} ${item[3]}</div>`;
       }
 
+      let errors = [];
+
       async function checkAnswer(button, answer) {
         button.disabled = true;
         const { item } = getState();
         const ok = item[2] === answer;
         if (!ok) {
-          byId("error").innerHTML = errorHTML(item) + byId("error").innerHTML;
+          errors = errors.filter((it) => it[0] !== item[0]);
+          errors.unshift(item);
+          byId("error").innerHTML = errors.map(errorHTML).join("");
         }
         setAnswered(ok);
         setItem();

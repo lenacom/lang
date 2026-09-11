@@ -163,6 +163,19 @@ function regularVerbTenses(base, verbType, form) {
   return tenses;
 }
 
+function findInfinitiveTenses(text) {
+  if (infinitives.includes(text)) {
+    return [verbTenses(text)];
+  }
+  if (/er$/i.test(text) && regularVerbBases1.has(text.slice(0, -2))) {
+    return [verbTenses(text)];
+  }
+  if (/ir$/i.test(text) && regularVerbBases2.has(text.slice(0, -2))) {
+    return [verbTenses(text)];
+  }
+  return undefined;
+}
+
 function getConjugation(form) {
   const infinitiveIds = formToInfinitives[form];
   if (infinitiveIds !== undefined) {
@@ -322,8 +335,8 @@ function escJs(text) {
 
 function refreshWordsToLearnLink() {
   const book = document.querySelector(".title")?.textContent ?? "";
-  const chapterLinksEl = document.querySelector(".chapter-links");
-  if (!chapterLinksEl) {
+  const linksEl = byPrefixId("wordsToLearnLinks");
+  if (!linksEl) {
     return;
   }
   const existingLink = byPrefixId("wordsToLearnLink");
@@ -333,16 +346,16 @@ function refreshWordsToLearnLink() {
   );
 
   if (!hasWords) {
-    existingLink?.parentElement?.remove();
+    existingLink?.remove();
     return;
   }
   if (existingLink) {
     return;
   }
 
-  chapterLinksEl.insertAdjacentHTML(
-    "beforebegin",
-    `<div><a id="${prefix("wordsToLearnLink")}" href="javascript:void(0)" onclick="openWordsToLearnChooser()">Учить слова</a></div>`,
+  linksEl.insertAdjacentHTML(
+    "afterbegin",
+    `<a id="${prefix("wordsToLearnLink")}" class="${prefix("link")}" href="javascript:void(0)" onclick="openWordsToLearnChooser()">Учить слова</a>`,
   );
 }
 
@@ -350,15 +363,70 @@ function initWordsToLearnUI() {
   if (!document.querySelector(".chapter-links")) {
     return;
   }
+  const inputStyle =
+    "background-color: black; color: #fff8dc; border: 1px solid #fff8dc; margin: 0; padding: 0.5rem; border-radius: 0.31rem;";
   if (!byPrefixId("wordsToLearnDialog")) {
     document.body.insertAdjacentHTML(
       "beforeend",
-      `<dialog id="${prefix("wordsToLearnDialog")}" style="border-radius: 0.31rem; background-color: black; color: #fff8dc; border: 1px solid #fff8dc; padding: 0.63rem; max-width: ${document.documentElement.clientWidth}px;">
+      `<style>.${prefix("link")} { text-decoration: none; } .${prefix("link")}:hover { text-decoration: underline; }</style>
+      <dialog id="${prefix("wordsToLearnDialog")}" style="border-radius: 0.31rem; background-color: black; color: #fff8dc; border: 1px solid #fff8dc; padding: 0.63rem; max-width: ${document.documentElement.clientWidth}px;">
         <div id="${prefix("wordsToLearnContent")}" style="display: flex; flex-direction: column; gap: 0.5rem; width: ${Math.min(document.documentElement.clientWidth / 16, 20)}rem;"></div>
+      </dialog>
+      <dialog id="${prefix("addWordsDialog")}" style="border-radius: 0.31rem; background-color: black; color: #fff8dc; border: 1px solid #fff8dc; padding: 0.63rem; max-width: ${document.documentElement.clientWidth}px;">
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; width: ${Math.min(document.documentElement.clientWidth / 16, 20)}rem;">
+          <textarea id="${prefix("addWordsTextarea")}" rows="10" placeholder='["muster [ˈmʌstə]", "собрать"],&#10;["wrangle [ræŋgl]", "спорить"],' style="${inputStyle} resize: vertical;"></textarea>
+          <div style="display: flex; flex-direction: row; justify-content: flex-end; gap: 0.5rem;">
+            <button style="margin: 0;" onClick="saveWordsToLearnBulk()">Сохранить</button>
+            <button style="margin: 0;" onClick="document.getElementById('${prefix("addWordsDialog")}').close();">Закрыть</button>
+          </div>
+        </div>
       </dialog>`,
     );
   }
+  if (!byPrefixId("wordsToLearnLinks")) {
+    document.querySelector(".chapter-links").insertAdjacentHTML(
+      "beforebegin",
+      `<div id="${prefix("wordsToLearnLinks")}" style="display: flex; flex-direction: row; gap: 0.5rem;">
+        <a id="${prefix("addWordsLink")}" class="${prefix("link")}" href="javascript:void(0)" onclick="openAddWordsToLearnDialog()">Добавить слова</a>
+      </div>`,
+    );
+  }
   refreshWordsToLearnLink();
+}
+
+function openAddWordsToLearnDialog() {
+  const textarea = byPrefixId("addWordsTextarea");
+  textarea.value = "";
+  byPrefixId("addWordsDialog").showModal();
+  textarea.focus();
+}
+
+function saveWordsToLearnBulk() {
+  const textarea = byPrefixId("addWordsTextarea");
+  let entries;
+  try {
+    entries = new Function(`return [${textarea.value}];`)();
+  } catch (e) {
+    alert("Не удалось разобрать список слов.");
+    return;
+  }
+  for (const entry of entries) {
+    const [word, translation] = entry;
+    if (!word || !translation) {
+      continue;
+    }
+    const existing = findWordToLearnLocation(word);
+    if (
+      existing &&
+      !confirm(
+        `Слово "${word}" уже сохранено в книге ${existing.book}, глава ${existing.chapter}. Сохранить ещё раз?`,
+      )
+    ) {
+      continue;
+    }
+    saveWordToLearn(word, translation);
+  }
+  byPrefixId("addWordsDialog").close();
 }
 
 function wordsToLearnChooserHTML() {
@@ -376,12 +444,12 @@ function wordsToLearnChooserHTML() {
   items.push(`<h3 style="margin: 0; padding: 0;">Учить слова</h3>`);
   if (totalCount > 0) {
     items.push(
-      `<div><a href="javascript:void(0)" onclick="startWordsToLearnStudy('${escJs(book)}', null)">${book} (${totalCount})</a></div>`,
+      `<div><a class="${prefix("link")}" href="javascript:void(0)" onclick="startWordsToLearnStudy('${escJs(book)}', null)">${book} (${totalCount})</a></div>`,
     );
   }
   for (const chapter of chapters) {
     items.push(
-      `<div><a href="javascript:void(0)" onclick="startWordsToLearnStudy('${escJs(book)}', '${escJs(chapter)}')">${chapter} (${data[book][chapter].length})</a></div>`,
+      `<div><a class="${prefix("link")}" href="javascript:void(0)" onclick="startWordsToLearnStudy('${escJs(book)}', '${escJs(chapter)}')">${chapter} (${data[book][chapter].length})</a></div>`,
     );
   }
   items.push(
@@ -523,6 +591,7 @@ function stripAnnotations(text) {
         !/^\[.*$/.test(it) &&
         !/^.*\]$/.test(it),
     )
+    .map((it) => it.replace(/\*$/, ""))
     .join(" ");
 }
 
@@ -556,6 +625,18 @@ function renderWordsToLearnStudy() {
   const entry = getLearnedEntry(book, currentRef.chapter, currentRef.id);
   const [word, translation, repeatOften] = entry;
   const remaining = collectWordsToLearnSessionRefs().length;
+  const conjugation = findInfinitiveTenses(stripAnnotations(word).trim());
+  const transcriptionMatch = word.match(/\s*\[[^\]]*\]\s*$/);
+  const transcription = transcriptionMatch ? transcriptionMatch[0] : "";
+  const wordCore = highlightGender(
+    transcriptionMatch
+      ? word.slice(0, word.length - transcriptionMatch[0].length)
+      : word,
+  );
+  const wordHTML =
+    (conjugation
+      ? `<a class="${prefix("link")}" href="javascript:void(0)" onclick="showWordToLearnConjugation()">${wordCore}</a>`
+      : wordCore) + transcription;
 
   contentEl.innerHTML = `
     <h4 style="margin: 0; padding: 0;">${chapterFilter ?? book}</h4>
@@ -563,7 +644,7 @@ function renderWordsToLearnStudy() {
       <div>
         <div>Осталось: ${remaining}</div>
         <div>${translation}</div>
-        <div style="display: flex; align-items: center; gap: 0.5rem; visibility: ${revealed ? "visible" : "hidden"};"><span>${revealed ? highlightGender(word) : ""}</span>${speakBtnHTML(stripAnnotations(word))}</div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; visibility: ${revealed ? "visible" : "hidden"};"><span>${revealed ? wordHTML : ""}</span>${speakBtnHTML(stripAnnotations(word))}</div>
       </div>
       <button style="margin: 0;" onClick="nextWordToLearn()">Дальше</button>
     </div>
@@ -578,7 +659,7 @@ function renderWordsToLearnStudy() {
       </div>
     </div>
     <div style="display: flex; flex-direction: row; align-items: flex-end; justify-content: space-between; gap: 0.5rem; padding-top: 0.5rem;">
-      <a href="javascript:void(0)" style="color: #F08080;" onclick="showWordToLearnDeleteOptions()">Удалить</a>
+      <a class="${prefix("link")}" href="javascript:void(0)" style="color: #F08080;" onclick="showWordToLearnDeleteOptions()">Удалить</a>
       <div style="display: flex; flex-direction: row; gap: 0.5rem;">
         <button style="margin: 0;" onClick="openWordsToLearnChooser()">Назад</button>
         <button style="margin: 0;" onClick="document.getElementById('${dialogId}').close();">Закрыть</button>
@@ -591,9 +672,9 @@ function wordToLearnDeleteOptionsHTML() {
   const { chapter } = currentRef;
   const word = getLearnedEntry(book, chapter, currentRef.id)[0];
   return `
-    <div><a href="javascript:void(0)" style="color: #F08080;" onclick="deleteWordToLearn()">Удалить ${word}?</a></div>
-    <div><a href="javascript:void(0)" style="color: #F08080;" onclick="deleteChapterWordsFromChooser('${escJs(book)}', '${escJs(chapter)}')">Удалить все слова в ${chapter}?</a></div>
-    <div><a href="javascript:void(0)" style="color: #F08080;" onclick="deleteBookWordsFromChooser('${escJs(book)}')">Удалить все слова в ${book}?</a></div>
+    <div><a class="${prefix("link")}" href="javascript:void(0)" style="color: #F08080;" onclick="deleteWordToLearn()">Удалить ${word}?</a></div>
+    <div><a class="${prefix("link")}" href="javascript:void(0)" style="color: #F08080;" onclick="deleteChapterWordsFromChooser('${escJs(book)}', '${escJs(chapter)}')">Удалить все слова в ${chapter}?</a></div>
+    <div><a class="${prefix("link")}" href="javascript:void(0)" style="color: #F08080;" onclick="deleteBookWordsFromChooser('${escJs(book)}')">Удалить все слова в ${book}?</a></div>
     <div style="display: flex; flex-direction: row; justify-content: flex-end; padding-top: 0.5rem;">
       <button style="margin: 0;" onClick="renderWordsToLearnStudy()">Назад</button>
     </div>`;
@@ -601,6 +682,22 @@ function wordToLearnDeleteOptionsHTML() {
 
 function showWordToLearnDeleteOptions() {
   byPrefixId("wordsToLearnContent").innerHTML = wordToLearnDeleteOptionsHTML();
+}
+
+function wordToLearnConjugationHTML() {
+  const { book, currentRef } = learnedSession;
+  const [word] = getLearnedEntry(book, currentRef.chapter, currentRef.id);
+  const text = stripAnnotations(word).trim();
+  const conjugation = findInfinitiveTenses(text);
+  return `
+    <div>${getConjugationHTML(text, conjugation, { showToggle: false })}</div>
+    <div style="display: flex; flex-direction: row; justify-content: flex-end; padding-top: 0.5rem;">
+      <button style="margin: 0;" onClick="renderWordsToLearnStudy()">Назад</button>
+    </div>`;
+}
+
+function showWordToLearnConjugation() {
+  byPrefixId("wordsToLearnContent").innerHTML = wordToLearnConjugationHTML();
 }
 
 document.addEventListener("DOMContentLoaded", initWordsToLearnUI);
@@ -626,7 +723,7 @@ function learnDialogHTML(id, item) {
       : tr
           .map((it) => {
             return `<a href="javascript:void(0)" style="margin: 0; padding: 0;"
-        onClick="const el = document.getElementById('${id}_part2'); el.value = el.value ? el.value + ', ' + this.textContent : this.textContent;">${it.text}</a>`;
+        onClick="const elm = document.getElementById('${id}_part2'); elm.value = elm.value ? elm.value + ', ' + this.textContent : this.textContent;">${it.text}</a>`;
           })
           .join("");
 
@@ -723,7 +820,7 @@ function participleAgreementMatches(form, text) {
   return ["", "e", "s", "es"].some((agreement) => form + agreement === text);
 }
 
-function getConjugationHTML(text, data) {
+function getConjugationHTML(text, data, { showToggle = true } = {}) {
   return data
     ?.map(({ infinitive, type, tenses }) => {
       const tensesHTML = Object.entries(tenses).map(([tenseName, __forms]) => {
@@ -759,7 +856,7 @@ function getConjugationHTML(text, data) {
           formsHTML = formsHTML.join("");
         }
         const found = forms.find(matches);
-        return `<div class="${found ? "" : prefix(infinitive)}">
+        return `<div class="${showToggle && !found ? prefix(infinitive) : ""}">
           <div style="display:flex; flex-direction:row; align-items:center; gap:0.63rem; font-weight:bold">
             <span>${tenseName}</span>
             ${speakBtnHTML(formsToSpeak.join(", "))}
@@ -772,7 +869,7 @@ function getConjugationHTML(text, data) {
       .forEach(it => { it.style.display = it.style.display === 'none'? 'block' : 'none'});`;
       return `<div>
       ${infinitive + (type === "irregular" ? "*" : "")}
-      <button style="border-radius:0.31rem; padding:0.31rem; margin:0;" class="${prefix("conjugation")}" onClick="${onClick}">Меньше</button>
+      ${showToggle ? `<button style="border-radius:0.31rem; padding:0.31rem; margin:0;" class="${prefix("conjugation")}" onClick="${onClick}">Меньше</button>` : ""}
       </div>
       ${tensesHTML.join("")}`;
     })
@@ -930,8 +1027,13 @@ function isInsideHelper(node) {
   return !!(helper && node && helper.contains(node));
 }
 
+function isInsideDialog(node) {
+  const elm = node instanceof Element ? node : node?.parentElement;
+  return !!elm?.closest("dialog");
+}
+
 const listener = async (event) => {
-  if (isInsideHelper(event.target)) {
+  if (isInsideHelper(event.target) || isInsideDialog(event.target)) {
     return;
   }
   await showHelper(document.getSelection());
@@ -940,12 +1042,19 @@ document.addEventListener("contextmenu", listener);
 document.addEventListener("pointerup", listener);
 document.addEventListener("selectionchange", async () => {
   const selection = document.getSelection();
-  if (!selection.toString() && !isInsideHelper(selection.anchorNode)) {
+  if (
+    !selection.toString() &&
+    !isInsideHelper(selection.anchorNode) &&
+    !isInsideDialog(selection.anchorNode)
+  ) {
     await showHelper(document.getSelection());
   }
 });
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
+    if (document.querySelector("dialog[open]")) {
+      return;
+    }
     const helper = document.getElementById("fr-helper");
     helper.removeAttribute("text");
     helper.innerHTML = "";
