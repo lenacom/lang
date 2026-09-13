@@ -335,8 +335,8 @@ function escJs(text) {
 
 function refreshWordsToLearnLink() {
   const book = document.querySelector(".title")?.textContent ?? "";
-  const linksEl = byPrefixId("wordsToLearnLinks");
-  if (!linksEl) {
+  const chapterLinksEl = document.querySelector(".chapter-links");
+  if (!chapterLinksEl) {
     return;
   }
   const existingLink = byPrefixId("wordsToLearnLink");
@@ -346,16 +346,16 @@ function refreshWordsToLearnLink() {
   );
 
   if (!hasWords) {
-    existingLink?.remove();
+    existingLink?.parentElement?.remove();
     return;
   }
   if (existingLink) {
     return;
   }
 
-  linksEl.insertAdjacentHTML(
-    "afterbegin",
-    `<a id="${prefix("wordsToLearnLink")}" class="${prefix("link")}" href="javascript:void(0)" onclick="openWordsToLearnChooser()">Учить слова</a>`,
+  chapterLinksEl.insertAdjacentHTML(
+    "beforebegin",
+    `<div><a id="${prefix("wordsToLearnLink")}" class="${prefix("link")}" href="javascript:void(0)" onclick="openWordsToLearnChooser()">Учить слова</a></div>`,
   );
 }
 
@@ -363,70 +363,16 @@ function initWordsToLearnUI() {
   if (!document.querySelector(".chapter-links")) {
     return;
   }
-  const inputStyle =
-    "background-color: black; color: #fff8dc; border: 1px solid #fff8dc; margin: 0; padding: 0.5rem; border-radius: 0.31rem;";
   if (!byPrefixId("wordsToLearnDialog")) {
     document.body.insertAdjacentHTML(
       "beforeend",
       `<style>.${prefix("link")} { text-decoration: none; } .${prefix("link")}:hover { text-decoration: underline; }</style>
       <dialog id="${prefix("wordsToLearnDialog")}" style="border-radius: 0.31rem; background-color: black; color: #fff8dc; border: 1px solid #fff8dc; padding: 0.63rem; max-width: ${document.documentElement.clientWidth}px;">
         <div id="${prefix("wordsToLearnContent")}" style="display: flex; flex-direction: column; gap: 0.5rem; width: ${Math.min(document.documentElement.clientWidth / 16, 20)}rem;"></div>
-      </dialog>
-      <dialog id="${prefix("addWordsDialog")}" style="border-radius: 0.31rem; background-color: black; color: #fff8dc; border: 1px solid #fff8dc; padding: 0.63rem; max-width: ${document.documentElement.clientWidth}px;">
-        <div style="display: flex; flex-direction: column; gap: 0.5rem; width: ${Math.min(document.documentElement.clientWidth / 16, 20)}rem;">
-          <textarea id="${prefix("addWordsTextarea")}" rows="10" placeholder='["muster [ˈmʌstə]", "собрать"],&#10;["wrangle [ræŋgl]", "спорить"],' style="${inputStyle} resize: vertical;"></textarea>
-          <div style="display: flex; flex-direction: row; justify-content: flex-end; gap: 0.5rem;">
-            <button style="margin: 0;" onClick="saveWordsToLearnBulk()">Сохранить</button>
-            <button style="margin: 0;" onClick="document.getElementById('${prefix("addWordsDialog")}').close();">Закрыть</button>
-          </div>
-        </div>
       </dialog>`,
     );
   }
-  if (!byPrefixId("wordsToLearnLinks")) {
-    document.querySelector(".chapter-links").insertAdjacentHTML(
-      "beforebegin",
-      `<div id="${prefix("wordsToLearnLinks")}" style="display: flex; flex-direction: row; gap: 0.5rem;">
-        <a id="${prefix("addWordsLink")}" class="${prefix("link")}" href="javascript:void(0)" onclick="openAddWordsToLearnDialog()">Добавить слова</a>
-      </div>`,
-    );
-  }
   refreshWordsToLearnLink();
-}
-
-function openAddWordsToLearnDialog() {
-  const textarea = byPrefixId("addWordsTextarea");
-  textarea.value = "";
-  byPrefixId("addWordsDialog").showModal();
-  textarea.focus();
-}
-
-function saveWordsToLearnBulk() {
-  const textarea = byPrefixId("addWordsTextarea");
-  let entries;
-  try {
-    entries = new Function(`return [${textarea.value}];`)();
-  } catch (e) {
-    alert("Не удалось разобрать список слов.");
-    return;
-  }
-  for (const entry of entries) {
-    const [word, translation] = entry;
-    if (!word || !translation) {
-      continue;
-    }
-    const existing = findWordToLearnLocation(word);
-    if (
-      existing &&
-      !confirm(
-        `Слово "${word}" уже сохранено в книге ${existing.book}, глава ${existing.chapter}. Сохранить ещё раз?`,
-      )
-    ) {
-      continue;
-    }
-    saveWordToLearn(word, translation);
-  }
-  byPrefixId("addWordsDialog").close();
 }
 
 function wordsToLearnChooserHTML() {
@@ -633,10 +579,10 @@ function renderWordsToLearnStudy() {
       ? word.slice(0, word.length - transcriptionMatch[0].length)
       : word,
   );
-  const wordHTML =
-    (conjugation
-      ? `<a class="${prefix("link")}" href="javascript:void(0)" onclick="showWordToLearnConjugation()">${wordCore}</a>`
-      : wordCore) + transcription;
+  const wordHTML = wordCore + transcription;
+  const conjugationButtonHTML = conjugation
+    ? `<button style="margin: 0;" onClick="showWordToLearnConjugation()">Спряжение</button>`
+    : "";
 
   contentEl.innerHTML = `
     <h4 style="margin: 0; padding: 0;">${chapterFilter ?? book}</h4>
@@ -644,7 +590,7 @@ function renderWordsToLearnStudy() {
       <div>
         <div>Осталось: ${remaining}</div>
         <div>${translation}</div>
-        <div style="display: flex; align-items: center; gap: 0.5rem; visibility: ${revealed ? "visible" : "hidden"};"><span>${revealed ? wordHTML : ""}</span>${speakBtnHTML(stripAnnotations(word))}</div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; visibility: ${revealed ? "visible" : "hidden"};"><span>${revealed ? wordHTML : ""}</span>${speakBtnHTML(stripAnnotations(word))}${conjugationButtonHTML}</div>
       </div>
       <button style="margin: 0;" onClick="nextWordToLearn()">Дальше</button>
     </div>
@@ -728,7 +674,14 @@ function learnDialogHTML(id, item) {
           .join("");
 
   return `<dialog id="${id}" style="border-radius: 0.31rem; background-color: black; color: #fff8dc; border: 1px solid #fff8dc; padding: 0.63rem; max-width: ${document.documentElement.clientWidth}px;">
-      <div style="display: flex; flex-direction: column; gap: 0.5rem; width: ${Math.min(document.documentElement.clientWidth / 16, 20)}rem;">
+      <div id="${id}_warning" style="display: none; flex-direction: column; gap: 0.5rem; width: ${Math.min(document.documentElement.clientWidth / 16, 20)}rem;">
+        <div id="${id}_warning_text"></div>
+        <div style="display: flex; flex-direction: row; justify-content: flex-end; gap: 0.5rem;">
+          <button style="margin: 0;" onClick="document.getElementById('${id}_warning').style.display = 'none'; document.getElementById('${id}_form').style.display = 'flex';">Да</button>
+          <button style="margin: 0;" onClick="document.getElementById('${id}').close();">Нет</button>
+        </div>
+      </div>
+      <div id="${id}_form" style="display: flex; flex-direction: column; gap: 0.5rem; width: ${Math.min(document.documentElement.clientWidth / 16, 20)}rem;">
         <input type="text" id="${id}_part1" placeholder="Слова" value="${wordValue}" style="${inputStyle}">
         <input type="text" id="${id}_part2" placeholder="Перевод" value="${translationValue}" style="${inputStyle}">
         <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 0.5rem;">${links}</div>
@@ -736,8 +689,6 @@ function learnDialogHTML(id, item) {
           <button style="margin: 0;"
             onClick="const word = document.getElementById('${id}_part1').value; const translation = document.getElementById('${id}_part2').value;
             if (!translation.trim()) { alert('Введите перевод.'); return; }
-            const existing = findWordToLearnLocation(word);
-            if (existing && !confirm('Слово уже сохранено в книге ' + existing.book + ', глава ' + existing.chapter + '. Сохранить ещё раз?')) { return; }
             saveWordToLearn(word, translation);
             document.getElementById('${id}').close();">Сохранить</button>
           <button style="margin: 0;" onClick="document.getElementById('${id}').close();">Закрыть</button>
@@ -760,7 +711,18 @@ function getTranslationHTML(data) {
       result.push(speakBtnHTML(text));
       const learnId = prefix(`learn${index}`);
       result.push(
-        `<button style="margin: 0; padding: 0 0.5rem; height: 2rem; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center;" onClick="document.getElementById('${learnId}').showModal(); document.getElementById('${learnId}_part2').focus();">Учить</button>`,
+        `<button style="margin: 0; padding: 0 0.5rem; height: 2rem; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center;"
+          onClick="const existing = findWordToLearnLocation('${escJs(text)}');
+          if (existing) {
+            document.getElementById('${learnId}_warning_text').textContent = 'Слово уже сохранено в книге ' + existing.book + ', глава ' + existing.chapter + '. Сохранить ещё раз?';
+            document.getElementById('${learnId}_warning').style.display = 'flex';
+            document.getElementById('${learnId}_form').style.display = 'none';
+          } else {
+            document.getElementById('${learnId}_warning').style.display = 'none';
+            document.getElementById('${learnId}_form').style.display = 'flex';
+          }
+          document.getElementById('${learnId}').showModal();
+          document.getElementById('${learnId}_part2').focus();">Учить</button>`,
       );
       return `<div style="display: flex; flex-wrap: wrap; flex-direction: row; align-items: baseline; gap: 0.5rem; width: max-content; max-width: ${document.documentElement.clientWidth}px;">
       ${result.join("")}
