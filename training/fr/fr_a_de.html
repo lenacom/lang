@@ -67,13 +67,13 @@
           /^(?:se |s’)?(.*?)( à | de | | d’)(faire qch|qch|qn|avoir fait qch).*$/i;
         const key = item[0].replace(regex, "$1");
         //console.log(`key '${key}'`);
-        const regexp = new RegExp(`(^|\s|’)${key}[^s]`);
+        const regexp = new RegExp(`(^|\\s|’)${key}[^s]`);
         return items.filter((it) => regexp.test(it[0]) && it[0] !== item[0]);
       }
 
-      /*let xitem = items.find(it => it[0] === "rêver de qch (qn)")
+      /*let xitem = items.find(it => it[0] === "se venger de qn")
       console.log(similarItems(xitem));
-      xitem = items.find(it => it[0] === "s’user à faire qch")
+      xitem = items.find(it => it[0] === "venger qch (qn)")
       console.log(similarItems(xitem));*/
 
       function speakText(text) {
