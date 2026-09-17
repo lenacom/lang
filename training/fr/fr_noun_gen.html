@@ -36,7 +36,7 @@
     </div>
     <div id="error"></div>
     <script>
-      ["ète"].forEach((ending) => {
+      ["èse"].forEach((ending) => {
         const x = nouns.filter(
           (it) => it[0].endsWith(ending) && it[2] == "m",
         ).length;
@@ -46,11 +46,11 @@
         console.log(`${ending}  f ${y} m ${x}`);
       });
 
-      /*let count = 0;
-      const x = nouns.filter(it => {
+      let count = 0;
+      nouns.forEach(it => {
         let skip = it[0].length < 3 && it[0] !== "an";
         if (it[0].length > 9 ) {
-          ["esse", "ence", "té","ade", "aison", "ance", "esse", "ine", "ison", "tude", "ose", "sion", "tion", "ure", "aille", "eille", "elle", "enne", "ère", "ette", "euse", "ie", "ille", "ise", "ière", "onne", "trice"].forEach(ending => {
+          ["ion", "esse", "ence", "té","ade", "aison", "ance", "esse", "ine", "ison", "tude", "ose", "sion", "tion", "ure", "aille", "eille", "elle", "enne", "ère", "ette", "euse", "ie", "ille", "ise", "ière", "onne", "trice"].forEach(ending => {
             if (it[0].endsWith(ending) && it[2] == "f") {
               console.log(it[0])
               skip = true;
@@ -68,8 +68,7 @@
           }
         }
         return !skip && it[2] !== "mf" && it[2] !== "";
-      }).map(it => `["${it[0]}", "${it[1]}", "${it[2]}", "${it[3]}"],`).join("\r\n");
-      console.log(x);*/
+      });
 
       const LANG = "fr-FR";
       initSpeak(LANG);
@@ -78,7 +77,7 @@
       function markEnding(word) {
         const regexps = [
           [
-            /^(.{2,}?)(esse|aine|ance|ence|té|ade|aison|ance|esse|ine|ison|tude|ose|sion|tion|aille|eille|elle|enne|ère|ette|euse|ie|ille|ise|ière|onne|trice)$/,
+            /^(.{2,}?)(ion|esse|aine|ance|ence|té|ade|aison|ance|esse|ine|ison|tude|ose|sion|tion|aille|eille|elle|enne|ère|ette|euse|ie|ille|ise|ière|onne|trice)$/,
             "$1<span class='f'>$2</span>",
           ],
           [/^(.{1,}?[^àâaéèêëeîïiôoùûü])(ure)$/, "$1<span class='f'>$2</span>"],
