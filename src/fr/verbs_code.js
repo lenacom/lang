@@ -701,9 +701,13 @@ function getTranslationHTML(data) {
   return data
     .map((item, index) => {
       const { text, ts, tr, gen } = item;
+      const genderColor =
+        gen?.code === "m" ? "#87CEFA" : gen?.code === "f" ? "#F08080" : null;
       const result = [
-        `<b>${text}${isIrregularVerb(text) ? "*" : ""}</b>`,
-        gen?.code,
+        `<b${genderColor ? ` style="color: ${genderColor};"` : ""}>${text}${isIrregularVerb(text) ? "*" : ""}</b>`,
+        genderColor
+          ? `<span style="color: ${genderColor};">${gen.code}</span>`
+          : gen?.code,
         ts ? `[${ts}]` : "",
       ]
         .filter((it) => it)
