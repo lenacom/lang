@@ -36,7 +36,7 @@
     </div>
     <div id="error"></div>
     <script>
-      ["oire"].forEach((ending) => {
+      ["eur"].forEach((ending) => {
         const x = nouns.filter(
           (it) => it[0].endsWith(ending) && it[2] == "m",
         ).length;
@@ -77,7 +77,7 @@
       function markEnding(word) {
         const regexps = [
           [
-            /^(.{2,}?)(ion|esse|aine|ance|ence|té|ade|aison|ance|esse|ine|ison|tude|ose|sion|tion|aille|eille|elle|enne|ère|ette|euse|ie|ille|ise|ière|onne|trice)$/,
+            /^(.{2,}?)(aise|ion|esse|aine|ance|ence|té|ade|aison|ance|esse|ine|ison|tude|ose|sion|tion|aille|eille|elle|enne|ère|ette|euse|ie|ille|ise|ière|onne|trice)$/,
             "$1<span class='f'>$2</span>",
           ],
           [/^(.{1,}?[^àâaéèêëeîïiôoùûü])(ure)$/, "$1<span class='f'>$2</span>"],
@@ -90,7 +90,7 @@
             /^(.{1,}?[^àâaéèêëeîïiôoùûü])(i|u|é|in|is|it)$/,
             "$1<span class='m'>$2</span>",
           ],
-          [/^(.{2,}?)(gramme|ment|teur)$/, "$1<span class='m'>$2</span>"],
+          [/^(.{2,}?)(gramme|ment)$/, "$1<span class='m'>$2</span>"],
         ];
 
         for (let regexp of regexps) {

@@ -1108,7 +1108,6 @@ const nouns = [
   ["poursuite", "puʁsɥit", "f", "преследование"],
   ["grenade", "ɡʁənad", "f", "гранат"],
   ["synchro", "sɛ̃kʁo", "f", "синхронизация"],
-  ["bingo", "biŋɡo", "m", "бинго"],
   ["relecture", "rəlɛktyʁ", "f", "корректура"],
   ["proie", "pʁwa", "f", "добыча"],
   ["douceur", "dusœʁ", "f", "мягкость"],
