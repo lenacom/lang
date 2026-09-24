@@ -77,7 +77,7 @@
       console.log(similarItems(xitem));*/
 
       function speakText(text) {
-        return text.replace("qn", "quelqu’un").replace("qch", "quelquechose");
+        return text.replaceAll("qn", "quelqu’un").replaceAll("qch", "quelquechose");
       }
 
       function checkAnswer() {
