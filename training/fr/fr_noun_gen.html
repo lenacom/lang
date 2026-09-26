@@ -26,6 +26,7 @@
     <script>
       menu();
     </script>
+    <div id="smallStepsSection"></div>
     <div id="test" class="small"></div>
     <div id="progress" class="small"></div>
     <hr />
@@ -72,7 +73,7 @@
 
       const LANG = "fr-FR";
       initSpeak(LANG);
-      const { getState, setAnswered } = SmallSteps("fr_noun_gen", nouns);
+      const { getState, setAnswered } = SmallSteps("fr_noun_gen", "smallStepsSection", nouns, 1000);
 
       function markEnding(word) {
         const regexps = [
@@ -103,8 +104,8 @@
       }
 
       function setItem() {
-        const { limit, part, item } = getState();
-        byId("test").innerHTML = `Слова по ${limit} из ${nouns.length}.`;
+        const { limit, selection, part, item } = getState();
+        byId("test").innerHTML = `Диапазон: ${limit} из ${selection.length}.`;
         byId("progress").innerHTML = `Осталось слов: ${part.length + 1}.`;
         byId("item").innerHTML = itemHTML(item);
       }

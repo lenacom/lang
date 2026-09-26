@@ -12,6 +12,7 @@
     <script>
       menu();
     </script>
+    <div id="smallStepsSection"></div>
     <div id="test" class="small"></div>
     <div id="progress" class="small"></div>
     <hr />
@@ -24,7 +25,7 @@
       const LANG = "fr-FR";
       initSpeak(LANG);
       document.write(autospeakHTML());
-      const { getState, setAnswered } = SmallSteps("fr_a_de", items);
+      const { getState, setAnswered } = SmallSteps("fr_a_de", "smallStepsSection", items);
 
       let correctItemWords;
       let itemWords;
@@ -49,9 +50,9 @@
       }
 
       function setItem() {
-        const { limit, part, item, countTests } = getState();
+        const { limit, selection, part, item, countTests } = getState();
         if (limit < items.length) {
-          byId("test").innerHTML = `Тесты по ${limit} из ${items.length}.`;
+          byId("test").innerHTML = `Диапазон: ${limit} из ${selection.length}.`;
           byId("progress").innerHTML = `Осталось тестов: ${part.length + 1}.`;
         } else {
           byId("test").innerHTML = `Всего тестов: ${items.length}.`;

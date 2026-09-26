@@ -1,20 +1,70 @@
 "use strict";
 
-function SmallSteps(configName, items) {
+function SmallSteps(configName, containerId, items, sectionSize = 50) {
   const partSize = 5;
   const config = getConfig(configName);
-  let limit = config?.limit ?? 2 * partSize;
-  const errors = config?.errors ?? [];
-  let order = config?.order ?? "direct";
-  if (order === "reverse") {
-    items.reverse();
+  migrateLegacyConfig();
+
+  const sectionsCount = Math.max(1, Math.ceil(items.length / sectionSize));
+  let section = config.section ?? 1;
+  if (section < 1 || section > sectionsCount) {
+    section = 1;
   }
+
+  let selection;
+  let limit;
+  let errors;
+  let order;
   let part;
   let current;
   let countTests = 0;
 
+  function migrateLegacyConfig() {
+    if (
+      !config.sections &&
+      (config.limit !== undefined ||
+        config.errors !== undefined ||
+        config.order !== undefined)
+    ) {
+      config.sections = {
+        1: { limit: config.limit, errors: config.errors, order: config.order },
+      };
+      delete config.limit;
+      delete config.errors;
+      delete config.order;
+    }
+  }
+
+  function getSectionItems(sectionNumber) {
+    const start = (sectionNumber - 1) * sectionSize;
+    return items.slice(start, start + sectionSize);
+  }
+
+  function addSectionSelect() {
+    if (sectionsCount <= 1) {
+      document.getElementById(containerId).innerHTML = "";
+      return;
+    }
+    const selectId = `smallStepsSection__${configName}`;
+    const optionsHTML = Array.from({ length: sectionsCount }, (_, i) => {
+      const value = i + 1;
+      const start = i * sectionSize + 1;
+      const end = Math.min(value * sectionSize, items.length);
+      return `<option value="${value}"${value === section ? " selected" : ""}>${start}-${end}</option>`;
+    }).join("");
+    document.getElementById(containerId).innerHTML =
+      `Часть: <select id="${selectId}">${optionsHTML}</select>`;
+    document.getElementById(selectId).addEventListener("change", (event) => {
+      section = Number(event.target.value);
+      initSection();
+    });
+  }
+
   function saveSmallStepsConfig() {
-    saveConfig(configName, { limit, errors: errors.slice(0, 100), order });
+    config.section = section;
+    config.sections = config.sections ?? {};
+    config.sections[section] = { limit, errors: errors.slice(0, 100), order };
+    saveConfig(configName, config);
   }
 
   function fillRandomly(toArray, fromArray, limit) {
@@ -28,12 +78,12 @@ function SmallSteps(configName, items) {
 
   function setPart(newStep = false) {
     if (newStep) {
-      if (limit === items.length) {
+      if (limit === selection.length) {
         order = order === "direct" ? "reverse" : "direct";
-        items.reverse();
+        selection.reverse();
         limit = 2 * partSize;
       } else {
-        limit = Math.min(limit + partSize, items.length);
+        limit = Math.min(limit + partSize, selection.length);
       }
       part = Array.from({ length: partSize }, (_, i) => limit - partSize + i);
     } else {
@@ -87,10 +137,23 @@ function SmallSteps(configName, items) {
   }
 
   function getState() {
-    return { item: items[current], part, limit, countTests };
+    return { item: selection[current], selection, part, limit, countTests };
   }
 
-  setPart();
+  function initSection() {
+    selection = getSectionItems(section);
+    const sectionConfig = config.sections?.[section];
+    limit = sectionConfig?.limit ?? 2 * partSize;
+    errors = sectionConfig?.errors ?? [];
+    order = sectionConfig?.order ?? "direct";
+    if (order === "reverse") {
+      selection.reverse();
+    }
+    setPart();
+  }
+
+  addSectionSelect();
+  initSection();
 
   return { getState, setAnswered };
 }

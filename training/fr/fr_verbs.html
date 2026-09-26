@@ -12,6 +12,7 @@
     <script>
       menu();
     </script>
+    <div id="smallStepsSection"></div>
     <div id="tenses"></div>
     <div id="test"></div>
     <div id="progress"></div>
@@ -44,7 +45,7 @@
       function setTenseName(__tenseName) {
         tenseName = __tenseName;
         setCookie("fr_verbs_tense", tenseName);
-        smallSteps = SmallSteps(`fr_verbs_${tenseName}`, verbs);
+        smallSteps = SmallSteps(`fr_verbs_${tenseName}`, "smallStepsSection", verbs);
         setVerb();
       }
 
@@ -58,8 +59,8 @@
         `<select name="tenseName" onChange="setTenseName(this.value)">${tenseNameOptions}</select>`;
 
       function setVerb() {
-        const { limit, part, item } = smallSteps.getState();
-        byId("test").innerHTML = `Глаголы по ${limit} из ${verbs.length}.`;
+        const { limit, part, selection, item } = smallSteps.getState();
+        byId("test").innerHTML = `Диапазон: ${limit} из ${selection.length}.`;
         byId("progress").innerHTML = `Осталось глаголов: ${part.length + 1}.`;
         byId("verb").innerHTML =
           `${withSpeakButtonHTML(item[0], LANG)}<span>${item[1]}<span>`;
