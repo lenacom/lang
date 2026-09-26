@@ -1053,3 +1053,4 @@ se morfondre
 
 // s’entretenaient не находит
 // prosternaient не находит
+// saississent не находит
