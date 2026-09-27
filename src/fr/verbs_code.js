@@ -450,7 +450,15 @@ function startWordsToLearnStudy(book, chapterFilter) {
   renderWordsToLearnStudy();
 }
 
+let nextWordToLearnLocked = false;
+
 function nextWordToLearn() {
+  if (nextWordToLearnLocked) return;
+  nextWordToLearnLocked = true;
+  setTimeout(() => {
+    nextWordToLearnLocked = false;
+  }, 300);
+
   if (!learnedSession.revealed) {
     learnedSession.revealed = true;
     if (getWordsToLearnAutospeak()) {
@@ -586,12 +594,12 @@ function renderWordsToLearnStudy() {
 
   contentEl.innerHTML = `
     <h4 style="margin: 0; padding: 0;">${chapterFilter ?? book}</h4>
-    <div style="display: flex; flex-direction: row; align-items: flex-start; justify-content: space-between; gap: 0.5rem;">
-      <div>
-        <div>Осталось: ${remaining}</div>
-        <div>${translation}</div>
-        <div style="display: flex; align-items: center; gap: 0.5rem; visibility: ${revealed ? "visible" : "hidden"};"><span>${revealed ? wordHTML : ""}</span>${speakBtnHTML(stripAnnotations(word))}${conjugationButtonHTML}</div>
-      </div>
+    <div>
+      <div>Осталось: ${remaining}</div>
+      <div>${translation}</div>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; min-height: 4.5rem; visibility: ${revealed ? "visible" : "hidden"};"><span>${revealed ? wordHTML : ""}</span>${speakBtnHTML(stripAnnotations(word))}${conjugationButtonHTML}</div>
+    </div>
+    <div style="display: flex; flex-direction: row; justify-content: flex-end; padding-top: 0.5rem;">
       <button style="margin: 0;" onClick="nextWordToLearn()">Дальше</button>
     </div>
     <div style="display: flex; flex-direction: column; gap: 0;">
@@ -669,7 +677,8 @@ function learnDialogHTML(id, item) {
       : tr
           .map((it) => {
             return `<a href="javascript:void(0)" style="margin: 0; padding: 0;"
-        onClick="const elm = document.getElementById('${id}_part2'); elm.value = elm.value ? elm.value + ', ' + this.textContent : this.textContent;">${it.text}</a>`;
+        onClick="const elm = document.getElementById('${id}_part2'); elm.value = elm.value ? elm.value + ', ' + this.textContent : this.textContent;
+        document.getElementById('${id}_save').disabled = !elm.value.trim();">${it.text}</a>`;
           })
           .join("");
 
@@ -683,12 +692,12 @@ function learnDialogHTML(id, item) {
       </div>
       <div id="${id}_form" style="display: flex; flex-direction: column; gap: 0.5rem; width: ${Math.min(document.documentElement.clientWidth / 16, 20)}rem;">
         <input type="text" id="${id}_part1" placeholder="Слова" value="${wordValue}" style="${inputStyle}">
-        <input type="text" id="${id}_part2" placeholder="Перевод" value="${translationValue}" style="${inputStyle}">
+        <input type="text" id="${id}_part2" placeholder="Перевод" value="${translationValue}" style="${inputStyle}"
+          oninput="document.getElementById('${id}_save').disabled = !this.value.trim();">
         <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 0.5rem;">${links}</div>
         <div style="display: flex; flex-direction: row; justify-content: space-between; gap: 0.5rem; margin-top: 0.5rem;">
-          <button style="margin: 0;"
+          <button id="${id}_save" style="margin: 0;" ${translationValue.trim() ? "" : "disabled"}
             onClick="const word = document.getElementById('${id}_part1').value; const translation = document.getElementById('${id}_part2').value;
-            if (!translation.trim()) { alert('Введите перевод.'); return; }
             saveWordToLearn(word, translation);
             document.getElementById('${id}').close();">Сохранить</button>
           <button style="margin: 0;" onClick="document.getElementById('${id}').close();">Закрыть</button>
