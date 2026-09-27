@@ -87,7 +87,11 @@
         }
       }
 
-      function checkAnswer(form) {
+      let answering = false;
+
+      async function checkAnswer(form) {
+        if (answering) return;
+        answering = true;
         const correctForm = forms[formIndex];
         if (globalThis.autospeak && correctForm !== "") {
           speak(withPronoun(correctForm), LANG);
@@ -108,6 +112,8 @@
           formIndex++;
           setForm();
         }
+        await sleep(300);
+        answering = false;
       }
 
       function createFormVariants(verbTenses) {
