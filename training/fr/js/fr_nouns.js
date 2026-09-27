@@ -1860,7 +1860,6 @@ const nouns = [
   ["duo", "dɥo, dɥɔ", "m", "дуэт"],
   ["sterling", "stɛʁliŋ", "m", "стерлинг"],
   ["commando", "kɔmɑ̃do", "m", "спецназовец"],
-  ["cavale", "kaval", "f", "кобыла"],
   ["parlement", "paʁləmɑ̃", "m", "парламент"],
   ["crapaud", "", "m", "жаба"],
   ["bestiole", "bɛstjɔl", "f", "тварь"],

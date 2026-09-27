@@ -144,3 +144,13 @@ function shuffle(array) {
 }
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const debounce = async (globalFlagName, fn) => {
+  if (globalThis[globalFlagName]) {
+    return;
+  }
+  globalThis[globalFlagName] = true;
+  fn();
+  await sleep(300);
+  globalThis[globalFlagName] = false;
+}

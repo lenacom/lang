@@ -106,7 +106,7 @@
       function setItem() {
         const { limit, selection, part, item } = getState();
         byId("test").innerHTML = `Диапазон: ${limit} из ${selection.length}.`;
-        byId("progress").innerHTML = `Осталось слов: ${part.length + 1}.`;
+        byId("progress").innerHTML = `До расширения диапазона осталось правильных ответов: ${part.length + 1}.`;
         byId("item").innerHTML = itemHTML(item);
       }
 
@@ -126,18 +126,17 @@
       let errors = [];
 
       async function checkAnswer(button, answer) {
-        button.disabled = true;
-        const { item } = getState();
-        const ok = item[2] === answer;
-        if (!ok) {
-          errors = errors.filter((it) => it[0] !== item[0]);
-          errors.unshift(item);
-          byId("error").innerHTML = errors.map(errorHTML).join("");
-        }
-        setAnswered(ok);
-        setItem();
-        await sleep(500);
-        button.disabled = false;
+        debounce("answering", () => {
+          const { item } = getState();
+          const ok = item[2] === answer;
+          if (!ok) {
+            errors = errors.filter((it) => it[0] !== item[0]);
+            errors.unshift(item);
+            byId("error").innerHTML = errors.map(errorHTML).join("");
+          }
+          setAnswered(ok);
+          setItem();
+        });
       }
 
       setItem();

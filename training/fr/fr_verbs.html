@@ -87,33 +87,29 @@
         }
       }
 
-      let answering = false;
-
-      async function checkAnswer(form) {
-        if (answering) return;
-        answering = true;
-        const correctForm = forms[formIndex];
-        if (globalThis.autospeak && correctForm !== "") {
-          speak(withPronoun(correctForm), LANG);
-        }
-        if (correctForm === form) {
-          byId("error").innerHTML = "";
-        } else {
-          error = true;
-          byId("error").innerHTML = withSpeakButtonHTML(
-            withPronoun(correctForm),
-            LANG,
-          );
-        }
-        if (formIndex === forms.length - 1) {
-          smallSteps.setAnswered(!error);
-          setVerb();
-        } else {
-          formIndex++;
-          setForm();
-        }
-        await sleep(300);
-        answering = false;
+      function checkAnswer(form) {
+        debounce("answering", () => {
+          const correctForm = forms[formIndex];
+          if (globalThis.autospeak && correctForm !== "") {
+            speak(withPronoun(correctForm), LANG);
+          }
+          if (correctForm === form) {
+            byId("error").innerHTML = "";
+          } else {
+            error = true;
+            byId("error").innerHTML = withSpeakButtonHTML(
+              withPronoun(correctForm),
+              LANG,
+            );
+          }
+          if (formIndex === forms.length - 1) {
+            smallSteps.setAnswered(!error);
+            setVerb();
+          } else {
+            formIndex++;
+            setForm();
+          }
+        });
       }
 
       function createFormVariants(verbTenses) {
