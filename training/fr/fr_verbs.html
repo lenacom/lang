@@ -40,12 +40,13 @@
       let forms;
       let formIndex;
       let formVariants;
+      let error = false;
       const pronouns = ["je", "tu", "il", "nous", "vous", "ils"];
 
       function setTenseName(__tenseName) {
         tenseName = __tenseName;
         setCookie("fr_verbs_tense", tenseName);
-        smallSteps = SmallSteps(`fr_verbs_${tenseName}`, "smallStepsSection", verbs);
+        smallSteps = SmallSteps(`fr_verbs_${tenseName}`, "smallStepsSection", verbs, 30);
         setVerb();
       }
 
@@ -61,13 +62,15 @@
       function setVerb() {
         const { limit, part, selection, item } = smallSteps.getState();
         byId("test").innerHTML = `Диапазон: ${limit} из ${selection.length}.`;
-        byId("progress").innerHTML = `Осталось глаголов: ${part.length + 1}.`;
+        console.log(part)
+        byId("progress").innerHTML = `До расширения диапазона осталось правильных ответов: ${part.length + 1}.`;
         byId("verb").innerHTML =
           `${withSpeakButtonHTML(item[0], LANG)}<span>${item[1]}<span>`;
         const verbTenses = tenses[item[0]];
         forms = verbTenses[tenseName];
         formVariants = createFormVariants(verbTenses);
         formIndex = 0;
+        error = false;
         setForm();
       }
 
@@ -90,21 +93,20 @@
           speak(withPronoun(correctForm), LANG);
         }
         if (correctForm === form) {
-          if (formIndex === 5) {
-            smallSteps.setAnswered(true);
-            setVerb();
-          } else {
-            formIndex++;
-            setForm();
-          }
           byId("error").innerHTML = "";
         } else {
+          error = true;
           byId("error").innerHTML = withSpeakButtonHTML(
             withPronoun(correctForm),
             LANG,
           );
-          smallSteps.setAnswered(false);
+        }
+        if (formIndex === forms.length - 1) {
+          smallSteps.setAnswered(!error);
           setVerb();
+        } else {
+          formIndex++;
+          setForm();
         }
       }
 

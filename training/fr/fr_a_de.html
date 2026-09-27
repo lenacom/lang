@@ -53,7 +53,7 @@
         const { limit, selection, part, item, countTests } = getState();
         if (limit < items.length) {
           byId("test").innerHTML = `Диапазон: ${limit} из ${selection.length}.`;
-          byId("progress").innerHTML = `Осталось тестов: ${part.length + 1}.`;
+          byId("progress").innerHTML = `До расширения диапазона осталось правильных ответов: ${part.length + 1}.`;
         } else {
           byId("test").innerHTML = `Всего тестов: ${items.length}.`;
           byId("progress").innerHTML = `Выполнено тестов: ${countTests}`;
