@@ -1882,7 +1882,6 @@ const nouns = [
   ["box", "bɔks", "m", "бокс"],
   ["rouleau", "ʁulo", "m", "рулон"],
   ["trappe", "tʁap", "f", "люк"],
-  ["érection", "eʁɛksjɔ̃", "f", "возведение"],
   ["chandelle", "ʃɑ̃dɛl", "f", "свеча"],
   ["crocodile", "kʁɔkɔdil", "m", "крокодил"],
   ["bavardage", "bavaʁdaʒ", "m", "болтовня"],

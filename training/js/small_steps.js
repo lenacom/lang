@@ -137,7 +137,7 @@ function SmallSteps(configName, containerId, items, sectionSize = 50) {
   }
 
   function getState() {
-    return { item: selection[current], selection, part, limit, countTests };
+    return { item: selection[current], selection, limit, countTests };
   }
 
   function initSection() {

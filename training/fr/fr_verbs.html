@@ -15,7 +15,6 @@
     <div id="smallStepsSection"></div>
     <div id="tenses"></div>
     <div id="test"></div>
-    <div id="progress"></div>
     <hr />
     <div id="verb" style="display: flex; gap: 1rem"></div>
     <div id="form" style="display: flex; flex-wrap: wrap; gap: 1rem"></div>
@@ -60,10 +59,8 @@
         `<select name="tenseName" onChange="setTenseName(this.value)">${tenseNameOptions}</select>`;
 
       function setVerb() {
-        const { limit, part, selection, item } = smallSteps.getState();
+        const { limit, selection, item } = smallSteps.getState();
         byId("test").innerHTML = `Диапазон: ${limit} из ${selection.length}.`;
-        console.log(part)
-        byId("progress").innerHTML = `До расширения диапазона осталось правильных ответов: ${part.length + 1}.`;
         byId("verb").innerHTML =
           `${withSpeakButtonHTML(item[0], LANG)}<span>${item[1]}<span>`;
         const verbTenses = tenses[item[0]];

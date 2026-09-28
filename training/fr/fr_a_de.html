@@ -14,7 +14,6 @@
     </script>
     <div id="smallStepsSection"></div>
     <div id="test" class="small"></div>
-    <div id="progress" class="small"></div>
     <hr />
     <div id="item"></div>
     <div>
@@ -50,13 +49,11 @@
       }
 
       function setItem() {
-        const { limit, selection, part, item, countTests } = getState();
+        const { limit, selection, item, countTests } = getState();
         if (limit < items.length) {
           byId("test").innerHTML = `Диапазон: ${limit} из ${selection.length}.`;
-          byId("progress").innerHTML = `До расширения диапазона осталось правильных ответов: ${part.length + 1}.`;
         } else {
           byId("test").innerHTML = `Всего тестов: ${items.length}.`;
-          byId("progress").innerHTML = `Выполнено тестов: ${countTests}`;
         }
 
         byId("item").innerHTML = `<div>${item[1]}</div>

@@ -28,7 +28,6 @@
     </script>
     <div id="smallStepsSection"></div>
     <div id="test" class="small"></div>
-    <div id="progress" class="small"></div>
     <hr />
     <div id="item"></div>
     <div style="margin: 2rem 0">
@@ -104,9 +103,8 @@
       }
 
       function setItem() {
-        const { limit, selection, part, item } = getState();
+        const { limit, selection, item } = getState();
         byId("test").innerHTML = `Диапазон: ${limit} из ${selection.length}.`;
-        byId("progress").innerHTML = `До расширения диапазона осталось правильных ответов: ${part.length + 1}.`;
         byId("item").innerHTML = itemHTML(item);
       }
 
