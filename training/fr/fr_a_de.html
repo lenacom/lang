@@ -49,11 +49,11 @@
       }
 
       function setItem() {
-        const { limit, selection, item, countTests } = getState();
+        const { limit, part, item, countTests, countPartPasses } = getState();
         if (limit < items.length) {
-          byId("test").innerHTML = `Диапазон: ${limit} из ${selection.length}.`;
+          byId("test").innerHTML = `Диапазон: ${limit} из ${part.length}. Проход ${countPartPasses + 1}.`;
         } else {
-          byId("test").innerHTML = `Всего тестов: ${items.length}.`;
+          byId("test").innerHTML = `Всего тестов: ${items.length}. Проход ${countPartPasses + 1}.`;
         }
 
         byId("item").innerHTML = `<div>${item[1]}</div>

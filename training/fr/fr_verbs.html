@@ -59,8 +59,8 @@
         `<select name="tenseName" onChange="setTenseName(this.value)">${tenseNameOptions}</select>`;
 
       function setVerb() {
-        const { limit, selection, item } = smallSteps.getState();
-        byId("test").innerHTML = `Диапазон: ${limit} из ${selection.length}.`;
+        const { limit, part, item, countPartPasses } = smallSteps.getState();
+        byId("test").innerHTML = `Диапазон: ${limit} из ${part.length}. Проход ${countPartPasses + 1}.`;
         byId("verb").innerHTML =
           `${withSpeakButtonHTML(item[0], LANG)}<span>${item[1]}<span>`;
         const verbTenses = tenses[item[0]];

@@ -2,8 +2,12 @@
 
 function SmallSteps(configName, containerId, items, sectionSize = 50) {
   const partSize = 5;
-  const config = getConfig(configName);
-  migrateLegacyConfig();
+  let config;
+  try {
+    config = getConfig(configName);
+  } catch (e) {
+    config = {};
+  }
 
   const sectionsCount = Math.max(1, Math.ceil(items.length / sectionSize));
   let section = config.section ?? 1;
@@ -11,29 +15,14 @@ function SmallSteps(configName, containerId, items, sectionSize = 50) {
     section = 1;
   }
 
-  let selection;
+  let part;
   let limit;
   let errors;
   let order;
-  let part;
+  let countPartPasses;
+  let window;
   let current;
   let countTests = 0;
-
-  function migrateLegacyConfig() {
-    if (
-      !config.sections &&
-      (config.limit !== undefined ||
-        config.errors !== undefined ||
-        config.order !== undefined)
-    ) {
-      config.sections = {
-        1: { limit: config.limit, errors: config.errors, order: config.order },
-      };
-      delete config.limit;
-      delete config.errors;
-      delete config.order;
-    }
-  }
 
   function getSectionItems(sectionNumber) {
     const start = (sectionNumber - 1) * sectionSize;
@@ -63,7 +52,12 @@ function SmallSteps(configName, containerId, items, sectionSize = 50) {
   function saveSmallStepsConfig() {
     config.section = section;
     config.sections = config.sections ?? {};
-    config.sections[section] = { limit, errors: errors.slice(0, 100), order };
+    config.sections[section] = {
+      limit,
+      errors: errors.slice(0, 100),
+      order,
+      countPartPasses,
+    };
     saveConfig(configName, config);
   }
 
@@ -78,37 +72,38 @@ function SmallSteps(configName, containerId, items, sectionSize = 50) {
 
   function setPart(newStep = false) {
     if (newStep) {
-      if (limit === selection.length) {
+      if (limit === part.length) {
         order = order === "direct" ? "reverse" : "direct";
-        selection.reverse();
+        part.reverse();
         limit = 2 * partSize;
+        countPartPasses++;
       } else {
-        limit = Math.min(limit + partSize, selection.length);
+        limit = Math.min(limit + partSize, part.length);
       }
-      part = Array.from({ length: partSize }, (_, i) => limit - partSize + i);
+      window = Array.from({ length: partSize }, (_, i) => limit - partSize + i);
     } else {
-      part = [];
+      window = [];
     }
     fillRandomly(
-      part,
+      window,
       errors.map((it) => it[0]),
       2 * partSize,
     );
     const previous = Array.from({ length: limit }, (_, i) => i).filter(
-      (it) => !part.includes(it),
+      (it) => !window.includes(it),
     );
-    fillRandomly(part, previous, 2 * partSize);
+    fillRandomly(window, previous, 2 * partSize);
     saveSmallStepsConfig();
     setCurrent();
   }
 
   function setCurrent() {
-    if (part.length === 0) {
+    if (window.length === 0) {
       setPart(true);
     } else {
-      const index = Math.round(Math.random() * (part.length - 1));
-      current = part[index];
-      part.splice(index, 1);
+      const index = Math.round(Math.random() * (window.length - 1));
+      current = window[index];
+      window.splice(index, 1);
     }
   }
 
@@ -137,17 +132,18 @@ function SmallSteps(configName, containerId, items, sectionSize = 50) {
   }
 
   function getState() {
-    return { item: selection[current], selection, limit, countTests };
+    return { item: part[current], part, limit, countTests, countPartPasses };
   }
 
   function initSection() {
-    selection = getSectionItems(section);
+    part = getSectionItems(section);
     const sectionConfig = config.sections?.[section];
     limit = sectionConfig?.limit ?? 2 * partSize;
     errors = sectionConfig?.errors ?? [];
     order = sectionConfig?.order ?? "direct";
+    countPartPasses = sectionConfig?.countPartPasses ?? 0;
     if (order === "reverse") {
-      selection.reverse();
+      part.reverse();
     }
     setPart();
   }

@@ -103,8 +103,8 @@
       }
 
       function setItem() {
-        const { limit, selection, item } = getState();
-        byId("test").innerHTML = `Диапазон: ${limit} из ${selection.length}.`;
+        const { limit, part, item, countPartPasses } = getState();
+        byId("test").innerHTML = `Диапазон: ${limit} из ${part.length}. Проход ${countPartPasses + 1}.`;
         byId("item").innerHTML = itemHTML(item);
       }
 
