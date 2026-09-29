@@ -664,8 +664,8 @@ function isIrregularVerb(text) {
 }
 
 function learnDialogHTML(id, item) {
-  const { text, ts, tr, gen } = item;
-  const irregular = isIrregularVerb(text);
+  const { text, ts, tr, gen, pos } = item;
+  const irregular = pos?.code === "vrb" && isIrregularVerb(text);
   const wordValue = `${text}${irregular ? "*" : ""}${gen ? ` ${gen?.code}` : ""}${ts ? ` [${ts}]` : ""}`;
   const inputStyle =
     "background-color: black; color: #fff8dc; border: 1px solid #fff8dc; margin: 0; padding: 0.5rem; border-radius: 0.31rem;";
@@ -709,11 +709,12 @@ function learnDialogHTML(id, item) {
 function getTranslationHTML(data) {
   return data
     .map((item, index) => {
-      const { text, ts, tr, gen } = item;
+      const { text, ts, tr, gen, pos } = item;
       const genderColor =
         gen?.code === "m" ? "#87CEFA" : gen?.code === "f" ? "#F08080" : null;
+      const irregular = pos?.code === "vrb" && isIrregularVerb(text);
       const result = [
-        `<b${genderColor ? ` style="color: ${genderColor};"` : ""}>${text}${isIrregularVerb(text) ? "*" : ""}</b>`,
+        `<b${genderColor ? ` style="color: ${genderColor};"` : ""}>${text}${irregular ? "*" : ""}</b>`,
         genderColor
           ? `<span style="color: ${genderColor};">${gen.code}</span>`
           : gen?.code,
