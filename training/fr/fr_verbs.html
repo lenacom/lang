@@ -73,7 +73,7 @@
 
       function setForm() {
         if (forms[formIndex].trim() === "") {
-          checkAnswer("");
+          processAnswer("");
         } else {
           const formHTML = formVariants[formIndex]
             .map((it) => {
@@ -85,28 +85,30 @@
       }
 
       function checkAnswer(form) {
-        debounce("answering", () => {
-          const correctForm = forms[formIndex];
-          if (globalThis.autospeak && correctForm !== "") {
-            speak(withPronoun(correctForm), LANG);
-          }
-          if (correctForm === form) {
-            byId("error").innerHTML = "";
-          } else {
-            error = true;
-            byId("error").innerHTML = withSpeakButtonHTML(
-              withPronoun(correctForm),
-              LANG,
-            );
-          }
-          if (formIndex === forms.length - 1) {
-            smallSteps.setAnswered(!error);
-            setVerb();
-          } else {
-            formIndex++;
-            setForm();
-          }
-        });
+        debounce("answering", () => processAnswer(form));
+      }
+
+      function processAnswer(form) {
+        const correctForm = forms[formIndex];
+        if (globalThis.autospeak && correctForm !== "") {
+          speak(withPronoun(correctForm), LANG);
+        }
+        if (correctForm === form) {
+          byId("error").innerHTML = "";
+        } else {
+          error = true;
+          byId("error").innerHTML = withSpeakButtonHTML(
+            withPronoun(correctForm),
+            LANG,
+          );
+        }
+        if (formIndex === forms.length - 1) {
+          smallSteps.setAnswered(!error);
+          setVerb();
+        } else {
+          formIndex++;
+          setForm();
+        }
       }
 
       function createFormVariants(verbTenses) {
