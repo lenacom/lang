@@ -1914,7 +1914,6 @@ const nouns = [
   ["pente", "pɑ̃t", "f", "склон"],
   ["spécimen", "spesimɛn", "m", "образец"],
   ["autobus", "otobys, ɔtɔbys", "m", "автобус"],
-  ["building", "bildiŋ", "m", "высотное здание"],
   ["run", "ʁɔn", "m", "забег"],
   ["mémo", "memo", "m", "памятка"],
   ["romance", "ʁɔmɑ̃s", "f", "романтик"],
