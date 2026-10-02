@@ -1986,7 +1986,6 @@ const nouns = [
   ["hameçon", "amsɔ̃", "m", "рыболовный крючок"],
   ["ferry", "feʁi", "m", "паром"],
   ["trac", "tʁak", "m", "страх"],
-  ["oxford", "ɔksfɔʁ", "m", "оксфорд"],
   ["gendarme", "ʒɑ̃daʁm", "m", "жандарм"],
   ["cricket", "kʁikɛt", "m", "крикет"],
   ["fantaisie", "fɑ̃tɛzi", "f", "фантазия"],
