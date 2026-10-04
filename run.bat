@@ -1,1 +1,1 @@
-D:/php8/php.exe -S localhost:80 -c D:/php8/php.ini
+C:/lenacom/php8/php.exe -S localhost:80 -c D:/php8/php.ini

@@ -553,16 +553,10 @@ function highlightGender(text) {
   text = text.replace(
     /(.*?)(?<![\p{L}\d_'’])([mf])(?![\p{L}\d_'’])/gu,
     (_match, before, marker) =>
-      `<span style="color: ${marker === "m" ? "#87CEFA" : "#F08080"};">${before}${marker}</span>`,
+      `<span class="${marker === "m" ? "m" : "f"}">${before}${marker}</span>`,
   );
-  text = text.replace(
-    /\b(une|la)\s+(\S+)/gi,
-    '<span style="color: #F08080;">$1 $2</span>',
-  );
-  text = text.replace(
-    /\b(un|le)\s+(\S+)/gi,
-    '<span style="color: #87CEFA;">$1 $2</span>',
-  );
+  text = text.replace(/\b(une|la)\s+(\S+)/gi, '<span class="f">$1 $2</span>');
+  text = text.replace(/\b(un|le)\s+(\S+)/gi, '<span class="m">$1 $2</span>');
   return text;
 }
 
@@ -710,13 +704,13 @@ function getTranslationHTML(data) {
   return data
     .map((item, index) => {
       const { text, ts, tr, gen, pos } = item;
-      const genderColor =
-        gen?.code === "m" ? "#87CEFA" : gen?.code === "f" ? "#F08080" : null;
+      const genderClass =
+        gen?.code === "m" ? "m" : gen?.code === "f" ? "f" : null;
       const irregular = pos?.code === "vrb" && isIrregularVerb(text);
       const result = [
-        `<b${genderColor ? ` style="color: ${genderColor};"` : ""}>${text}${irregular ? "*" : ""}</b>`,
-        genderColor
-          ? `<span style="color: ${genderColor};">${gen.code}</span>`
+        `<b${genderClass ? ` class="${genderClass}"` : ""}>${text}${irregular ? "*" : ""}</b>`,
+        genderClass
+          ? `<span class="${genderClass}">${gen.code}</span>`
           : gen?.code,
         ts ? `[${ts}]` : "",
       ]
