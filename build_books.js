@@ -16,13 +16,50 @@ fs.cpSync(`${SRC}/js`, `${DEST}/js`, { recursive: true });
 
 const GENDER_ARTICLES = new Set([
   "un", "une", "le", "la", "du", "au", "son", "sa", "ce", "cet", "cette",
-  "aucun", "aucune", "ma", "ta", "mon", "ton",
+  "aucun", "aucune", "ma", "ta", "mon", "ton", "tout", "toute", "tous", "toutes",
 ]);
-const PLURAL_ARTICLES = new Set(["les", "des", "ses", "ces", "mes", "tes"]);
+// numbers above "un"/"une" don't inflect for gender in French
+const FRENCH_NUMBER_WORDS = [
+  "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix",
+  "onze", "douze", "treize", "quatorze", "quinze", "seize",
+  "dix-sept", "dix-huit", "dix-neuf",
+  "vingt", "vingt-et-un", "vingt-deux", "vingt-trois", "vingt-quatre",
+  "vingt-cinq", "vingt-six", "vingt-sept", "vingt-huit", "vingt-neuf",
+  "trente", "trente-et-un", "trente-deux", "trente-trois", "trente-quatre",
+  "trente-cinq", "trente-six", "trente-sept", "trente-huit", "trente-neuf",
+  "quarante", "quarante-et-un", "quarante-deux", "quarante-trois",
+  "quarante-quatre", "quarante-cinq", "quarante-six", "quarante-sept",
+  "quarante-huit", "quarante-neuf",
+  "cinquante", "cinquante-et-un", "cinquante-deux", "cinquante-trois",
+  "cinquante-quatre", "cinquante-cinq", "cinquante-six", "cinquante-sept",
+  "cinquante-huit", "cinquante-neuf",
+  "soixante", "soixante-et-un", "soixante-deux", "soixante-trois",
+  "soixante-quatre", "soixante-cinq", "soixante-six", "soixante-sept",
+  "soixante-huit", "soixante-neuf",
+  "soixante-dix", "soixante-et-onze", "soixante-douze", "soixante-treize",
+  "soixante-quatorze", "soixante-quinze", "soixante-seize",
+  "soixante-dix-sept", "soixante-dix-huit", "soixante-dix-neuf",
+  "quatre-vingts", "quatre-vingt", "quatre-vingt-un", "quatre-vingt-deux",
+  "quatre-vingt-trois", "quatre-vingt-quatre", "quatre-vingt-cinq",
+  "quatre-vingt-six", "quatre-vingt-sept", "quatre-vingt-huit",
+  "quatre-vingt-neuf",
+  "quatre-vingt-dix", "quatre-vingt-onze", "quatre-vingt-douze",
+  "quatre-vingt-treize", "quatre-vingt-quatorze", "quatre-vingt-quinze",
+  "quatre-vingt-seize", "quatre-vingt-dix-sept", "quatre-vingt-dix-huit",
+  "quatre-vingt-dix-neuf",
+  "cent",
+];
+// gender-neutral - trigger a noun search, but never reveal m/f themselves
+const PLURAL_ARTICLES = new Set([
+  "les", "des", "ses", "ces", "mes", "tes", "votre", "notre", "vos", "nos",
+  "leur", "leurs",
+  ...FRENCH_NUMBER_WORDS,
+]);
 const ARTICLE_GENDER = {
   un: "m", une: "f", le: "m", la: "f", du: "m", au: "m", son: "m", sa: "f",
   ce: "m", cet: "m", cette: "f", aucun: "m", aucune: "f",
   ma: "f", ta: "f", mon: "m", ton: "m",
+  tout: "m", toute: "f", tous: "m", toutes: "f",
 };
 // "mon"/"ton"/"son" also stand in for "ma"/"ta"/"sa" right before a
 // vowel/mute-h-initial feminine noun (euphony, e.g. "mon amie") - see the
@@ -32,17 +69,47 @@ const POSSESSIVE_VOWEL_EXCEPTION = new Set(["son", "mon", "ton"]);
 // a lookahead landing on one of them can pick up a bogus noun sense Yandex
 // returns for an accent-insensitive homograph (e.g. "de" matched as "dé")
 const STOPWORDS = new Set([
-  "de", "et", "à", "en", "y", "se", "ne", "pas", "que", "qui", "dont", "où",
-  "leur", "leurs", "lui",
+  "et", "y", "se", "ne", "pas", "que", "qui", "dont", "où",
+  "lui",
   "nous", "vous", "il", "elle", "ils", "elles", "on", "je", "tu", "moi",
   "toi", "aux", "car", "donc", "mais", "ou", "si", "comme",
-  "sans", "sous", "dans", "pour", "avec", "chez", "entre", "vers", "par",
+  "sous", "dans", "pour", "chez", "vers",
   "après", "avant", "pendant", "depuis",
 ]);
+// these don't reveal gender, but the word right after them is worth
+// checking too - unlike articles, only the immediate next word counts
+// (no 3-word adjective lookahead), since there's no agreement to confirm
+const PREPOSITION_TRIGGERS = new Set([
+  "à", "de", "entre", "sans", "par", "sur", "avec", "en", "chaque",
+]);
+// "de"/"à" get the same 3-word adjective lookahead as articles (e.g. "de
+// haute naissance", "à haute voix") - the other prepositions stay at 1
+// word, since they were not reported to need it and a wider window raises
+// false-positive risk
+const NARROW_PREPOSITIONS = new Set([
+  "entre", "sans", "par", "sur", "avec", "en", "chaque",
+]);
+// most noun/verb and noun/adjective ambiguity (e.g. "grand", "porter") is
+// detected from Yandex's own part-of-speech data instead (see
+// fetchGenderFromYandex) - these are left here only because the metadata
+// doesn't (yet) catch them: "combien"/"ensemble"/"devant" are
+// adverb-dominant, not adjective-dominant, so the fallback-chain doesn't
+// apply to them; "haut"/"haute" is a genuine Yandex data gap - querying
+// the inflected form "haute" alone doesn't surface the "haut" adjective
+// sense it belongs with
+const EXCLUDED_NOUNS = new Set(["combien", "ensemble", "devant", "haut", "haute"]);
 const ELISION_RE = /^(l['’])(\p{L}.*)$/u;
+// "de" elides onto a directly-following vowel-initial word with no space
+// (e.g. "d’épines") - same role as the PREPOSITION_TRIGGERS "de", but
+// fused into one token, so it needs its own pattern
+const DE_ELISION_RE = /^(d['’])(\p{L}.*)$/iu;
 // a preceding word elided onto "un"/"une" with nothing after (e.g. "d’une", "qu’un") -
 // the elided part (e.g. "d’") is not itself an article and is never highlighted
 const TRAILING_ARTICLE_RE = /^(\p{L}+['’])(une?)$/iu;
+// a candidate is never the first word of its line (an article or
+// preposition always precedes it), so a capital letter reliably marks a
+// proper noun (name, place) rather than mere sentence-initial capitalization
+const CAPITALIZED_RE = /^[^\p{L}]*\p{Lu}/u;
 const CLEAN_RE = /^[^\p{L}]+|[^\p{L}]+$/gu;
 const VOWEL_START_RE = /^[aeiouyâàéèêëîïôöûüùœæh]/iu;
 
@@ -50,6 +117,35 @@ function cleanWord(token) {
   return token.toLowerCase().replace(CLEAN_RE, "");
 }
 
+// true when `wordCleaned` is grammatically filler right after `prevCleaned`
+// rather than a noun, even if it has some rare noun sense in the dictionary
+function isFillerAfter(prevCleaned, wordCleaned) {
+  // "de"/"à" + infinitive (e.g. "d’aller", "à porter") is handled at the
+  // source: fetchGenderFromYandex() never returns a gender for a word that
+  // also has a verb sense, so such words simply aren't in the gender map
+  return prevCleaned === "en" && wordCleaned.endsWith("ant"); // gerund: "en descendant"
+}
+
+function isExcludedCandidate(cleaned, rawWord) {
+  if (
+    GENDER_ARTICLES.has(cleaned) ||
+    PLURAL_ARTICLES.has(cleaned) ||
+    STOPWORDS.has(cleaned) ||
+    PREPOSITION_TRIGGERS.has(cleaned) ||
+    EXCLUDED_NOUNS.has(cleaned) ||
+    CAPITALIZED_RE.test(rawWord)
+  ) {
+    return true;
+  }
+  if (cleaned.endsWith("s") && cleaned.length > 1) {
+    return EXCLUDED_NOUNS.has(cleaned.slice(0, -1));
+  }
+  return false;
+}
+
+// returns { gender: "m"|"f", isAdjective } or undefined if `word` isn't
+// known as a noun at all; `isAdjective` means it ALSO has an adjective
+// sense, so it's a fallback candidate rather than an immediate match
 function lookupGender(word, nounGender) {
   const direct = nounGender.get(word);
   if (direct) return direct;
@@ -61,23 +157,12 @@ function lookupGender(word, nounGender) {
   return undefined;
 }
 
-function buildNounGenderMap() {
-  const raw = fs.readFileSync(`${SRC}/fr/all_nouns.js`, "utf8");
-  const allNouns = new Function(`${raw}\nreturn all_nouns;`)();
-  const map = new Map();
-  for (const [word, , gender] of allNouns) {
-    const key = word.toLowerCase();
-    if (!map.has(key) && (gender === "m" || gender === "f")) {
-      map.set(key, gender);
-    }
-  }
-  return map;
-}
-
 function findArticleInfo(tokens, i) {
   const token = tokens[i];
   const elisionMatch = token.match(ELISION_RE);
   const trailingMatch = !elisionMatch && token.match(TRAILING_ARTICLE_RE);
+  const deElisionMatch =
+    !elisionMatch && !trailingMatch && token.match(DE_ELISION_RE);
   const cleanedToken = cleanWord(token);
 
   let outerPrefix = "";
@@ -85,6 +170,7 @@ function findArticleInfo(tokens, i) {
   let articleRemainder = null;
   let isGenderArticle = false;
   let isPluralArticle = false;
+  let isPrepositionTrigger = false;
   let expectedGender = null;
 
   if (elisionMatch) {
@@ -98,25 +184,49 @@ function findArticleInfo(tokens, i) {
     articlePrefix = trailingMatch[2];
     isGenderArticle = true;
     expectedGender = ARTICLE_GENDER[articlePrefix.toLowerCase()];
+  } else if (deElisionMatch) {
+    // "de" elided onto a following vowel-initial word (e.g. "d’épines") -
+    // same role as the "de" preposition trigger, just fused into one token
+    articlePrefix = deElisionMatch[1];
+    articleRemainder = deElisionMatch[2];
+    isPrepositionTrigger = true;
   } else if (GENDER_ARTICLES.has(cleanedToken)) {
     isGenderArticle = true;
     expectedGender = ARTICLE_GENDER[cleanedToken];
   } else if (PLURAL_ARTICLES.has(cleanedToken)) {
     isPluralArticle = true;
+  } else if (PREPOSITION_TRIGGERS.has(cleanedToken)) {
+    isPrepositionTrigger = true;
   }
 
-  if (!isGenderArticle && !isPluralArticle) {
+  if (!isGenderArticle && !isPluralArticle && !isPrepositionTrigger) {
     return null;
   }
 
+  const maxCandidates =
+    isPrepositionTrigger && NARROW_PREPOSITIONS.has(cleanedToken) ? 1 : 3;
   const candidates = [];
+  // tracks the previous non-whitespace "word", whether or not it became a
+  // candidate, so filler right after "en"/"de"/"à" can be recognized even
+  // when that trigger is itself just filler inside an unrelated search;
+  // the fused "d’" elision counts as "de" even though cleanWord() can't
+  // split it from the word it's fused to
+  let prevCleaned = deElisionMatch ? "de" : cleanedToken;
   if (articleRemainder !== null) {
-    candidates.push({ word: articleRemainder, tokenIndex: i });
+    const remainderCleaned = cleanWord(articleRemainder);
+    if (!isFillerAfter(prevCleaned, remainderCleaned)) {
+      candidates.push({ word: articleRemainder, tokenIndex: i });
+    }
+    prevCleaned = remainderCleaned;
   }
   let idx = i + 1;
-  while (candidates.length < 3 && idx < tokens.length) {
+  while (candidates.length < maxCandidates && idx < tokens.length) {
     if (!/^\s+$/.test(tokens[idx])) {
-      candidates.push({ word: tokens[idx], tokenIndex: idx });
+      const wordCleaned = cleanWord(tokens[idx]);
+      if (!isFillerAfter(prevCleaned, wordCleaned)) {
+        candidates.push({ word: tokens[idx], tokenIndex: idx });
+      }
+      prevCleaned = wordCleaned;
     }
     idx++;
   }
@@ -158,23 +268,34 @@ function highlightNounGender(line, nounGender) {
 
     let matchedGender = null;
     let matchedCandidate = null;
+    let fallbackGender = null;
+    let fallbackCandidate = null;
     for (const candidate of candidates) {
       const cleaned = cleanWord(candidate.word);
       // a determiner or other closed-class word can't itself be the noun -
       // skip it so an unrelated search can't swallow it as a false match
-      if (
-        GENDER_ARTICLES.has(cleaned) ||
-        PLURAL_ARTICLES.has(cleaned) ||
-        STOPWORDS.has(cleaned)
-      ) {
+      if (isExcludedCandidate(cleaned, candidate.word)) {
         continue;
       }
-      const gender = lookupGender(cleaned, nounGender);
-      if (gender && (!expectedGender || gender === expectedGender)) {
-        matchedGender = gender;
+      const entry = lookupGender(cleaned, nounGender);
+      if (!entry || (expectedGender && entry.gender !== expectedGender)) {
+        continue;
+      }
+      if (!entry.isAdjective) {
+        matchedGender = entry.gender;
         matchedCandidate = candidate;
         break;
       }
+      // also usable as an adjective (e.g. "grand") - keep looking for a
+      // later word that's unambiguously the noun, but remember this one
+      // (preferring the latest such candidate) in case nothing better turns up
+      fallbackGender = entry.gender;
+      fallbackCandidate = candidate;
+    }
+
+    if (!matchedCandidate && fallbackCandidate) {
+      matchedGender = fallbackGender;
+      matchedCandidate = fallbackCandidate;
     }
 
     if (!matchedGender) {
@@ -220,19 +341,18 @@ function collectUnresolvedWords(line, nounGender, unresolved) {
 
     for (const candidate of info.candidates) {
       const cleaned = cleanWord(candidate.word);
-      if (
-        GENDER_ARTICLES.has(cleaned) ||
-        PLURAL_ARTICLES.has(cleaned) ||
-        STOPWORDS.has(cleaned)
-      ) {
+      if (isExcludedCandidate(cleaned, candidate.word)) {
         continue;
       }
-      const gender = lookupGender(cleaned, nounGender);
-      if (gender) {
-        if (!info.expectedGender || gender === info.expectedGender) {
-          break; // static match found - highlightNounGender would stop here too
+      const entry = lookupGender(cleaned, nounGender);
+      if (entry) {
+        if (info.expectedGender && entry.gender !== info.expectedGender) {
+          continue; // found but gender mismatches the article - not a dictionary gap
         }
-        continue; // found but gender mismatches the article - not a dictionary gap
+        if (!entry.isAdjective) {
+          break; // unambiguous match found - highlightNounGender would stop here too
+        }
+        continue; // ambiguous - highlightNounGender keeps looking too, but it's resolved
       }
       if (cleaned) {
         unresolved.add(cleaned);
@@ -270,39 +390,76 @@ async function getYandexJson(word) {
   return response.json();
 }
 
+// returns { gender: "m"|"f"|null, isAdjective: boolean } for the cache
 async function fetchGenderFromYandex(word) {
   const json = await getYandexJson(word);
   const regular = json["fr-ru"]?.["regular"];
-  if (!regular || regular.length === 0) {
-    return null;
+  // Yandex sometimes answers with a related/suggested word instead of the
+  // one asked for (e.g. querying "devant" also returns a "devoir" entry) -
+  // only entries for the exact word asked about are meaningful here
+  const entries = (regular ?? []).filter(
+    (it) => it.text?.toLowerCase() === word.toLowerCase(),
+  );
+  if (entries.length === 0) {
+    return { gender: null, isAdjective: false };
   }
-  const noun = regular.find((it) => it.pos?.code === "nn");
+  // a word that Yandex also lists as a verb ("vrb") is treated as not a
+  // noun at all, even when it has a rare noun sense too (e.g. "porter",
+  // "aller") - there's no useful fallback for verb/noun ambiguity the way
+  // there is for adjective/noun ambiguity (an adjective usually precedes
+  // the real noun; an infinitive doesn't reliably)
+  if (entries.some((it) => it.pos?.code === "vrb")) {
+    return { gender: null, isAdjective: false };
+  }
+  const noun = entries.find((it) => it.pos?.code === "nn");
   const gen = noun?.gen?.code;
-  return gen === "m" || gen === "f" ? gen : null;
+  const gender = gen === "m" || gen === "f" ? gen : null;
+  const isAdjective = gender !== null && entries.some((it) => it.pos?.code === "adj");
+  return { gender, isAdjective };
 }
 
+const FETCH_CONCURRENCY = 15;
+
 async function resolveMissingGenders(unresolvedWords, cache) {
-  for (const word of unresolvedWords) {
-    if (word in cache) continue;
-    try {
-      cache[word] = await fetchGenderFromYandex(word);
-    } catch (e) {
-      console.error(`Yandex lookup failed for "${word}": ${e.message}`);
+  const toFetch = [...unresolvedWords].filter((word) => !(word in cache));
+  let nextIndex = 0;
+  async function worker() {
+    while (nextIndex < toFetch.length) {
+      const word = toFetch[nextIndex++];
+      try {
+        cache[word] = await fetchGenderFromYandex(word);
+      } catch (e) {
+        console.error(`Yandex lookup failed for "${word}": ${e.message}`);
+      }
     }
   }
+  await Promise.all(
+    Array.from({ length: Math.min(FETCH_CONCURRENCY, toFetch.length) }, worker),
+  );
 }
 
 function mergeGenderMap(baseMap, cache) {
   const merged = new Map(baseMap);
-  for (const [word, gender] of Object.entries(cache)) {
-    if ((gender === "m" || gender === "f") && !merged.has(word)) {
-      merged.set(word, gender);
+  for (const [word, value] of Object.entries(cache)) {
+    if (merged.has(word)) continue;
+    // older cache entries are a bare "m"/"f"/null string, from before
+    // isAdjective was tracked - treat them as unambiguous
+    const entry =
+      typeof value === "string" || value === null
+        ? { gender: value, isAdjective: false }
+        : value;
+    if (entry.gender === "m" || entry.gender === "f") {
+      merged.set(word, entry);
     }
   }
   return merged;
 }
 
-const nounGenderMap = buildNounGenderMap();
+// every noun's gender comes from a live Yandex metadata check (gender +
+// adjective/verb ambiguity) via the cache below - no static word list is
+// trusted blindly, since all_nouns.js turned out to contain at least one
+// bad entry ("aller") that bypassed ambiguity detection entirely
+const nounGenderMap = new Map();
 
 function createFileContent(fileName, title, body, selfPath, lang) {
   const content = bookTemplate

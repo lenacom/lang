@@ -6919,7 +6919,6 @@ const all_nouns = [
   ["hypnotiseur", "ipnɔtizœʁ", "m", "гипнотизер", 182],
   ["corneille", "kɔʁnɛj", "f", "ворона", 182],
   ["colloque", "kɔlɔk", "m", "симпозиум", 182],
-  ["aller", "ale", "m", "переход", 182],
   ["ménélas", "menelas", "", "Менелай", 182],
   ["compilation", "kɔ̃pilasjɔ̃", "f", "компиляция", 182],
   ["colonisation", "kɔlɔnizasjɔ̃", "f", "колонизация", 182],
