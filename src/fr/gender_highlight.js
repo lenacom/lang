@@ -75,7 +75,7 @@ const PREPOSITION_TRIGGERS = new Set([
 // word, since they were not reported to need it and a wider window raises
 // false-positive risk
 const NARROW_PREPOSITIONS = new Set([
-  "entre", "sans", "par", "sur", "avec", "en", "chaque", "pour",
+  "entre", "sans", "par", "sur", "avec", "chaque", "pour",
 ]);
 // most noun/verb and noun/adjective ambiguity (e.g. "grand", "porter") is
 // detected from Yandex's own part-of-speech data instead (see
@@ -111,6 +111,12 @@ const LEADING_ELISION_RE = /^(?:l|d|qu|n|s|j|m|t|c)['’]/iu;
 // strips the demonstrative reinforcement suffix from words like "ce
 // monde-ci"/"cet homme-là" - the dictionary only has "monde"/"homme"
 const TRAILING_CI_LA_RE = /-(ci|là)$/iu;
+// nouns that are only trustworthy when found as the direct "l'" elision
+// remainder (tokenIndex === i) - found at a distance they are almost
+// always something else. "été" is usually the past participle of "être"
+// ("a été" = "has been"), not the noun "l'été" (summer); Yandex doesn't
+// even give it a gender as a noun, so the normal dictionary can't help
+const ELISION_ONLY_NOUNS = { été: "m" };
 
 function cleanWord(token) {
   return token
@@ -118,6 +124,33 @@ function cleanWord(token) {
     .replace(CLEAN_RE, "")
     .replace(LEADING_ELISION_RE, "")
     .replace(TRAILING_CI_LA_RE, "");
+}
+
+const LEADING_ELISION_CAPTURE_RE = /^((?:l|d|qu|n|s|j|m|t|c)['’])/iu;
+
+// splits a raw token into { prefix, core, suffix } so only the noun
+// itself (`core`) ends up inside the highlight span - without this, a
+// token like "l’angoisse" or "jours-là!" would have its fused elided
+// article or demonstrative suffix wrapped in the span too. When there's
+// no elision/suffix to peel off, `core` is just the original token
+// (including any trailing punctuation), matching prior behavior exactly
+function extractHighlightSpan(rawToken) {
+  let prefix = "";
+  let rest = rawToken;
+  const leadMatch = rest.match(LEADING_ELISION_CAPTURE_RE);
+  if (leadMatch) {
+    prefix = leadMatch[1];
+    rest = rest.slice(prefix.length);
+  }
+  const trailingPunctMatch = rest.match(/[^\p{L}]*$/u);
+  const trailingPunct = trailingPunctMatch ? trailingPunctMatch[0] : "";
+  const withoutPunct = trailingPunct ? rest.slice(0, rest.length - trailingPunct.length) : rest;
+  const ciLaMatch = withoutPunct.match(TRAILING_CI_LA_RE);
+  if (ciLaMatch) {
+    const core = withoutPunct.slice(0, withoutPunct.length - ciLaMatch[0].length);
+    return { prefix, core, suffix: ciLaMatch[0] + trailingPunct };
+  }
+  return { prefix, core: rest, suffix: "" };
 }
 
 // true when `wordCleaned` is grammatically filler right after `prevCleaned`
@@ -280,6 +313,14 @@ function highlightNounGender(line, nounGender) {
       if (isExcludedCandidate(cleaned, candidate.word)) {
         continue;
       }
+      if (cleaned in ELISION_ONLY_NOUNS) {
+        if (candidate.tokenIndex === i) {
+          matchedGender = ELISION_ONLY_NOUNS[cleaned];
+          matchedCandidate = candidate;
+          break;
+        }
+        continue; // found at a distance - never trust it (see comment above)
+      }
       const entry = lookupGender(cleaned, nounGender);
       if (!entry || (expectedGender && entry.gender !== expectedGender)) {
         continue;
@@ -309,9 +350,13 @@ function highlightNounGender(line, nounGender) {
 
     if (matchedCandidate.tokenIndex === i) {
       // the noun is the elision remainder itself ("l'" + noun) - only the
-      // noun part is highlighted, never the article
+      // noun part is highlighted, never the article (and never a trailing
+      // "-ci"/"-là" or punctuation that may have come along with it)
+      const { core: remainderCore, suffix: remainderSuffix } =
+        extractHighlightSpan(articleRemainder);
       result.push(articlePrefix);
-      result.push(`<span class="${matchedGender}">${articleRemainder}</span>`);
+      result.push(`<span class="${matchedGender}">${remainderCore}</span>`);
+      result.push(remainderSuffix);
       i++;
     } else {
       // only the noun is highlighted - articles are never highlighted
@@ -327,9 +372,11 @@ function highlightNounGender(line, nounGender) {
         result.push(tokens[i]);
         i++;
       }
-      result.push(
-        `<span class="${matchedGender}">${tokens[matchedCandidate.tokenIndex]}</span>`,
-      );
+      const { prefix: nounPrefix, core: nounCore, suffix: nounSuffix } =
+        extractHighlightSpan(tokens[matchedCandidate.tokenIndex]);
+      result.push(nounPrefix);
+      result.push(`<span class="${matchedGender}">${nounCore}</span>`);
+      result.push(nounSuffix);
       i = matchedCandidate.tokenIndex + 1;
     }
   }
@@ -346,6 +393,10 @@ function collectUnresolvedWords(line, nounGender, unresolved) {
       const cleaned = cleanWord(candidate.word);
       if (isExcludedCandidate(cleaned, candidate.word)) {
         continue;
+      }
+      if (cleaned in ELISION_ONLY_NOUNS) {
+        if (candidate.tokenIndex === i) break; // resolved - see ELISION_ONLY_NOUNS
+        continue; // found at a distance - never trust it
       }
       const entry = lookupGender(cleaned, nounGender);
       if (entry) {
@@ -428,8 +479,12 @@ async function fetchGenderFromYandex(word) {
   const gen = noun?.gen?.code;
   const gender = gen === "m" || gen === "f" ? gen : null;
   const isAdjective = gender !== null && entries.some((it) => it.pos?.code === "adj");
-  if (word.toLowerCase() in GENDER_OVERRIDES) {
-    return { gender: GENDER_OVERRIDES[word.toLowerCase()], isAdjective: false };
+  // check the override against the plural too (e.g. querying "pierres"
+  // still needs the "pierre" override), not just the exact word queried
+  const overrideKey =
+    lower in GENDER_OVERRIDES ? lower : singular && singular in GENDER_OVERRIDES ? singular : null;
+  if (overrideKey) {
+    return { gender: GENDER_OVERRIDES[overrideKey], isAdjective: false };
   }
   return { gender, isAdjective };
 }
