@@ -88,7 +88,9 @@ const NARROW_PREPOSITIONS = new Set([
 const EXCLUDED_NOUNS = new Set([
   "combien", "ensemble", "devant", "haut", "haute", "peu", "plusieurs",
 ]);
-const ELISION_RE = /^(l['’])(\p{L}.*)$/u;
+// case-insensitive: "L’heure" at the start of a sentence is the same
+// elided article as "l’heure" mid-sentence
+const ELISION_RE = /^(l['’])(\p{L}.*)$/iu;
 // "de" elides onto a directly-following vowel-initial word with no space
 // (e.g. "d’épines") - same role as the PREPOSITION_TRIGGERS "de", but
 // fused into one token, so it needs its own pattern
@@ -153,6 +155,23 @@ function extractHighlightSpan(rawToken) {
   return { prefix, core: rest, suffix: "" };
 }
 
+// the singular form(s) a French plural could have come from: most take
+// "-s", but "-eau"/"-eu"/"-ou" words take "-x" (genou -> genoux) and
+// "-al" words become "-aux" (cheval -> chevaux). Both "-aux" readings are
+// returned, since "château -> châteaux" also ends that way - whichever
+// form the dictionary actually knows wins
+function singularForms(word) {
+  const forms = [];
+  if (word.length < 2) return forms;
+  if (word.endsWith("s") || word.endsWith("x")) {
+    forms.push(word.slice(0, -1));
+  }
+  if (word.endsWith("aux")) {
+    forms.push(`${word.slice(0, -3)}al`);
+  }
+  return forms;
+}
+
 // true when `wordCleaned` is grammatically filler right after `prevCleaned`
 // rather than a noun, even if it has some rare noun sense in the dictionary
 function isFillerAfter(prevCleaned, wordCleaned) {
@@ -173,10 +192,7 @@ function isExcludedCandidate(cleaned, rawWord) {
   ) {
     return true;
   }
-  if (cleaned.endsWith("s") && cleaned.length > 1) {
-    return EXCLUDED_NOUNS.has(cleaned.slice(0, -1));
-  }
-  return false;
+  return singularForms(cleaned).some((form) => EXCLUDED_NOUNS.has(form));
 }
 
 // returns { gender: "m"|"f", isAdjective } or undefined if `word` isn't
@@ -185,10 +201,12 @@ function isExcludedCandidate(cleaned, rawWord) {
 function lookupGender(word, nounGender) {
   const direct = nounGender.get(word);
   if (direct) return direct;
-  // the dictionary only stores singular forms - fall back to the
-  // regular plural-"s" singular when the plural itself isn't listed
-  if (word.endsWith("s") && word.length > 1) {
-    return nounGender.get(word.slice(0, -1));
+  // the dictionary mostly stores singular forms - fall back to whichever
+  // singular this plural could have come from, when the plural itself
+  // isn't listed
+  for (const form of singularForms(word)) {
+    const entry = nounGender.get(form);
+    if (entry) return entry;
   }
   return undefined;
 }
@@ -239,6 +257,23 @@ function findArticleInfo(tokens, i) {
     return null;
   }
 
+  // "du"/"au" (contracted "de"/"à" + "le"), "de la"/"à la", and
+  // "aucun"/"aucune" always introduce a noun phrase - unlike bare
+  // "le"/"la", they can never be object pronouns - so when nothing better
+  // is found afterward, even a verb-ambiguous word is trusted as a last
+  // resort (see the isVerb fallback tier below)
+  let mustBeNoun =
+    cleanedToken === "du" ||
+    cleanedToken === "au" ||
+    cleanedToken === "aucun" ||
+    cleanedToken === "aucune";
+  if (!mustBeNoun && cleanedToken === "la") {
+    let prevIdx = i - 1;
+    while (prevIdx >= 0 && /^\s+$/.test(tokens[prevIdx])) prevIdx--;
+    const prevWord = prevIdx >= 0 ? cleanWord(tokens[prevIdx]) : "";
+    mustBeNoun = prevWord === "de" || prevWord === "à";
+  }
+
   const maxCandidates =
     isPrepositionTrigger && NARROW_PREPOSITIONS.has(cleanedToken) ? 1 : 3;
   const candidates = [];
@@ -282,6 +317,7 @@ function findArticleInfo(tokens, i) {
     isGenderArticle,
     expectedGender,
     candidates,
+    mustBeNoun,
   };
 }
 
@@ -299,13 +335,21 @@ function highlightNounGender(line, nounGender) {
       continue;
     }
 
-    const { outerPrefix, articlePrefix, articleRemainder, expectedGender, candidates } =
-      info;
+    const {
+      outerPrefix,
+      articlePrefix,
+      articleRemainder,
+      expectedGender,
+      candidates,
+      mustBeNoun,
+    } = info;
 
     let matchedGender = null;
     let matchedCandidate = null;
     let fallbackGender = null;
     let fallbackCandidate = null;
+    let verbFallbackGender = null;
+    let verbFallbackCandidate = null;
     for (const candidate of candidates) {
       const cleaned = cleanWord(candidate.word);
       // a determiner or other closed-class word can't itself be the noun -
@@ -325,10 +369,21 @@ function highlightNounGender(line, nounGender) {
       if (!entry || (expectedGender && entry.gender !== expectedGender)) {
         continue;
       }
-      if (!entry.isAdjective) {
+      if (!entry.isAdjective && !entry.isVerb) {
         matchedGender = entry.gender;
         matchedCandidate = candidate;
         break;
+      }
+      if (entry.isVerb) {
+        // normally an infinitive doesn't reliably follow an article, so
+        // this is untrustworthy - except right after "du"/"au"/"de la"/
+        // "à la", where a noun is grammatically guaranteed and this may
+        // be the only candidate available at all
+        if (mustBeNoun) {
+          verbFallbackGender = entry.gender;
+          verbFallbackCandidate = candidate;
+        }
+        continue;
       }
       // also usable as an adjective (e.g. "grand") - keep looking for a
       // later word that's unambiguously the noun, but remember this one
@@ -340,6 +395,10 @@ function highlightNounGender(line, nounGender) {
     if (!matchedCandidate && fallbackCandidate) {
       matchedGender = fallbackGender;
       matchedCandidate = fallbackCandidate;
+    }
+    if (!matchedCandidate && verbFallbackCandidate) {
+      matchedGender = verbFallbackGender;
+      matchedCandidate = verbFallbackCandidate;
     }
 
     if (!matchedGender) {
@@ -403,10 +462,12 @@ function collectUnresolvedWords(line, nounGender, unresolved) {
         if (info.expectedGender && entry.gender !== info.expectedGender) {
           continue; // found but gender mismatches the article - not a dictionary gap
         }
-        if (!entry.isAdjective) {
+        if (!entry.isAdjective && !entry.isVerb) {
           break; // unambiguous match found - highlightNounGender would stop here too
         }
-        continue; // ambiguous - highlightNounGender keeps looking too, but it's resolved
+        // ambiguous (adjective) or verb-only (last-resort fallback when
+        // mustBeNoun) - either way it's already resolved, not a dictionary gap
+        continue;
       }
       if (cleaned) {
         unresolved.add(cleaned);
@@ -445,9 +506,10 @@ async function getYandexJson(word) {
 }
 
 // manual corrections for words where Yandex itself returns the wrong
-// gender - e.g. querying "pierre" matches it to the masculine name
-// "Pierre" instead of the feminine common noun "pierre" (stone)
-const GENDER_OVERRIDES = { pierre: "f" };
+// gender, or (like "feu") a real but vanishingly rare second sense ("feu
+// mon père" = my late father) that makes the fallback-chain wrongly skip
+// past the common noun reading ("feu" = fire) to an unrelated later word
+const GENDER_OVERRIDES = { pierre: "f", feu: "m" };
 
 // returns { gender: "m"|"f"|null, isAdjective: boolean } for the cache
 async function fetchGenderFromYandex(word) {
@@ -459,34 +521,39 @@ async function fetchGenderFromYandex(word) {
   // plural query (e.g. "sièges") normalizes to the singular lemma in
   // Yandex's response ("siège"), so that's accepted too
   const lower = word.toLowerCase();
-  const singular = lower.endsWith("s") && lower.length > 1 ? lower.slice(0, -1) : null;
+  const singulars = singularForms(lower);
   const entries = (regular ?? []).filter((it) => {
     const text = it.text?.toLowerCase();
-    return text === lower || (singular !== null && text === singular);
+    return text === lower || singulars.includes(text);
   });
   if (entries.length === 0) {
-    return { gender: null, isAdjective: false };
-  }
-  // a word that Yandex also lists as a verb ("vrb") is treated as not a
-  // noun at all, even when it has a rare noun sense too (e.g. "porter",
-  // "aller") - there's no useful fallback for verb/noun ambiguity the way
-  // there is for adjective/noun ambiguity (an adjective usually precedes
-  // the real noun; an infinitive doesn't reliably)
-  if (entries.some((it) => it.pos?.code === "vrb")) {
-    return { gender: null, isAdjective: false };
+    return { gender: null, isAdjective: false, isVerb: false };
   }
   const noun = entries.find((it) => it.pos?.code === "nn");
   const gen = noun?.gen?.code;
   const gender = gen === "m" || gen === "f" ? gen : null;
   const isAdjective = gender !== null && entries.some((it) => it.pos?.code === "adj");
+  // a word that Yandex also lists as a verb ("vrb") is normally treated as
+  // not a noun at all, even when it has a rare noun sense too (e.g.
+  // "porter", "aller") - an infinitive doesn't reliably follow an article
+  // the way an adjective does. The gender is still kept (tagged isVerb)
+  // rather than discarded, for the rare case where a noun is grammatically
+  // guaranteed (e.g. right after "du"/"au"/"de la"/"à la") and this is the
+  // only candidate available
+  const isVerb = gender !== null && entries.some((it) => it.pos?.code === "vrb");
   // check the override against the plural too (e.g. querying "pierres"
   // still needs the "pierre" override), not just the exact word queried
   const overrideKey =
-    lower in GENDER_OVERRIDES ? lower : singular && singular in GENDER_OVERRIDES ? singular : null;
+    lower in GENDER_OVERRIDES
+      ? lower
+      : (singulars.find((form) => form in GENDER_OVERRIDES) ?? null);
   if (overrideKey) {
-    return { gender: GENDER_OVERRIDES[overrideKey], isAdjective: false };
+    return { gender: GENDER_OVERRIDES[overrideKey], isAdjective: false, isVerb: false };
   }
-  return { gender, isAdjective };
+  if (isVerb) {
+    return { gender, isAdjective: false, isVerb: true };
+  }
+  return { gender, isAdjective, isVerb: false };
 }
 
 const FETCH_CONCURRENCY = 6;
@@ -513,12 +580,15 @@ function mergeGenderMap(baseMap, cache) {
   const merged = new Map(baseMap);
   for (const [word, value] of Object.entries(cache)) {
     if (merged.has(word)) continue;
-    // older cache entries are a bare "m"/"f"/null string, from before
-    // isAdjective was tracked - treat them as unambiguous
-    const entry =
-      typeof value === "string" || value === null
-        ? { gender: value, isAdjective: false }
-        : value;
+    // older cache entries are a bare "m"/"f"/null string (from before
+    // isAdjective was tracked) or lack isVerb (from before verb/noun
+    // ambiguity was tracked separately) - normalize to the full shape
+    const raw = typeof value === "string" || value === null ? { gender: value } : value;
+    const entry = {
+      gender: raw.gender,
+      isAdjective: raw.isAdjective ?? false,
+      isVerb: raw.isVerb ?? false,
+    };
     if (entry.gender === "m" || entry.gender === "f") {
       merged.set(word, entry);
     }
