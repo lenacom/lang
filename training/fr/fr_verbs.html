@@ -45,7 +45,7 @@
       function setTenseName(__tenseName) {
         tenseName = __tenseName;
         setCookie("fr_verbs_tense", tenseName);
-        smallSteps = SmallSteps(`fr_verbs_${tenseName}`, "smallStepsSection", verbs, 30);
+        smallSteps = SmallSteps(`fr_verbs_${tenseName}`, "smallStepsSection", verbs, 30, false);
         setVerb();
       }
 

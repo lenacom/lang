@@ -1,6 +1,6 @@
 "use strict";
 
-function SmallSteps(configName, containerId, items, sectionSize = 50) {
+function SmallSteps(configName, containerId, items, sectionSize = 50, restartOnError = true) {
   const partSize = 5;
   let config;
   try {
@@ -127,7 +127,9 @@ function SmallSteps(configName, containerId, items, sectionSize = 50) {
         errors.push([current, 0]);
       }
       saveSmallStepsConfig();
-      setPart();
+      if (restartOnError) {
+        setPart();
+      }
     }
   }
 
