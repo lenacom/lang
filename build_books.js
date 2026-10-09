@@ -75,13 +75,13 @@ async function buildChapters(lang, book, text, metadata, genderCache) {
     if (lang === "fr") {
       const unresolved = new Set();
       for (const line of rawLines) {
-        collectUnresolvedWords(line, nounGenderMap, unresolved);
+        collectUnresolvedWords(line, nounGenderMap, unresolved, genderCache);
       }
       await resolveMissingGenders(unresolved, genderCache);
       saveGenderCache(genderCache);
       const mergedMap = mergeGenderMap(nounGenderMap, genderCache);
       processedLines = rawLines.map((line) =>
-        highlightNounGender(line, mergedMap),
+        highlightNounGender(line, mergedMap, genderCache),
       );
     }
 

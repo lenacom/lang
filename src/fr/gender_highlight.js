@@ -39,7 +39,7 @@ const FRENCH_NUMBER_WORDS = [
 // gender-neutral - trigger a noun search, but never reveal m/f themselves
 const PLURAL_ARTICLES = new Set([
   "les", "des", "ses", "ces", "mes", "tes", "votre", "notre", "vos", "nos",
-  "leur", "leurs", "aux",
+  "leur", "leurs", "aux", "quelques",
   ...FRENCH_NUMBER_WORDS,
 ]);
 const ARTICLE_GENDER = {
@@ -69,13 +69,14 @@ const STOPWORDS = new Set([
 // (no 3-word adjective lookahead), since there's no agreement to confirm
 const PREPOSITION_TRIGGERS = new Set([
   "à", "de", "entre", "sans", "par", "sur", "avec", "en", "chaque", "pour",
+  "quelque",
 ]);
 // "de"/"à" get the same 3-word adjective lookahead as articles (e.g. "de
 // haute naissance", "à haute voix") - the other prepositions stay at 1
 // word, since they were not reported to need it and a wider window raises
 // false-positive risk
 const NARROW_PREPOSITIONS = new Set([
-  "entre", "sans", "par", "sur", "avec", "chaque", "pour",
+  "entre", "sans", "par", "sur", "avec", "chaque", "pour", "quelque",
 ]);
 // most noun/verb and noun/adjective ambiguity (e.g. "grand", "porter") is
 // detected from Yandex's own part-of-speech data instead (see
@@ -98,10 +99,11 @@ const DE_ELISION_RE = /^(d['’])(\p{L}.*)$/iu;
 // a preceding word elided onto "un"/"une" with nothing after (e.g. "d’une", "qu’un") -
 // the elided part (e.g. "d’") is not itself an article and is never highlighted
 const TRAILING_ARTICLE_RE = /^(\p{L}+['’])(une?)$/iu;
-// a candidate is never the first word of its line (an article or
-// preposition always precedes it), so a capital letter reliably marks a
-// proper noun (name, place) rather than mere sentence-initial capitalization
-const CAPITALIZED_RE = /^[^\p{L}]*\p{Lu}/u;
+// matches a raw occurrence that is itself capitalized (allowing for a
+// leading elided prefix, e.g. "Qu'Esprit" hypothetically) - used only to
+// tell whether THIS occurrence could be the dictionary's capitalized/name
+// sense, not to exclude candidates outright
+const CAPITALIZED_WORD_RE = /^[^\p{L}]*\p{Lu}/u;
 const CLEAN_RE = /^[^\p{L}]+|[^\p{L}]+$/gu;
 const VOWEL_START_RE = /^[aeiouyâàéèêëîïôöûüùœæh]/iu;
 // strips a fused elided article/pronoun (l', d', qu', n', s', j', m', t',
@@ -113,6 +115,11 @@ const LEADING_ELISION_RE = /^(?:l|d|qu|n|s|j|m|t|c)['’]/iu;
 // strips the demonstrative reinforcement suffix from words like "ce
 // monde-ci"/"cet homme-là" - the dictionary only has "monde"/"homme"
 const TRAILING_CI_LA_RE = /-(ci|là)$/iu;
+// a comma/semicolon/colon/sentence-ender right after a lookahead token
+// means the noun phrase is over (e.g. "un conseiller, nommé Joseph" - the
+// article's reach stops at "conseiller", so "nommé" must never be scanned
+// as a candidate)
+const CLAUSE_BREAK_RE = /[,;:.!?…]$/u;
 // nouns that are only trustworthy when found as the direct "l'" elision
 // remainder (tokenIndex === i) - found at a distance they are almost
 // always something else. "été" is usually the past participle of "être"
@@ -152,7 +159,7 @@ function extractHighlightSpan(rawToken) {
     const core = withoutPunct.slice(0, withoutPunct.length - ciLaMatch[0].length);
     return { prefix, core, suffix: ciLaMatch[0] + trailingPunct };
   }
-  return { prefix, core: rest, suffix: "" };
+  return { prefix, core: withoutPunct, suffix: trailingPunct };
 }
 
 // the singular form(s) a French plural could have come from: most take
@@ -178,17 +185,43 @@ function isFillerAfter(prevCleaned, wordCleaned) {
   // "de"/"à" + infinitive (e.g. "d’aller", "à porter") is handled at the
   // source: fetchGenderFromYandex() never returns a gender for a word that
   // also has a verb sense, so such words simply aren't in the gender map
-  return prevCleaned === "en" && wordCleaned.endsWith("ant"); // gerund: "en descendant"
+  if (prevCleaned === "en" && wordCleaned.endsWith("ant")) return true; // gerund: "en descendant"
+  // object pronoun + gerund ("en les tirant" = "drawing them") - the pronoun
+  // itself is already excluded as a candidate elsewhere, but without this
+  // the gerund right after it can still be picked up by a search that
+  // started further back (e.g. "en" looking past "les" for a noun)
+  if ((prevCleaned === "le" || prevCleaned === "la" || prevCleaned === "les") && wordCleaned.endsWith("ant")) {
+    return true;
+  }
+  return false;
 }
 
-function isExcludedCandidate(cleaned, rawWord) {
+// a trigger word reached mid-search means a fresh noun phrase is starting
+// right there - the search that led up to it has no business reaching past
+// it (e.g. "en" scanning for a noun must not continue through "au" to reach
+// "sort"; "au" starts its own proper search instead)
+function isTriggerWord(cleaned) {
+  return (
+    GENDER_ARTICLES.has(cleaned) ||
+    PLURAL_ARTICLES.has(cleaned) ||
+    PREPOSITION_TRIGGERS.has(cleaned)
+  );
+}
+
+// capitalization is no longer a blanket exclusion: a proper noun ("Pierre")
+// usually has no dictionary entry at all and is simply never matched, while
+// a common noun that happens to be capitalized (mid-line sentence start
+// after a colon/period, not just the first word of the line) should still
+// be found via its lowercased dictionary entry. The one accepted tradeoff:
+// a name that coincides with a real common noun (e.g. "Pierre"/"pierre")
+// will get highlighted as that noun
+function isExcludedCandidate(cleaned) {
   if (
     GENDER_ARTICLES.has(cleaned) ||
     PLURAL_ARTICLES.has(cleaned) ||
     STOPWORDS.has(cleaned) ||
     PREPOSITION_TRIGGERS.has(cleaned) ||
-    EXCLUDED_NOUNS.has(cleaned) ||
-    CAPITALIZED_RE.test(rawWord)
+    EXCLUDED_NOUNS.has(cleaned)
   ) {
     return true;
   }
@@ -211,13 +244,49 @@ function lookupGender(word, nounGender) {
   return undefined;
 }
 
-function findArticleInfo(tokens, i) {
+function findArticleInfo(tokens, i, cache) {
   const token = tokens[i];
   const elisionMatch = token.match(ELISION_RE);
   const trailingMatch = !elisionMatch && token.match(TRAILING_ARTICLE_RE);
   const deElisionMatch =
     !elisionMatch && !trailingMatch && token.match(DE_ELISION_RE);
   const cleanedToken = cleanWord(token);
+
+  // "le"/"la"/"les"/"l'" directly followed by a verb form can only be the
+  // direct-object pronoun ("je l’ai trouvé", "en les tirant") - never the
+  // article - since an article can never sit right in front of a bare verb.
+  // Two sub-cases: a gerund (always "en" + pronoun + participe présent), or
+  // any other recognized conjugated form (mostly auxiliaries right after
+  // the pronoun, e.g. "l’ai", "la voit") - either way, skip the article
+  // search entirely so nothing past the pronoun gets scanned as a noun
+  if (elisionMatch) {
+    const remainderCleaned = cleanWord(elisionMatch[2]);
+    // "l'on" is a fixed euphonic spelling of the pronoun "on" (inserted
+    // after "si"/"que"/"et"/etc. to avoid a vowel clash, e.g. "si l'on
+    // veut") - the "l'" is not an elided article here at all, so nothing
+    // after it should ever be scanned as a noun
+    if (remainderCleaned === "on") {
+      return null;
+    }
+    if (isPureVerb(remainderCleaned, cache) || remainderCleaned.endsWith("ant")) {
+      return null;
+    }
+  } else if (cleanedToken === "le" || cleanedToken === "la" || cleanedToken === "les") {
+    let nextIdx = i + 1;
+    while (nextIdx < tokens.length && /^\s+$/.test(tokens[nextIdx])) nextIdx++;
+    const nextWord = nextIdx < tokens.length ? cleanWord(tokens[nextIdx]) : "";
+    if (isPureVerb(nextWord, cache)) {
+      return null;
+    }
+    if (nextWord.endsWith("ant")) {
+      let prevIdx = i - 1;
+      while (prevIdx >= 0 && /^\s+$/.test(tokens[prevIdx])) prevIdx--;
+      const prevWord = prevIdx >= 0 ? cleanWord(tokens[prevIdx]) : "";
+      if (prevWord === "en") {
+        return null;
+      }
+    }
+  }
 
   let outerPrefix = "";
   let articlePrefix = token;
@@ -283,21 +352,37 @@ function findArticleInfo(tokens, i) {
   // the fused "d’" elision counts as "de" even though cleanWord() can't
   // split it from the word it's fused to
   let prevCleaned = deElisionMatch ? "de" : cleanedToken;
+  let clauseBroken = false;
   if (articleRemainder !== null) {
     const remainderCleaned = cleanWord(articleRemainder);
-    if (!isFillerAfter(prevCleaned, remainderCleaned)) {
+    // a gerund right after the trigger ends the search outright (it's not
+    // just an unrelated word to skip past - "en"/"le"/"la"/"les" governing a
+    // gerund means the whole phrase is a fixed construction with no noun to
+    // find), same treatment as punctuation
+    if (isFillerAfter(prevCleaned, remainderCleaned)) {
+      clauseBroken = true;
+    } else {
       candidates.push({ word: articleRemainder, tokenIndex: i });
     }
     prevCleaned = remainderCleaned;
+    clauseBroken =
+      clauseBroken ||
+      CLAUSE_BREAK_RE.test(articleRemainder) ||
+      isTriggerWord(remainderCleaned);
   }
   let idx = i + 1;
-  while (candidates.length < maxCandidates && idx < tokens.length) {
+  while (!clauseBroken && candidates.length < maxCandidates && idx < tokens.length) {
     if (!/^\s+$/.test(tokens[idx])) {
       const wordCleaned = cleanWord(tokens[idx]);
-      if (!isFillerAfter(prevCleaned, wordCleaned)) {
+      if (isFillerAfter(prevCleaned, wordCleaned)) {
+        clauseBroken = true;
+      } else {
         candidates.push({ word: tokens[idx], tokenIndex: idx });
       }
       prevCleaned = wordCleaned;
+      if (CLAUSE_BREAK_RE.test(tokens[idx]) || isTriggerWord(wordCleaned)) {
+        clauseBroken = true;
+      }
     }
     idx++;
   }
@@ -321,13 +406,13 @@ function findArticleInfo(tokens, i) {
   };
 }
 
-function highlightNounGender(line, nounGender) {
+function highlightNounGender(line, nounGender, cache) {
   const tokens = line.split(/(\s+)/);
   const result = [];
   let i = 0;
   while (i < tokens.length) {
     const token = tokens[i];
-    const info = findArticleInfo(tokens, i);
+    const info = findArticleInfo(tokens, i, cache);
 
     if (!info) {
       result.push(token);
@@ -354,7 +439,7 @@ function highlightNounGender(line, nounGender) {
       const cleaned = cleanWord(candidate.word);
       // a determiner or other closed-class word can't itself be the noun -
       // skip it so an unrelated search can't swallow it as a false match
-      if (isExcludedCandidate(cleaned, candidate.word)) {
+      if (isExcludedCandidate(cleaned)) {
         continue;
       }
       if (cleaned in ELISION_ONLY_NOUNS) {
@@ -367,6 +452,12 @@ function highlightNounGender(line, nounGender) {
       }
       const entry = lookupGender(cleaned, nounGender);
       if (!entry || (expectedGender && entry.gender !== expectedGender)) {
+        continue;
+      }
+      // this exact occurrence is capitalized, and the dictionary also
+      // recognizes a capitalized sense for the word (a name) - can't tell
+      // from the text alone which sense is meant here, so skip it
+      if (entry.hasCapitalizedVariant && CAPITALIZED_WORD_RE.test(candidate.word)) {
         continue;
       }
       if (!entry.isAdjective && !entry.isVerb) {
@@ -442,15 +533,15 @@ function highlightNounGender(line, nounGender) {
   return result.join("");
 }
 
-function collectUnresolvedWords(line, nounGender, unresolved) {
+function collectUnresolvedWords(line, nounGender, unresolved, cache) {
   const tokens = line.split(/(\s+)/);
   for (let i = 0; i < tokens.length; i++) {
-    const info = findArticleInfo(tokens, i);
+    const info = findArticleInfo(tokens, i, cache);
     if (!info) continue;
 
     for (const candidate of info.candidates) {
       const cleaned = cleanWord(candidate.word);
-      if (isExcludedCandidate(cleaned, candidate.word)) {
+      if (isExcludedCandidate(cleaned)) {
         continue;
       }
       if (cleaned in ELISION_ONLY_NOUNS) {
@@ -509,26 +600,42 @@ async function getYandexJson(word) {
 // gender, or (like "feu") a real but vanishingly rare second sense ("feu
 // mon père" = my late father) that makes the fallback-chain wrongly skip
 // past the common noun reading ("feu" = fire) to an unrelated later word
-const GENDER_OVERRIDES = { pierre: "f", feu: "m" };
+const GENDER_OVERRIDES = { pierre: "f", feu: "m", conseiller: "m" };
 
-// returns { gender: "m"|"f"|null, isAdjective: boolean } for the cache
+// returns { gender: "m"|"f"|null, isAdjective: boolean, isVerb: boolean } for
+// the cache
 async function fetchGenderFromYandex(word) {
   const json = await getYandexJson(word);
-  const regular = json["fr-ru"]?.["regular"];
+  const regular = json["fr-ru"]?.["regular"] ?? [];
   // Yandex sometimes answers with a related/suggested word instead of the
   // one asked for (e.g. querying "devant" also returns a "devoir" entry) -
-  // only entries for the exact word asked about are meaningful here. A
-  // plural query (e.g. "sièges") normalizes to the singular lemma in
-  // Yandex's response ("siège"), so that's accepted too
+  // only entries for the exact word asked about are meaningful for GENDER.
+  // A plural query (e.g. "sièges") normalizes to the singular lemma in
+  // Yandex's response ("siège"), so that's accepted too.
+  // Case must match exactly (not just case-insensitively): a place/person
+  // name queried lowercase (e.g. "jérusalem") comes back under its own
+  // entry spelled "Jérusalem" with no separate lowercase entry at all - that
+  // capitalization is the dictionary's only spelling, not incidental, and
+  // means there is no common-noun sense to report at all
   const lower = word.toLowerCase();
   const singulars = singularForms(lower);
-  const entries = (regular ?? []).filter((it) => {
-    const text = it.text?.toLowerCase();
+  const entries = regular.filter((it) => {
+    const text = it.text;
     return text === lower || singulars.includes(text);
   });
-  if (entries.length === 0) {
-    return { gender: null, isAdjective: false, isVerb: false };
-  }
+  // a capitalized instance in the source text (e.g. "Pierre"/"Jean"/"Lot")
+  // is only ever highlighted as the common noun when the dictionary has NO
+  // separate capitalized entry at all - if it does (even alongside a
+  // genuine lowercase sense, like "pierre"/"Pierre" = stone/Pierre), that
+  // confirms the word is also a recognized name, and there is no way to
+  // tell from the text alone which sense this particular capitalized
+  // instance means, so it's left unhighlighted rather than guessed at
+  const hasCapitalizedVariant = regular.some((it) => {
+    if (!it.text) return false;
+    const textLower = it.text.toLowerCase();
+    const matchesWord = textLower === lower || singulars.includes(textLower);
+    return matchesWord && it.text !== textLower;
+  });
   const noun = entries.find((it) => it.pos?.code === "nn");
   const gen = noun?.gen?.code;
   const gender = gen === "m" || gen === "f" ? gen : null;
@@ -539,8 +646,13 @@ async function fetchGenderFromYandex(word) {
   // the way an adjective does. The gender is still kept (tagged isVerb)
   // rather than discarded, for the rare case where a noun is grammatically
   // guaranteed (e.g. right after "du"/"au"/"de la"/"à la") and this is the
-  // only candidate available
-  const isVerb = gender !== null && entries.some((it) => it.pos?.code === "vrb");
+  // only candidate available.
+  // Unlike gender/adjective, this checks the UNFILTERED response: a
+  // conjugated form ("ai", "trouvé") comes back under its infinitive
+  // ("avoir", "trouver") in `text`, which the exact-match filter above
+  // would otherwise discard - that's a legitimate lemma normalization, not
+  // an unrelated suggestion the way gender detection needs to guard against
+  const isVerb = regular.some((it) => it.pos?.code === "vrb");
   // check the override against the plural too (e.g. querying "pierres"
   // still needs the "pierre" override), not just the exact word queried
   const overrideKey =
@@ -548,12 +660,17 @@ async function fetchGenderFromYandex(word) {
       ? lower
       : (singulars.find((form) => form in GENDER_OVERRIDES) ?? null);
   if (overrideKey) {
-    return { gender: GENDER_OVERRIDES[overrideKey], isAdjective: false, isVerb: false };
+    return {
+      gender: GENDER_OVERRIDES[overrideKey],
+      isAdjective: false,
+      isVerb: false,
+      hasCapitalizedVariant,
+    };
   }
   if (isVerb) {
-    return { gender, isAdjective: false, isVerb: true };
+    return { gender, isAdjective: false, isVerb: true, hasCapitalizedVariant };
   }
-  return { gender, isAdjective, isVerb: false };
+  return { gender, isAdjective, isVerb: false, hasCapitalizedVariant };
 }
 
 const FETCH_CONCURRENCY = 6;
@@ -576,24 +693,44 @@ async function resolveMissingGenders(unresolvedWords, cache) {
   );
 }
 
+// older cache entries are a bare "m"/"f"/null string (from before
+// isAdjective was tracked) or lack isVerb (from before verb/noun ambiguity
+// was tracked separately) - normalize to the full shape
+function normalizeCacheEntry(value) {
+  const raw = typeof value === "string" || value === null ? { gender: value } : value;
+  return {
+    gender: raw.gender,
+    isAdjective: raw.isAdjective ?? false,
+    isVerb: raw.isVerb ?? false,
+    hasCapitalizedVariant: raw.hasCapitalizedVariant ?? false,
+  };
+}
+
 function mergeGenderMap(baseMap, cache) {
   const merged = new Map(baseMap);
   for (const [word, value] of Object.entries(cache)) {
     if (merged.has(word)) continue;
-    // older cache entries are a bare "m"/"f"/null string (from before
-    // isAdjective was tracked) or lack isVerb (from before verb/noun
-    // ambiguity was tracked separately) - normalize to the full shape
-    const raw = typeof value === "string" || value === null ? { gender: value } : value;
-    const entry = {
-      gender: raw.gender,
-      isAdjective: raw.isAdjective ?? false,
-      isVerb: raw.isVerb ?? false,
-    };
+    const entry = normalizeCacheEntry(value);
     if (entry.gender === "m" || entry.gender === "f") {
       merged.set(word, entry);
     }
   }
   return merged;
+}
+
+// true only when the cache has already confirmed `word` resolves to a verb
+// with no competing noun sense at all - used to tell a direct-object
+// pronoun ("le"/"la"/"les"/"l’") apart from the identical-looking article,
+// since only a pronoun can sit directly in front of a verb. Returns false
+// (not yet certain) for a word the cache hasn't seen yet, same as for a
+// word confirmed NOT to be a pure verb - either way the article search
+// proceeds as normal, and collectUnresolvedWords queues the word for a
+// Yandex lookup via the ordinary candidate-gathering path so a later build
+// pass (once cached) can make the correct call
+function isPureVerb(word, cache) {
+  if (!(word in cache)) return false;
+  const entry = normalizeCacheEntry(cache[word]);
+  return entry.isVerb && entry.gender === null;
 }
 
 // every noun's gender comes from a live Yandex metadata check (gender +
