@@ -36,6 +36,17 @@ const FRENCH_NUMBER_WORDS = [
   "quatre-vingt-dix-neuf",
   "cent",
 ];
+// Yandex tags these purely as nouns ("nn"), with no "adj" entry at all,
+// even though "troisième jour" uses "troisième" adjectivally (modifying
+// "jour") just as much as "grand" modifies a noun elsewhere - without this,
+// the ordinal gets treated as an unambiguous direct match and the search
+// stops before ever reaching the real noun that follows it. "premier" is
+// the one ordinal Yandex does tag "adj" for, so it already works without
+// being listed here
+const ORDINAL_NUMBER_WORDS = new Set([
+  "deuxième", "troisième", "quatrième", "cinquième", "sixième", "septième",
+  "huitième", "neuvième", "dixième", "onzième", "douzième",
+]);
 // gender-neutral - trigger a noun search, but never reveal m/f themselves
 const PLURAL_ARTICLES = new Set([
   "les", "des", "ses", "ces", "mes", "tes", "votre", "notre", "vos", "nos",
@@ -69,7 +80,7 @@ const STOPWORDS = new Set([
 // (no 3-word adjective lookahead), since there's no agreement to confirm
 const PREPOSITION_TRIGGERS = new Set([
   "à", "de", "entre", "sans", "par", "sur", "avec", "en", "chaque", "pour",
-  "quelque",
+  "quelque", "contre", "ni",
 ]);
 // "de"/"à" get the same 3-word adjective lookahead as articles (e.g. "de
 // haute naissance", "à haute voix") - the other prepositions stay at 1
@@ -77,6 +88,7 @@ const PREPOSITION_TRIGGERS = new Set([
 // false-positive risk
 const NARROW_PREPOSITIONS = new Set([
   "entre", "sans", "par", "sur", "avec", "chaque", "pour", "quelque",
+  "contre", "ni",
 ]);
 // most noun/verb and noun/adjective ambiguity (e.g. "grand", "porter") is
 // detected from Yandex's own part-of-speech data instead (see
@@ -96,6 +108,13 @@ const ELISION_RE = /^(l['’])(\p{L}.*)$/iu;
 // (e.g. "d’épines") - same role as the PREPOSITION_TRIGGERS "de", but
 // fused into one token, so it needs its own pattern
 const DE_ELISION_RE = /^(d['’])(\p{L}.*)$/iu;
+// "jusque" elides onto a following vowel-initial word with no space
+// ("jusqu’au", "jusqu’à", "jusqu’aux", "jusqu’alors") - unlike "de"/"à"
+// eliding directly onto the noun, the remainder here is itself another
+// article/preposition ("au" = "à"+"le") that still needs its own forward
+// search, so this is classified by re-checking the remainder rather than
+// treated as a noun candidate the way DE_ELISION_RE's remainder is
+const JUSQUE_ELISION_RE = /^(jusqu['’])(\p{L}.*)$/iu;
 // a preceding word elided onto "un"/"une" with nothing after (e.g. "d’une", "qu’un") -
 // the elided part (e.g. "d’") is not itself an article and is never highlighted
 const TRAILING_ARTICLE_RE = /^(\p{L}+['’])(une?)$/iu;
@@ -133,6 +152,16 @@ function cleanWord(token) {
     .replace(CLEAN_RE, "")
     .replace(LEADING_ELISION_RE, "")
     .replace(TRAILING_CI_LA_RE, "");
+}
+
+// like cleanWord, but also unwraps "jusqu’au"/"jusqu’à"/"jusqu’aux" to the
+// article/preposition they're fused with ("au"/"à"/"aux") - used wherever a
+// classification decision needs the word a token actually behaves as,
+// including when looking back at a *previous* token (e.g. "la" right after
+// "jusqu’à" still needs the same mustBeNoun guarantee as plain "à la")
+function effectiveWord(token) {
+  const jusqueMatch = token.match(JUSQUE_ELISION_RE);
+  return cleanWord(jusqueMatch ? jusqueMatch[2] : token);
 }
 
 const LEADING_ELISION_CAPTURE_RE = /^((?:l|d|qu|n|s|j|m|t|c)['’])/iu;
@@ -250,7 +279,12 @@ function findArticleInfo(tokens, i, cache) {
   const trailingMatch = !elisionMatch && token.match(TRAILING_ARTICLE_RE);
   const deElisionMatch =
     !elisionMatch && !trailingMatch && token.match(DE_ELISION_RE);
+  const jusqueElisionMatch =
+    !elisionMatch && !trailingMatch && !deElisionMatch && token.match(JUSQUE_ELISION_RE);
   const cleanedToken = cleanWord(token);
+  // "jusqu'au"/"jusqu'à"/"jusqu'aux" classify by their remainder ("au"/
+  // "à"/"aux"), not by the fused "jusqu'..." spelling itself
+  const effectiveToken = jusqueElisionMatch ? effectiveWord(token) : cleanedToken;
 
   // "le"/"la"/"les"/"l'" directly followed by a verb form can only be the
   // direct-object pronoun ("je l’ai trouvé", "en les tirant") - never the
@@ -313,12 +347,12 @@ function findArticleInfo(tokens, i, cache) {
     articlePrefix = deElisionMatch[1];
     articleRemainder = deElisionMatch[2];
     isPrepositionTrigger = true;
-  } else if (GENDER_ARTICLES.has(cleanedToken)) {
+  } else if (GENDER_ARTICLES.has(effectiveToken)) {
     isGenderArticle = true;
-    expectedGender = ARTICLE_GENDER[cleanedToken];
-  } else if (PLURAL_ARTICLES.has(cleanedToken)) {
+    expectedGender = ARTICLE_GENDER[effectiveToken];
+  } else if (PLURAL_ARTICLES.has(effectiveToken)) {
     isPluralArticle = true;
-  } else if (PREPOSITION_TRIGGERS.has(cleanedToken)) {
+  } else if (PREPOSITION_TRIGGERS.has(effectiveToken)) {
     isPrepositionTrigger = true;
   }
 
@@ -332,26 +366,26 @@ function findArticleInfo(tokens, i, cache) {
   // is found afterward, even a verb-ambiguous word is trusted as a last
   // resort (see the isVerb fallback tier below)
   let mustBeNoun =
-    cleanedToken === "du" ||
-    cleanedToken === "au" ||
-    cleanedToken === "aucun" ||
-    cleanedToken === "aucune";
+    effectiveToken === "du" ||
+    effectiveToken === "au" ||
+    effectiveToken === "aucun" ||
+    effectiveToken === "aucune";
   if (!mustBeNoun && cleanedToken === "la") {
     let prevIdx = i - 1;
     while (prevIdx >= 0 && /^\s+$/.test(tokens[prevIdx])) prevIdx--;
-    const prevWord = prevIdx >= 0 ? cleanWord(tokens[prevIdx]) : "";
+    const prevWord = prevIdx >= 0 ? effectiveWord(tokens[prevIdx]) : "";
     mustBeNoun = prevWord === "de" || prevWord === "à";
   }
 
   const maxCandidates =
-    isPrepositionTrigger && NARROW_PREPOSITIONS.has(cleanedToken) ? 1 : 3;
+    isPrepositionTrigger && NARROW_PREPOSITIONS.has(effectiveToken) ? 1 : 3;
   const candidates = [];
   // tracks the previous non-whitespace "word", whether or not it became a
   // candidate, so filler right after "en"/"de"/"à" can be recognized even
   // when that trigger is itself just filler inside an unrelated search;
   // the fused "d’" elision counts as "de" even though cleanWord() can't
   // split it from the word it's fused to
-  let prevCleaned = deElisionMatch ? "de" : cleanedToken;
+  let prevCleaned = deElisionMatch ? "de" : effectiveToken;
   let clauseBroken = false;
   if (articleRemainder !== null) {
     const remainderCleaned = cleanWord(articleRemainder);
@@ -450,16 +484,23 @@ function highlightNounGender(line, nounGender, cache) {
         }
         continue; // found at a distance - never trust it (see comment above)
       }
-      const entry = lookupGender(cleaned, nounGender);
-      if (!entry || (expectedGender && entry.gender !== expectedGender)) {
+      const rawEntry = lookupGender(cleaned, nounGender);
+      if (!rawEntry || (expectedGender && rawEntry.gender !== expectedGender)) {
         continue;
       }
       // this exact occurrence is capitalized, and the dictionary also
       // recognizes a capitalized sense for the word (a name) - can't tell
       // from the text alone which sense is meant here, so skip it
-      if (entry.hasCapitalizedVariant && CAPITALIZED_WORD_RE.test(candidate.word)) {
+      if (rawEntry.hasCapitalizedVariant && CAPITALIZED_WORD_RE.test(candidate.word)) {
         continue;
       }
+      // Yandex doesn't tag these as adjectives at all (see
+      // ORDINAL_NUMBER_WORDS) - treat them as ambiguous regardless, so the
+      // search keeps looking for the real noun that follows ("troisième
+      // jour" -> "jour", not "troisième" itself)
+      const entry = ORDINAL_NUMBER_WORDS.has(cleaned)
+        ? { ...rawEntry, isAdjective: true }
+        : rawEntry;
       if (!entry.isAdjective && !entry.isVerb) {
         matchedGender = entry.gender;
         matchedCandidate = candidate;
@@ -548,11 +589,18 @@ function collectUnresolvedWords(line, nounGender, unresolved, cache) {
         if (candidate.tokenIndex === i) break; // resolved - see ELISION_ONLY_NOUNS
         continue; // found at a distance - never trust it
       }
-      const entry = lookupGender(cleaned, nounGender);
-      if (entry) {
-        if (info.expectedGender && entry.gender !== info.expectedGender) {
+      const rawEntry = lookupGender(cleaned, nounGender);
+      if (rawEntry) {
+        if (info.expectedGender && rawEntry.gender !== info.expectedGender) {
           continue; // found but gender mismatches the article - not a dictionary gap
         }
+        // see ORDINAL_NUMBER_WORDS - Yandex tags these as plain nouns, but
+        // highlightNounGender treats them as ambiguous and keeps searching,
+        // so this must match that or a later unresolved word in the same
+        // chain (e.g. "jour" in "troisième jour") never gets queued
+        const entry = ORDINAL_NUMBER_WORDS.has(cleaned)
+          ? { ...rawEntry, isAdjective: true }
+          : rawEntry;
         if (!entry.isAdjective && !entry.isVerb) {
           break; // unambiguous match found - highlightNounGender would stop here too
         }
