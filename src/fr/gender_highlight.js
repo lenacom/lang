@@ -277,8 +277,22 @@ function findArticleInfo(tokens, i, cache) {
   const token = tokens[i];
   const elisionMatch = token.match(ELISION_RE);
   const trailingMatch = !elisionMatch && token.match(TRAILING_ARTICLE_RE);
-  const deElisionMatch =
+  const deElisionMatchRaw =
     !elisionMatch && !trailingMatch && token.match(DE_ELISION_RE);
+  // "d'aucun"/"d'aucune" - the elided "de" lands on ANOTHER determiner, not
+  // directly on a noun ("d'épines" is "de" + noun, but "d'aucun homme" is
+  // "de" + "aucun" + noun). When the remainder is itself a recognized
+  // article, this must NOT be treated as noun fusion (which would both wrongly
+  // offer the determiner itself as a noun candidate and, since "aucun" is
+  // also a trigger word, end the search right there before ever reaching the
+  // real noun that follows) - fall through and let "aucun" be classified as
+  // a plain gender article instead, with its own normal forward lookahead
+  const deElisionMatch =
+    deElisionMatchRaw &&
+    !GENDER_ARTICLES.has(cleanWord(deElisionMatchRaw[2])) &&
+    !PLURAL_ARTICLES.has(cleanWord(deElisionMatchRaw[2]))
+      ? deElisionMatchRaw
+      : null;
   const jusqueElisionMatch =
     !elisionMatch && !trailingMatch && !deElisionMatch && token.match(JUSQUE_ELISION_RE);
   const cleanedToken = cleanWord(token);
@@ -402,7 +416,8 @@ function findArticleInfo(tokens, i, cache) {
     clauseBroken =
       clauseBroken ||
       CLAUSE_BREAK_RE.test(articleRemainder) ||
-      isTriggerWord(remainderCleaned);
+      isTriggerWord(remainderCleaned) ||
+      isPureVerb(remainderCleaned, cache);
   }
   let idx = i + 1;
   while (!clauseBroken && candidates.length < maxCandidates && idx < tokens.length) {
@@ -414,7 +429,11 @@ function findArticleInfo(tokens, i, cache) {
         candidates.push({ word: tokens[idx], tokenIndex: idx });
       }
       prevCleaned = wordCleaned;
-      if (CLAUSE_BREAK_RE.test(tokens[idx]) || isTriggerWord(wordCleaned)) {
+      if (
+        CLAUSE_BREAK_RE.test(tokens[idx]) ||
+        isTriggerWord(wordCleaned) ||
+        isPureVerb(wordCleaned, cache)
+      ) {
         clauseBroken = true;
       }
     }
@@ -648,7 +667,7 @@ async function getYandexJson(word) {
 // gender, or (like "feu") a real but vanishingly rare second sense ("feu
 // mon père" = my late father) that makes the fallback-chain wrongly skip
 // past the common noun reading ("feu" = fire) to an unrelated later word
-const GENDER_OVERRIDES = { pierre: "f", feu: "m", conseiller: "m" };
+const GENDER_OVERRIDES = { pierre: "f", feu: "m", conseiller: "m", corde: "f" };
 
 // returns { gender: "m"|"f"|null, isAdjective: boolean, isVerb: boolean } for
 // the cache
