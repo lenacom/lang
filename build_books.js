@@ -58,9 +58,15 @@ function nextPreviousChapterLinks(currentIndex, countChapters) {
 
 async function buildChapters(lang, book, text, metadata, genderCache) {
   const lines = text.split(/\r?\n/);
+  // a chapter heading is the chapter word followed by ONLY its number (e.g.
+  // "Psaume 3") - matching on startsWith alone would also catch a psalm's own
+  // superscription line when it happens to begin with the same word (e.g.
+  // "Psaume de David. A l'occasion de sa fuite..."), wrongly splitting that
+  // line into a new chapter and leaving the real chapter empty
+  const chapterHeadingRe = new RegExp(`^${metadata.chapter} [0-9]+$`);
   const chapterLines = [];
   for (const line of lines) {
-    if (line.startsWith(`${metadata.chapter} `)) {
+    if (chapterHeadingRe.test(line.trim())) {
       chapterLines.push([]);
     } else if (line.trim().length > 0) {
       chapterLines[chapterLines.length - 1].push(line);
@@ -106,7 +112,7 @@ async function main() {
     const langSrcDir = `${booksSrcDir}/${lang}`;
     const langDestDir = `${DEST}/${lang}`;
     fs.mkdirSync(langDestDir);
-    for (const book of ["mf", "mk", "lk", "jn"]) {
+    for (const book of ["mf", "mk", "lk", "jn", "psaumes"]) {
       const bookDir = `${langSrcDir}/${book}`;
       const metadata = JSON.parse(fs.readFileSync(`${bookDir}/metadata.json`));
       const text = fs.readFileSync(`${bookDir}/${metadata.code}.txt`, "utf8");
