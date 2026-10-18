@@ -21352,5 +21352,8687 @@
     "isAdjective": false,
     "isVerb": false,
     "hasCapitalizedVariant": false
+  },
+  "dissipe": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "médite": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "moqueurs": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "feuillage": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "compagnie": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "courant": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "résistent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "moque": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "princes": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "liguent-ils": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "soulèvent-ils": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "rit": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "oint": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "décret": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "possession": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "briseras": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "verge": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "enflammer": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "fer": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "soutien": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "bouclier": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "bénédiction": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "myriades": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "lève": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "instruments": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "vanité": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "outragée": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "aimerez-vous": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "chantres": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "pieux": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "bonheur": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sécurité": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "moût": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "couche": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "gémissements": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "commettent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "flûtes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "adresse": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "subsistent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "insensés": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "menteurs": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "abhorre": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "malice": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sincérité": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "gosier": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "flatteuses": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "coupables": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "desseins": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "amènent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "réjouiront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "protégeras": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "entoures": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "souvenir": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "harpe": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "chagrin": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "exauce": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "gémir": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "usé": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "persécuteurs": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "environne": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "refuge": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "cusch": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "lion": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "poursuive": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "glaive": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "élevés": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "terme": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "arc": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "traits": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "innocence": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "flèches": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "brûlantes": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "creuse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": true
+  },
+  "front": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "redescend": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "majesté": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "vindicatif": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "guitthith": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "mamelle": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "élève": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "confondre": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "inférieur": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "domination": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "magnificence": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "animaux": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "parcourt": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "mers": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "opprimé": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "merveilles": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "perpétuité": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "reculent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "meurs": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "ruines": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "confient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "malheureux": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "misère": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "tournent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "faits": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "oublient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "triomphe": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sachent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "convoitise": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "ravisseur": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "réussissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "arrogance": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "trames": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "outrage": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "jugements": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "abri": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "malheur": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "atteindre": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "malédictions": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "tromperies": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "embuscade": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "fraudes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "épient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "aguets": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "écartés": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "retraite": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tanière": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "surprend": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "griffes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "abandonne": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "orphelin": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "aide": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "iniquités": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "vœux": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "souffrent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tiré": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "inspirer": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "flèche": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "oiseau": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "fondements": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "regardent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "bandent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "corde": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "soufre": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sondent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "calice": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "brûlant": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sonde": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "droits": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "contemplent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "faussetés": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "discourt": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "disparaissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "fidèles": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "extermine": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "double": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "gémissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "creuset": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "éprouvé": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "épuré": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "garderas": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "préserveras": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "race": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "promènent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "aurai-je": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "chagrins": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "cacheras-tu": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "dise": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "clarté": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "élèvera-t-il": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "bonté": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "abominables": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "ramènera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "intégrité": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "dédain": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "préjudice": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "tente": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "idoles": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "belle": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "affection": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "souverain": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "délicieux": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "libations": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sentier": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "exhorte": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "repose": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "corruption": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "joies": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "abondantes": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "acharnés": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "prunelle": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "chancellent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "paraisse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "délivres": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "visites": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "avide": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "hautaines": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "déchirer": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "lionceau": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "repaire": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "petits-enfants": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "réveil": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "image": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "saül": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "rocher": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "palais": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "forteresse": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "libérateur": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "cantique": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "frémirent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "narines": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "embrasés": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "dévorant": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "fumée": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "jaillissait": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "chérubin": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "épaisse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "obscures": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "splendeur": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sombres": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "nuages": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "précédait": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "échappaient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "grêle": {
+    "gender": "f",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "tonna": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "foudre": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "dispersa": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "déroute": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "menace": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "large": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "appui": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "pureté": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "lois": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "pervers": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "reproche": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "perversité": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "agis": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "humilie": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "hautains": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "troupe": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "franchis": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "muraille": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "biches": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "combat": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tendent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "soutient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "atteins": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "brise": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "dos": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "broie": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "dissensions": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "flattent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "défaillance": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "vengeur": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "forteresses": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "délivrances": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "carrière": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "accents": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "retentissement": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "manifeste": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "racontent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "étendue": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "héros": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "égarements": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "orgueilleux": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sentiments": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "course": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "rayons": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sanctuaire": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "chars": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "étendard": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "protège": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "exaucera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sauve": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "chevaux": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "invoquons": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "puissante": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "protection": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "longue": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "remplit": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "désirait": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "bénédictions": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "éclat": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "rends": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "confie": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "anéantira": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "rendras": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "combles": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "dévorera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "feras": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tourner": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tireras": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "maternel": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "aurore": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "plaintes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "confiaient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "délivrera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "délivrais": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "mamelles": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "basan": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "taureaux": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "environnent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "gueule": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "déchire": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "écoule": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "séparent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "dessèche": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "cire": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "argile": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "attache": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "bande": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "scélérats": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "rôdent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "buffle": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "cornes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "peines": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "misérable": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "mangeront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "célébreront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "familles": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "penseront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "prosterneront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "descendent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "servira": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "future": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "nouveau-né": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "houlette": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "paisibles": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "verts": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "déborde": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "rassurent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "innocentes": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "linteaux": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "pause": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "renferme": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tromper": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "invoque": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "combats": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "amitié": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "fautes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "transgressions": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "possédera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "espèrent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "craint": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "haine": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "augmentent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sauve-moi": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "détresses": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "protègent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "grâces": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "éclater": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "dissimulés": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "présents": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "aurais-je": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "contempler": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "dévorer": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "avancent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "campait": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "élevait": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tabernacle": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "exauce-moi": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "entourent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "admirer": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "recueillera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "abandonnent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "affermisse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "ouvrage": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "iniques": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "loue": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "méritent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "relève": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "renverse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "chants": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "bénis": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "veaux": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "ornements": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "retentit": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "cèdres": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "liban": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "sacrés": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sirion": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "flammes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "forêts": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "kadès": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "buffles": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "écrie": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "lors": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "aimez": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "réjouissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "a-t-elle": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "verser": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "soupirs": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "protecteur": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "dépérissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "douleur": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "usés": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "secourir": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "entour": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "audace": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "menteuses": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "destinées": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "persécutent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "protèges": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "piété": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "précipitation": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "attaquent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "vigueur": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "duquel": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "transgression": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "appesantissait": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "impute": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "consumaient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "cheval": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "nullement": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "débordent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "asile": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "atteindront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "mulet": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "frein": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "mors": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "bride": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "pare": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sied": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "réservoirs": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "luth": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "tas": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "louange": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "accomplissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "craigne": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "abîmes": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "projets": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "tremblent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "espère": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "assurer": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "frayeurs": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "lionceaux": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "abimélec": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "éprouvent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "campe": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "arrache": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "disette": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "trompeuses": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "jouir": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "prolonger": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tourne": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "retrancher": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "abattement": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "atteint": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tue": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "balle": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "javelot": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "dépouille": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "veulent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "atteigne": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "emportée": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "ignore": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "outrager": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "penchée": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "abandon": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "impies": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "parasites": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "verras-tu": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "tranquilles": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "embûches": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "ignominie": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "voulions": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "célébrera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "impie": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "assouvir": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "consommer": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "abreuves": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "nues": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "posséderont": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "gazon": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "indigent": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "pâture": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "possèdent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "égorger": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "arcs": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "intègres": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "abandonné": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "brisent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "périssent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "affermit": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "annonce": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "proclame": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "condamne": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "retranchés": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "anéantis": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "verdoyant": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "secourt": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "plaie": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sain": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "élèvent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "lourd": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "éloignent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "trouble": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tiennent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "chancelle": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "réplique": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "jeduthun": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "pécher": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "largeur": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "brûlait": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "promène": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "attaques": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "souffle.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "teigne": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "habitant": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "victime": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "holocauste": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "garderont": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "compassions": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "rouleau": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sais": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "châtiments": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "courage": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "atteignent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "pense": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "médire": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "voilà": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "chuchotent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "soulages": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "causera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "rétablis-moi": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "éternité": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "biche": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "louerai": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "koré": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "effusion": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "soupire": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "courants": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "hermon": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "ondées": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "flot": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "mitsear": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "accordait": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "oppression": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "outragent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "demeures": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "nom.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "établir": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "autrefois": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "étendre": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "écrasons": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "aimais": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "dépouilles": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "moquerie": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "risée": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sarcasme": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "estimes": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "hochements": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "confusion": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "chacals": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "insulte": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "saurait-il": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "boucherie": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "parure": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "écrivain": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "bouillonnent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "habile": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "plume": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "charme": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "char": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "merveilleux": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sceptre": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "signale": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "exploits": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "équité": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "privilège": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "collègues": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "parfument": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "bien-aimées": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "ivoire": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "casse": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "ophir": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "beauté": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "hommages": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "rechercheront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "resplendissante": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "brodés": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "compagnes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "introduit": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "établiras": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "réjouissances": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "âges": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "loueront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "montagnes.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "alamoth": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "mugissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "ébranlent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "agitent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "cité": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "retraite.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "ravages": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "aime.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "boucliers": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "siège": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "réunissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "toujours.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "navires": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "septentrional": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "tarsis": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "accouche": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "avions": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tours": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "rempart": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "guide": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "stupide": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "richesse": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "rachat": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sentences": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "meurent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "enveloppe": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "subsisteront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "honneur": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "discours.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "protection.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "foulent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "évanouit": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "multiplient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "enrichit": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "jouissances": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "meut": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "publieront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "taureau": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "bergeries": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "bouc": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "couchant": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "avis": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "dirais": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "bienfaits": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "transgressent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sentence": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "publiera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "versé": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "murs": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "entières": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "victimes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "reviendront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "édomite": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "rasoir": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "doëg": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "rapport": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "achimélec": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "invente": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "vivants.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "moqueries": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "affilé": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "olivier": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "confondras": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "campent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "dieu.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "ziphiens": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "impétueux": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "terreurs": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "frisson": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "surprennent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "assaillent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tremble": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "néant": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "querelles": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "quittent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "confident": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "supporterais": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "douce": {
+    "gender": "f",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "intimité": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "surprenne": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "humiliera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "changement": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "crème": {
+    "gender": "f",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "lointains": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "philistins": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "térébinthes": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "gath": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "harcèlent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "traces": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "errante": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "outre": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "persécuteur": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "calamités": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "outrages": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "vomissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tranchant": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "lions": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": true
+  },
+  "courbait": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "enchanteurs": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "aspic": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "égarent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "venin": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "balance": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "taisant": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "magicien": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "mâchoires": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "écoulent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "émoussés": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "fondant": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "limaçon": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "avorton": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "chaudières": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sentent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "épine": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "emportera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "glaives": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "complotent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "pèche": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "châtier": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "oublie": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "mésopotamie": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "tsoba": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "édomites": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "brèches": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "syriens": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "dures": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "étourdissement": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "bannière": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "bien-aimés": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "succoth": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "vérité.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "galaad": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "manassé": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "soulier": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "édom": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "prolongent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "veillent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "abattu": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "cœur.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "jetterez-vous": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "abattre": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "poste": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "penche": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "clôture": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "refuge,:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "espoir": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "monteraient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "rapine": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "accroissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "profondeurs": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "aride": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "mieux": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "vaut": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "mets": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "célèbrent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "amères": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "plan": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "cachette": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "complots": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "intime": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tendre": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "ruisseau": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "lointaines": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "parvis": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "mugissement": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "accablent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "effraient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "fertilises": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sillons": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "détrempes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "mottes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "pluies": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "versent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "plaines": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "vallées": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "couvrent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "revêtent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "retentissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "prosterne": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "observent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "têtes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "chancelât": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "pesant": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sèche": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "boucs.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "béliers": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "graisse": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "terre.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "louent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "produits": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "transports": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "défenseur": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "dissipes": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "fondirent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "orphelins": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "dispersent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sinaï": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "bienfaisante": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "ébranla": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "messagères": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "épuisé": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "butin": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "étables": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "plumage": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "jaune": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "envie": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tsalmon": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "cimes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "résidence": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "comptent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "hauteurs": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "habiteront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sommet": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "vivent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "chanteurs": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "ramènerai": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tambourin": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "battant": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "règnes": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "apporteront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "animal": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "roseaux": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "combattre": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "éthiopie": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "accourt": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tendues": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "éternels": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "inconnu": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "gouffre": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "restitue": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "menacent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "consument": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "inondent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "insultent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sarcasmes": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "chansons": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "buveurs": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "liqueurs": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "parlent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "engloutisse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "exaucer": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "pitié": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "consolateurs": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "apaiser": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "obscurcissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "souffrances": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "exalterai": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sabots": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "malheurs": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "puissantes": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "inique": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "appuie": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "bornes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "consultent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "célébrant": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "oppresseur": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "terrain": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "fleurira": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "porteront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "fauché": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "arrosent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "fléchiront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "genou": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "lécheront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "séba": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "îles": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "paieront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "saba": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "offriront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "serviront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "béniront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "blés": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "abonderont": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "agiteront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "subsistera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "fleuriront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "glorieux": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "perpétuera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "abondamment": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "embonpoint": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "collier": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "tourmente": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "opprimer": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "glisser": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "connaîtrait-il": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "matins": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sanctuaires": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "pénétré": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "eusse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "final": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "aigrissait": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "glissantes": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "cognée": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "asaph": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "constamment": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "pâturage": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "ravagé": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "dévastés": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "forêt": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sculptures": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "marteaux": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "haches": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "méprisera-t-il": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "outragera-t-il": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "monstres": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "crocodile": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sources": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "limites": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tourterelle": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "méprise": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "repaires": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "clameurs": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "colonnes.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "élévation": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "lie": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sucent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "verse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "bouches": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "guerre.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "ravisseurs": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "vaillants": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "salem": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "effrayée": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "éclate": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "courroux": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "dons": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "terrible": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "éveil": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "réflexions": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "refuse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "rejettera-t-il": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "anéantie": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "épuisée": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "versèrent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "volèrent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "éclata": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "éclairs": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "illuminèrent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "émut": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tsoan": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "indocile": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "naîtraient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "oubli": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "parlassent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "cacherons": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "passage": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "désir": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "viande": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "abondants": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "révolter": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "alluma": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "éleva": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "satiété": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "camp": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "ailés": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "frappait": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "trompaient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "irritèrent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "solitude": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "tenter": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "provoquer": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "délivra": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "accomplit": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "mouches": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "venimeuses": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "dévorèrent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "grenouilles": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "détruisirent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "récoltes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "vignes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sycomores": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "gelée": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "bétail": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "rage": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "mortalité": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "premiers-nés": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "prémices": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "cham": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "dirigea": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sûrement": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "couvrit": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "trompeur": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "frontière": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "captivité": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "silo": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "merci": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "dévora": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sacrificateurs": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "pleurèrent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "éveilla": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "allaitent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "intègre": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "intelligentes": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "cadavres": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "embrasera-t-elle": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "diraient-elles": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "monceau": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "invoquent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "passées": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "parviennent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "publierons": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "irriteras-tu": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "rameaux": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "nourris": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "chérubins": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "raillent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "discorde": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "clôtures": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "rejetons": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sanglier": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "dépouillent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "ronge": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "menaçante": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "meriba": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "corbeille": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "statut": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "mélodieuse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "épaule": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "ordonnance": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "conseils": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "remplirai": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "penchants": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "flatteraient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "confondrais": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "durerait": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "nourrirais": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "meilleur": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "rassasierais": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "jugerez-vous": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "en-dor": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "assyrie": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "hagaréniens": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "kison": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "ismaélites": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "lot.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "oreb": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "zébach": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "chaume": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "ouragan": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "embrase": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "baca": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "hirondelle": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "nid": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "autels": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "passereau": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "tracés": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "seuil": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "transforment": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "augmente": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "ardeur": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "réjouisse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "rencontrent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "marchera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "embrassent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "héman": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "ézrachite": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "flots.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "appesantit": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "parvienne": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "chanter": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "lèvent-ils": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sont-ils": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "horreur": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "connus": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "fureurs": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "anéantissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "intimes": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "thabor": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "perpétuité.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "bontés": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "éthan": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "apaises": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "soulèvent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "base": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "fortifiera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "soutiendra": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "surprendra": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "opprimera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "haïssent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "murailles": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "honte.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "hier": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "nées": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "fussent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "évanouir": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "emportes": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "contagion": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "peste": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "oiseleur": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "vole": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "cuirasse": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "plumes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "rétribution": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "fléau": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "dragon": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "délivrerai": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "rassasierai": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "protégerai": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "longs": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "instrument": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sons": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "fraîche": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "fleurissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "croissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "célébrer": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "cèdre": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "palmier": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "plaît": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sève": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "verdoyants": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "retentissantes": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "ondes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "convient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "triompheront-ils": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "superbes": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "verrait-il": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "entendrait-il": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "vengeances": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "glorifient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "punirait-il": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "délaisse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "calmer": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "consolations": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "approuveront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "feraient-ils": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "dépit": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sommets": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "massa": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tentèrent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "eus": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "dégoût": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "égaie": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "contient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "retentisse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "images": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "obscurité": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "illuminent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "servent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "fondent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "prosternent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "publient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "trompettes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "cor": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "battent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "chantez": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "colonne": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "exauça": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "exauças": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "anéantirai": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "éloignera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "habitera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "supporterai": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "enflé": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "conduite": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "mensonges": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "exterminer": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "solitaire": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "tison": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "évanouissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "plainte": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "pélican": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "attachent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "boisson": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "chérissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "fixé": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "craindront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "rebâtira": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "assembleront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "durent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "affermira": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "changeras": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "finiront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "aigle": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "fleur": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "domine": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "bénisse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "occupait": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "reconnaît": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "arrêtaient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "ânes": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "faîte": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "limite": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "doivent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "pavillon": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "besoins": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "produise": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "plantes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "resplendir": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "rassasient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "cigogne": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "cyprès": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "damans": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "élevées": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "rugissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "marquer": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "vaste": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "léviathan": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "recueillent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "donnes": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "retires": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "canaan": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "promesses": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "subsistance": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "moyen": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "oints": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "exercent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "dominateur": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "éprouva": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "gré": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "fécond": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "enchaîner": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "haïrent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "perfidie": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "fourmilla": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "figuiers": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "égyptiens": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "poux": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "réjouirent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "saisissait": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "cailles": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "rassasia": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "coulèrent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "exécution": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sauva": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "accordant": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "manifester": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "bienveillance": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "haïssait": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "abiram": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "dépérissement": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "accorda": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "embrasa": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "horeb": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "consuma": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "fonte": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "brèche": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "empêcher": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "détourner": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "disperser": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "figure": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "baal-peor": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sacrifiées": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "enflamma": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "opprimèrent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "retenaient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "verrous": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "habitable": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "affamée": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "altérée": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "secourut": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "rachetés": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "ivre": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "habileté": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "vertige": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "port": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "turent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "exaltent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "réunion": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "fertile": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "desséchée": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "étang": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "fait-il": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "errer": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "accusateur": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "haineux": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "pillent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "mensongère": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "descendants": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "charge": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "éteigne": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "exercer": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "suivante": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sauterelle": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "malédiction": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "maigreur": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "hautement": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "célébrerai": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "condamnent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "repentira": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "melchisédek": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "rosée": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "étendra": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "saine": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "livrant": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "largesses": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "indigents": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "mette": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "bien-être": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "exerce": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "joyeuse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "domaine": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sautèrent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "enfuir": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "barbare": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sauter": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "souvient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "multipliera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "faveurs": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "nez": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "fabriquent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "invoquerai": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "abeilles": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "prospérité": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "environnaient": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "confier": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "énumère": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "conseillers": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "statuts": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "pleure": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "dirigeant": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "suivre": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "gain": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "retienne": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "railleries": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "oppriment": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "promesse": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "chargent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "languissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "languit": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "creusent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "vieillards": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "fosses": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "méditation": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "deviens": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tiendrai": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "exprime": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "écume": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "indécis": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "écartent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "frissonne": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "oppresseurs": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "garantie": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "répandent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "dominer": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "révélation": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "méditer": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "traîtres": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "fondement": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "supplication": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "soutiennent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "perdue": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "trompeuse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "lèvre": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "aigus": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "ardents": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "guerrier": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "degrés": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "genêt": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "méschec": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "kédar": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "séjourner": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "gardera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tranquillité": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "parties": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "arrêtent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "maîtresse": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "oiseleurs": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "élevèrent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "détruise": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "détournées": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "restera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "ruisseaux": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "ramena": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "levez-vous": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "carquois": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "travaillent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "bâtissent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "bénira": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "plants": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "féconde": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "moissonneur": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "laboureurs": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "rédemption": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "trop": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sevré": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "enfle": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "éphrata": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "jaar": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "entendîmes": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "trouvâmes": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "vœu": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "reviendra": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "enseigne": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "pousseront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "précieuse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "demeurer": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "barbe": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "amoréens": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "pharaon": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "luminaires": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "présider": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "étendu": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "seigneurs": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
+  },
+  "harpes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "saules": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "vainqueurs": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "principal": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "étrangère": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "souvenant": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "dévastée": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "écrase": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "agira": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "merveilleuse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "couvriront": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "conduira": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "portée": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "science": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "brille": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "créature": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "inscrits": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "masse": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "informe": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "existât": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "grains": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "criminelle": {
+    "gender": "f",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "mentir": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "mauvaise": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "hais": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "embûches.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "rets": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "précipite": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "aspic.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "entraîne": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "implore": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "desséchée.:pause": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "poursuit": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "connaisses": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "meurtrier": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "colonnes": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "fausseté": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "bienfaiteur": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "bataille": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "sculptées": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "provisions": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "désastre": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "génisses": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "immense": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "redoutable": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "souhait": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "glorieuse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "étendent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "publie": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "redresse": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "blessures": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "corbeau": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "exilés": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "rebâtit": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "court": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "barres": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "vitesse": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "laine": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "glace": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "coulent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "froid": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "violera": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "lumineuses": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "ceps": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "exécuter": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "triomphent": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "tranchants": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "cymbales": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "chalumeau": {
+    "gender": "m",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "sonores": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "immensité": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": false
+  },
+  "respire": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "hasCapitalizedVariant": false
+  },
+  "absalom": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": false,
+    "hasCapitalizedVariant": true
   }
 }

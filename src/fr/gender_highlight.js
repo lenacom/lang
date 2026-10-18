@@ -90,6 +90,18 @@ const NARROW_PREPOSITIONS = new Set([
   "entre", "sans", "par", "sur", "avec", "chaque", "pour", "quelque",
   "contre", "ni",
 ]);
+// a preposition can never be followed by nothing - whatever comes after it
+// (directly, or via an intervening "le"/"la"/"les" that turns out to govern
+// a verb/noun homograph like "voie"/"paille"/"assemblée"/"courant") is
+// guaranteed to be a noun phrase, so even a verb-ambiguous candidate should
+// be trusted here rather than discarded (see the mustBeNoun fallback tier
+// below). "comme" and "dans" are included here even though they are not
+// full PREPOSITION_TRIGGERS entries (they are STOPWORDS instead, since they
+// are essentially never followed by a bare noun with no article) - they
+// still guarantee a noun once an article intervenes ("dans l'assemblée")
+const NOUN_GUARANTEED_PREPOSITIONS = new Set([
+  "à", "de", "sur", "en", "comme", "par", "avec", "dans",
+]);
 // most noun/verb and noun/adjective ambiguity (e.g. "grand", "porter") is
 // detected from Yandex's own part-of-speech data instead (see
 // fetchGenderFromYandex) - these are left here only because the metadata
@@ -374,7 +386,7 @@ function findArticleInfo(tokens, i, cache) {
     return null;
   }
 
-  // "du"/"au" (contracted "de"/"à" + "le"), "de la"/"à la", and
+  // "du"/"au" (contracted "de"/"à" + "le"), "de la"/"à la", "un"/"une", and
   // "aucun"/"aucune" always introduce a noun phrase - unlike bare
   // "le"/"la", they can never be object pronouns - so when nothing better
   // is found afterward, even a verb-ambiguous word is trusted as a last
@@ -382,13 +394,22 @@ function findArticleInfo(tokens, i, cache) {
   let mustBeNoun =
     effectiveToken === "du" ||
     effectiveToken === "au" ||
+    effectiveToken === "un" ||
+    effectiveToken === "une" ||
     effectiveToken === "aucun" ||
-    effectiveToken === "aucune";
-  if (!mustBeNoun && cleanedToken === "la") {
+    effectiveToken === "aucune" ||
+    (isPrepositionTrigger && NOUN_GUARANTEED_PREPOSITIONS.has(effectiveToken));
+  if (
+    !mustBeNoun &&
+    (elisionMatch ||
+      cleanedToken === "la" ||
+      cleanedToken === "le" ||
+      cleanedToken === "les")
+  ) {
     let prevIdx = i - 1;
     while (prevIdx >= 0 && /^\s+$/.test(tokens[prevIdx])) prevIdx--;
     const prevWord = prevIdx >= 0 ? effectiveWord(tokens[prevIdx]) : "";
-    mustBeNoun = prevWord === "de" || prevWord === "à";
+    mustBeNoun = NOUN_GUARANTEED_PREPOSITIONS.has(prevWord);
   }
 
   const maxCandidates =
