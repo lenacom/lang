@@ -100,7 +100,7 @@ const NARROW_PREPOSITIONS = new Set([
 // are essentially never followed by a bare noun with no article) - they
 // still guarantee a noun once an article intervenes ("dans l'assemblée")
 const NOUN_GUARANTEED_PREPOSITIONS = new Set([
-  "à", "de", "sur", "en", "comme", "par", "avec", "dans",
+  "à", "de", "sur", "en", "comme", "par", "avec", "dans", "depuis",
 ]);
 // most noun/verb and noun/adjective ambiguity (e.g. "grand", "porter") is
 // detected from Yandex's own part-of-speech data instead (see
