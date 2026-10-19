@@ -42,10 +42,15 @@ const FRENCH_NUMBER_WORDS = [
 // the ordinal gets treated as an unambiguous direct match and the search
 // stops before ever reaching the real noun that follows it. "premier" is
 // the one ordinal Yandex does tag "adj" for, so it already works without
-// being listed here
-const ORDINAL_NUMBER_WORDS = new Set([
+// being listed here. "tel"/"telle" are the same case ("de tels miracles",
+// "un tel homme") - kept as a fallback rather than excluded outright, since
+// they are also a real noun in "chez un tel" (so-and-so). Plurals are listed
+// explicitly because this is checked against the word as written, before
+// the singular lookup
+const UNTAGGED_ADJECTIVE_WORDS = new Set([
   "deuxième", "troisième", "quatrième", "cinquième", "sixième", "septième",
   "huitième", "neuvième", "dixième", "onzième", "douzième",
+  "tel", "telle", "tels", "telles",
 ]);
 // gender-neutral - trigger a noun search, but never reveal m/f themselves
 const PLURAL_ARTICLES = new Set([
@@ -64,6 +69,18 @@ const ARTICLE_GENDER = {
 // vowel/mute-h-initial feminine noun (euphony, e.g. "mon amie") - see the
 // VOWEL_START_RE check below
 const POSSESSIVE_VOWEL_EXCEPTION = new Set(["son", "mon", "ton"]);
+// a possessive determiner can never sit in front of a verb, so the word
+// after it is guaranteed to be a noun phrase - even a verb-ambiguous
+// candidate ("sa salive", "ses larmes") should be trusted rather than
+// discarded (see the mustBeNoun fallback tier below). "leur" is left out on
+// purpose: it is also an invariable indirect-object pronoun ("il leur
+// parle"), which can sit right in front of a verb - "leurs" is safe, since
+// the pronoun never takes an "s" (the possessive pronoun "les leurs" is
+// followed by a pure verb at worst, which already ends the search)
+const POSSESSIVE_DETERMINERS = new Set([
+  "sa", "son", "ses", "ma", "mon", "mes", "ta", "ton", "tes",
+  "notre", "nos", "votre", "vos", "leurs",
+]);
 // closed-class words that can never themselves be the noun - without this,
 // a lookahead landing on one of them can pick up a bogus noun sense Yandex
 // returns for an accent-insensitive homograph (e.g. "de" matched as "dé")
@@ -151,6 +168,16 @@ const TRAILING_CI_LA_RE = /-(ci|là)$/iu;
 // article's reach stops at "conseiller", so "nommé" must never be scanned
 // as a candidate)
 const CLAUSE_BREAK_RE = /[,;:.!?…]$/u;
+// brackets end the noun phrase too: a closing one right after a lookahead
+// token ("de Siloé)" - the token itself is still a candidate, same as with a
+// comma), and an opening one right before it ("de Siloé _(nom_ qui signifie
+// envoyé)" - the parenthetical is an aside, so the word inside it must never
+// be scanned as a candidate; checked BEFORE the token is pushed). Trailing
+// "_" italic markers are allowed after the closing bracket; the bracket
+// characters themselves stay outside any highlight span, since
+// extractHighlightSpan() already peels every non-letter off the noun
+const CLOSING_BRACKET_RE = /[)\]}][^\p{L}]*$/u;
+const OPENING_BRACKET_RE = /^[^\p{L}]*[(\[{]/u;
 // nouns that are only trustworthy when found as the direct "l'" elision
 // remainder (tokenIndex === i) - found at a distance they are almost
 // always something else. "été" is usually the past participle of "être"
@@ -398,6 +425,7 @@ function findArticleInfo(tokens, i, cache) {
     effectiveToken === "une" ||
     effectiveToken === "aucun" ||
     effectiveToken === "aucune" ||
+    POSSESSIVE_DETERMINERS.has(effectiveToken) ||
     (isPrepositionTrigger && NOUN_GUARANTEED_PREPOSITIONS.has(effectiveToken));
   if (
     !mustBeNoun &&
@@ -437,12 +465,16 @@ function findArticleInfo(tokens, i, cache) {
     clauseBroken =
       clauseBroken ||
       CLAUSE_BREAK_RE.test(articleRemainder) ||
+      CLOSING_BRACKET_RE.test(articleRemainder) ||
       isTriggerWord(remainderCleaned) ||
       isPureVerb(remainderCleaned, cache);
   }
   let idx = i + 1;
   while (!clauseBroken && candidates.length < maxCandidates && idx < tokens.length) {
     if (!/^\s+$/.test(tokens[idx])) {
+      if (OPENING_BRACKET_RE.test(tokens[idx])) {
+        break;
+      }
       const wordCleaned = cleanWord(tokens[idx]);
       if (isFillerAfter(prevCleaned, wordCleaned)) {
         clauseBroken = true;
@@ -452,6 +484,7 @@ function findArticleInfo(tokens, i, cache) {
       prevCleaned = wordCleaned;
       if (
         CLAUSE_BREAK_RE.test(tokens[idx]) ||
+        CLOSING_BRACKET_RE.test(tokens[idx]) ||
         isTriggerWord(wordCleaned) ||
         isPureVerb(wordCleaned, cache)
       ) {
@@ -535,10 +568,10 @@ function highlightNounGender(line, nounGender, cache) {
         continue;
       }
       // Yandex doesn't tag these as adjectives at all (see
-      // ORDINAL_NUMBER_WORDS) - treat them as ambiguous regardless, so the
+      // UNTAGGED_ADJECTIVE_WORDS) - treat them as ambiguous regardless, so the
       // search keeps looking for the real noun that follows ("troisième
       // jour" -> "jour", not "troisième" itself)
-      const entry = ORDINAL_NUMBER_WORDS.has(cleaned)
+      const entry = UNTAGGED_ADJECTIVE_WORDS.has(cleaned)
         ? { ...rawEntry, isAdjective: true }
         : rawEntry;
       if (!entry.isAdjective && !entry.isVerb) {
@@ -564,6 +597,19 @@ function highlightNounGender(line, nounGender, cache) {
       fallbackCandidate = candidate;
     }
 
+    // a verb-ambiguous word that comes AFTER an adjective-ambiguous one inside
+    // a guaranteed noun phrase ("un tel pouvoir", "sa belle salive") must be
+    // the head noun - a verb can't follow the adjective there - so it beats
+    // the adjective, which is only the right pick when nothing follows it
+    if (
+      !matchedCandidate &&
+      verbFallbackCandidate &&
+      fallbackCandidate &&
+      verbFallbackCandidate.tokenIndex > fallbackCandidate.tokenIndex
+    ) {
+      matchedGender = verbFallbackGender;
+      matchedCandidate = verbFallbackCandidate;
+    }
     if (!matchedCandidate && fallbackCandidate) {
       matchedGender = fallbackGender;
       matchedCandidate = fallbackCandidate;
@@ -634,11 +680,11 @@ function collectUnresolvedWords(line, nounGender, unresolved, cache) {
         if (info.expectedGender && rawEntry.gender !== info.expectedGender) {
           continue; // found but gender mismatches the article - not a dictionary gap
         }
-        // see ORDINAL_NUMBER_WORDS - Yandex tags these as plain nouns, but
+        // see UNTAGGED_ADJECTIVE_WORDS - Yandex tags these as plain nouns, but
         // highlightNounGender treats them as ambiguous and keeps searching,
         // so this must match that or a later unresolved word in the same
         // chain (e.g. "jour" in "troisième jour") never gets queued
-        const entry = ORDINAL_NUMBER_WORDS.has(cleaned)
+        const entry = UNTAGGED_ADJECTIVE_WORDS.has(cleaned)
           ? { ...rawEntry, isAdjective: true }
           : rawEntry;
         if (!entry.isAdjective && !entry.isVerb) {
