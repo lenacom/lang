@@ -69,17 +69,29 @@ const ARTICLE_GENDER = {
 // vowel/mute-h-initial feminine noun (euphony, e.g. "mon amie") - see the
 // VOWEL_START_RE check below
 const POSSESSIVE_VOWEL_EXCEPTION = new Set(["son", "mon", "ton"]);
-// a possessive determiner can never sit in front of a verb, so the word
-// after it is guaranteed to be a noun phrase - even a verb-ambiguous
-// candidate ("sa salive", "ses larmes") should be trusted rather than
-// discarded (see the mustBeNoun fallback tier below). "leur" is left out on
-// purpose: it is also an invariable indirect-object pronoun ("il leur
-// parle"), which can sit right in front of a verb - "leurs" is safe, since
-// the pronoun never takes an "s" (the possessive pronoun "les leurs" is
-// followed by a pure verb at worst, which already ends the search)
-const POSSESSIVE_DETERMINERS = new Set([
+// a possessive/demonstrative determiner can never sit in front of a verb, so
+// the word after it is guaranteed to be a noun phrase - even a verb-ambiguous
+// candidate ("sa salive", "ses larmes", "ces œuvres") should be trusted
+// rather than discarded (see the mustBeNoun fallback tier below). "leur" is
+// left out on purpose: it is also an invariable indirect-object pronoun ("il
+// leur parle"), which can sit right in front of a verb - "leurs" is safe,
+// since the pronoun never takes an "s" (the possessive pronoun "les leurs"
+// is followed by a pure verb at worst, which already ends the search). "ce"
+// is handled separately (see CE_PRONOUN_VERBS): unlike "cet"/"cette"/"ces"
+// it is also a pronoun
+const NOUN_GUARANTEEING_DETERMINERS = new Set([
   "sa", "son", "ses", "ma", "mon", "mes", "ta", "ton", "tes",
   "notre", "nos", "votre", "vos", "leurs",
+  "cet", "cette", "ces",
+]);
+// "ce" is a determiner ("ce miracle") but also the pronoun of "ce sont", "ce
+// fut", "ce n’est pas" - in those the next word is a form of être/pouvoir/
+// devoir/sembler, which for words like "est" (the noun "east") would
+// otherwise pass as a verb-ambiguous noun
+const CE_PRONOUN_VERBS = new Set([
+  "est", "sont", "sera", "serait", "seront", "seraient", "fut", "furent",
+  "était", "étaient", "soit", "soient", "peut", "pouvait", "doit", "devait",
+  "semble", "semblait",
 ]);
 // closed-class words that can never themselves be the noun - without this,
 // a lookahead landing on one of them can pick up a bogus noun sense Yandex
@@ -115,9 +127,14 @@ const NARROW_PREPOSITIONS = new Set([
 // below). "comme" and "dans" are included here even though they are not
 // full PREPOSITION_TRIGGERS entries (they are STOPWORDS instead, since they
 // are essentially never followed by a bare noun with no article) - they
-// still guarantee a noun once an article intervenes ("dans l'assemblée")
+// still guarantee a noun once an article intervenes ("dans l'assemblée").
+// Left out on purpose: "pour"/"sans"/"après"/"avant" - they take an
+// infinitive or a pronoun + infinitive ("pour porter", "sans les voir",
+// "après les avoir vus"), so what follows can be a verb and "les" a pronoun
 const NOUN_GUARANTEED_PREPOSITIONS = new Set([
   "à", "de", "sur", "en", "comme", "par", "avec", "dans", "depuis",
+  "entre", "contre", "chez", "vers", "sous", "pendant", "parmi", "selon",
+  "malgré",
 ]);
 // most noun/verb and noun/adjective ambiguity (e.g. "grand", "porter") is
 // detected from Yandex's own part-of-speech data instead (see
@@ -312,6 +329,18 @@ function lookupGender(word, nounGender) {
   return undefined;
 }
 
+// a capitalized token that opens a sentence: first word of the line (verse
+// numbers like "25" in front of it don't count), or right after a
+// sentence-ender / colon (direct speech: "dirent: Les ...")
+function isSentenceStart(tokens, i) {
+  if (!CAPITALIZED_WORD_RE.test(tokens[i])) return false;
+  let prevIdx = i - 1;
+  while (prevIdx >= 0 && (/^\s+$/.test(tokens[prevIdx]) || /^\d+$/.test(tokens[prevIdx]))) {
+    prevIdx--;
+  }
+  return prevIdx < 0 || /[.!?…:»"]$/u.test(tokens[prevIdx]);
+}
+
 function findArticleInfo(tokens, i, cache) {
   const token = tokens[i];
   const elisionMatch = token.match(ELISION_RE);
@@ -425,8 +454,21 @@ function findArticleInfo(tokens, i, cache) {
     effectiveToken === "une" ||
     effectiveToken === "aucun" ||
     effectiveToken === "aucune" ||
-    POSSESSIVE_DETERMINERS.has(effectiveToken) ||
+    NOUN_GUARANTEEING_DETERMINERS.has(effectiveToken) ||
     (isPrepositionTrigger && NOUN_GUARANTEED_PREPOSITIONS.has(effectiveToken));
+  if (!mustBeNoun && effectiveToken === "ce") {
+    let nextIdx = i + 1;
+    while (nextIdx < tokens.length && /^\s+$/.test(tokens[nextIdx])) nextIdx++;
+    const nextToken = nextIdx < tokens.length ? tokens[nextIdx] : "";
+    const nextWord = cleanWord(nextToken);
+    // a noun never carries an elided pronoun in front of it ("ce n’est",
+    // "ce qu’il"), and a gerund ("ce disant", "ce faisant") is not one
+    mustBeNoun =
+      nextWord !== "" &&
+      !LEADING_ELISION_CAPTURE_RE.test(nextToken) &&
+      !nextWord.endsWith("ant") &&
+      !CE_PRONOUN_VERBS.has(nextWord);
+  }
   if (
     !mustBeNoun &&
     (elisionMatch ||
@@ -438,6 +480,32 @@ function findArticleInfo(tokens, i, cache) {
     while (prevIdx >= 0 && /^\s+$/.test(tokens[prevIdx])) prevIdx--;
     const prevWord = prevIdx >= 0 ? effectiveWord(tokens[prevIdx]) : "";
     mustBeNoun = NOUN_GUARANTEED_PREPOSITIONS.has(prevWord);
+  }
+  // a capitalized "Le"/"La"/"Les"/"L’" opening a sentence is an article: an
+  // object pronoun can only sit before a verb inside the clause, never start
+  // a plain statement. The only starts that stay ambiguous are a present
+  // participle ("Les voyant venir, ...") - an "-ant" word right after it
+  // keeps the old cautious behaviour. (Infinitives and inverted questions
+  // like "Les avez-vous vus?" need no special case: the word after the
+  // pronoun there can't be a noun with a gender, so there is nothing to
+  // wrongly highlight)
+  if (
+    !mustBeNoun &&
+    (elisionMatch ||
+      cleanedToken === "la" ||
+      cleanedToken === "le" ||
+      cleanedToken === "les") &&
+    isSentenceStart(tokens, i)
+  ) {
+    let followingWord;
+    if (elisionMatch) {
+      followingWord = cleanWord(elisionMatch[2]);
+    } else {
+      let nextIdx = i + 1;
+      while (nextIdx < tokens.length && /^\s+$/.test(tokens[nextIdx])) nextIdx++;
+      followingWord = nextIdx < tokens.length ? cleanWord(tokens[nextIdx]) : "";
+    }
+    mustBeNoun = !followingWord.endsWith("ant");
   }
 
   const maxCandidates =
@@ -502,6 +570,22 @@ function findArticleInfo(tokens, i, cache) {
     expectedGender = null;
   }
 
+  // true when the last candidate is also the last word of the phrase
+  // (punctuation, a bracket, or the end of the line right after it) - only
+  // then can an adjective-only word be the substantivized noun itself
+  // ("d’un démoniaque;"), since nothing after it could be the real noun
+  let phraseEnds = false;
+  if (candidates.length > 0) {
+    const last = candidates[candidates.length - 1];
+    if (CLAUSE_BREAK_RE.test(last.word) || CLOSING_BRACKET_RE.test(last.word)) {
+      phraseEnds = true;
+    } else {
+      let k = last.tokenIndex + 1;
+      while (k < tokens.length && /^\s+$/.test(tokens[k])) k++;
+      phraseEnds = k >= tokens.length || OPENING_BRACKET_RE.test(tokens[k]);
+    }
+  }
+
   return {
     outerPrefix,
     articlePrefix,
@@ -510,7 +594,34 @@ function findArticleInfo(tokens, i, cache) {
     expectedGender,
     candidates,
     mustBeNoun,
+    phraseEnds,
   };
+}
+
+// candidates that COULD be an adjective used as the noun of the phrase
+// ("le démoniaque avait été guéri", "d’un démoniaque;"): everything after
+// the candidate inside the phrase is only a closed-class word or a pure verb
+// (so nothing after it could be the real noun), or the phrase ends right
+// there. Whether the word actually is an adjective with no noun sense is a
+// separate dictionary check, done by the callers
+function substantivizedCandidates(info, cache) {
+  const { candidates, phraseEnds } = info;
+  const result = [];
+  for (let c = 0; c < candidates.length; c++) {
+    const cleaned = cleanWord(candidates[c].word);
+    if (!cleaned || isExcludedCandidate(cleaned) || cleaned in ELISION_ONLY_NOUNS) {
+      continue;
+    }
+    const followers = candidates.slice(c + 1);
+    const nothingFollows = followers.every((f) => {
+      const followerCleaned = cleanWord(f.word);
+      return isExcludedCandidate(followerCleaned) || isPureVerb(followerCleaned, cache);
+    });
+    if (nothingFollows && (followers.length > 0 || phraseEnds)) {
+      result.push(candidates[c]);
+    }
+  }
+  return result;
 }
 
 function highlightNounGender(line, nounGender, cache) {
@@ -534,6 +645,7 @@ function highlightNounGender(line, nounGender, cache) {
       expectedGender,
       candidates,
       mustBeNoun,
+      isGenderArticle,
     } = info;
 
     let matchedGender = null;
@@ -557,8 +669,33 @@ function highlightNounGender(line, nounGender, cache) {
         }
         continue; // found at a distance - never trust it (see comment above)
       }
-      const rawEntry = lookupGender(cleaned, nounGender);
-      if (!rawEntry || (expectedGender && rawEntry.gender !== expectedGender)) {
+      const foundEntry = lookupGender(cleaned, nounGender);
+      // a proper name right after a gender article ("du Jourdain", "l’Égypte")
+      // - the dictionary only knows it capitalized, so it has no entry above,
+      // but the capital in the text plus the article settle it
+      if (
+        !foundEntry &&
+        isGenderArticle &&
+        candidate === candidates[0] &&
+        CAPITALIZED_WORD_RE.test(candidate.word) &&
+        cleaned in cache
+      ) {
+        const cached = normalizeCacheEntry(cache[cleaned]);
+        if (cached.properNoun) {
+          const properGender = expectedGender
+            ? !cached.properGender || cached.properGender === expectedGender
+              ? expectedGender
+              : null
+            : cached.properGender;
+          if (properGender) {
+            matchedGender = properGender;
+            matchedCandidate = candidate;
+            break;
+          }
+        }
+      }
+      const rawEntry = foundEntry && effectiveEntry(foundEntry, expectedGender);
+      if (!rawEntry) {
         continue;
       }
       // this exact occurrence is capitalized, and the dictionary also
@@ -584,7 +721,10 @@ function highlightNounGender(line, nounGender, cache) {
         // this is untrustworthy - except right after "du"/"au"/"de la"/
         // "à la", where a noun is grammatically guaranteed and this may
         // be the only candidate available at all
-        if (mustBeNoun) {
+        // the FIRST such candidate wins: right after a determiner the head
+        // noun is the word closest to it, anything further along ("ma force
+        // est épuisée" -> "est", the noun "east") is something else
+        if (mustBeNoun && !verbFallbackCandidate) {
           verbFallbackGender = entry.gender;
           verbFallbackCandidate = candidate;
         }
@@ -617,6 +757,25 @@ function highlightNounGender(line, nounGender, cache) {
     if (!matchedCandidate && verbFallbackCandidate) {
       matchedGender = verbFallbackGender;
       matchedCandidate = verbFallbackCandidate;
+    }
+    // last resort: nothing in the phrase is a noun, and its final word is an
+    // adjective the dictionary has no noun sense for ("d’un démoniaque;") -
+    // it can only be the adjective used as a noun, and the article says which
+    // gender. Never for an elided "l’"/plural article (no gender to read)
+    if (!matchedCandidate && expectedGender) {
+      for (const candidate of substantivizedCandidates(info, cache)) {
+        const cleaned = cleanWord(candidate.word);
+        const cached = cleaned in cache ? normalizeCacheEntry(cache[cleaned]) : null;
+        if (
+          cached &&
+          cached.isAdjectiveOnly &&
+          !(cached.hasCapitalizedVariant && CAPITALIZED_WORD_RE.test(candidate.word))
+        ) {
+          matchedGender = expectedGender;
+          matchedCandidate = candidate;
+          break;
+        }
+      }
     }
 
     if (!matchedGender) {
@@ -675,10 +834,11 @@ function collectUnresolvedWords(line, nounGender, unresolved, cache) {
         if (candidate.tokenIndex === i) break; // resolved - see ELISION_ONLY_NOUNS
         continue; // found at a distance - never trust it
       }
-      const rawEntry = lookupGender(cleaned, nounGender);
-      if (rawEntry) {
-        if (info.expectedGender && rawEntry.gender !== info.expectedGender) {
-          continue; // found but gender mismatches the article - not a dictionary gap
+      const foundEntry = lookupGender(cleaned, nounGender);
+      if (foundEntry) {
+        const rawEntry = effectiveEntry(foundEntry, info.expectedGender);
+        if (!rawEntry) {
+          continue; // found but doesn't fit the article - not a dictionary gap
         }
         // see UNTAGGED_ADJECTIVE_WORDS - Yandex tags these as plain nouns, but
         // highlightNounGender treats them as ambiguous and keeps searching,
@@ -696,6 +856,24 @@ function collectUnresolvedWords(line, nounGender, unresolved, cache) {
       }
       if (cleaned) {
         unresolved.add(cleaned);
+      }
+    }
+    // the adjective-only last resort in highlightNounGender needs the
+    // `isAdjectiveOnly` flag, which older cache entries predate - look the
+    // phrase-final word up again, but only here (not for every cached word)
+    const firstCandidate = info.candidates[0];
+    if (info.isGenderArticle && firstCandidate && CAPITALIZED_WORD_RE.test(firstCandidate.word)) {
+      const cleaned = cleanWord(firstCandidate.word);
+      if (cleaned in cache && lacksProperInfo(cache[cleaned])) {
+        unresolved.add(cleaned);
+      }
+    }
+    if (info.expectedGender) {
+      for (const candidate of substantivizedCandidates(info, cache)) {
+        const cleaned = cleanWord(candidate.word);
+        if (cleaned in cache && lacksAdjectiveInfo(cache[cleaned])) {
+          unresolved.add(cleaned);
+        }
       }
     }
   }
@@ -736,8 +914,11 @@ async function getYandexJson(word) {
 // past the common noun reading ("feu" = fire) to an unrelated later word
 const GENDER_OVERRIDES = { pierre: "f", feu: "m", conseiller: "m", corde: "f" };
 
-// returns { gender: "m"|"f"|null, isAdjective: boolean, isVerb: boolean } for
-// the cache
+// returns { gender: "m"|"f"|null, isAdjective: boolean, isVerb: boolean,
+// isNoun: boolean } for the cache. `isNoun` is true whenever Yandex lists a
+// noun entry for the word - even without a gender ("joue" = cheek is tagged
+// "nn" with no "gen" at all), in which case the gender is read off the
+// article at the point of use instead (see effectiveEntry)
 async function fetchGenderFromYandex(word) {
   const json = await getYandexJson(word);
   const regular = json["fr-ru"]?.["regular"] ?? [];
@@ -773,7 +954,26 @@ async function fetchGenderFromYandex(word) {
   const noun = entries.find((it) => it.pos?.code === "nn");
   const gen = noun?.gen?.code;
   const gender = gen === "m" || gen === "f" ? gen : null;
+  const isNoun = noun !== undefined;
+  // a noun entry spelled with a capital ("Jourdain", "Jérusalem") - a proper
+  // name. Never used on its own (see hasCapitalizedVariant), but right after
+  // a gender article ("du Jourdain") it can only be that name, so it's
+  // highlighted there, with the gender taken from the article
+  const properEntry = regular.find((it) => {
+    if (it.pos?.code !== "nn" || !it.text) return false;
+    const textLower = it.text.toLowerCase();
+    return (
+      it.text !== textLower && (textLower === lower || singulars.includes(textLower))
+    );
+  });
+  const properNoun = properEntry !== undefined;
+  const properGenderCode = properEntry?.gen?.code;
+  const properGender =
+    properGenderCode === "m" || properGenderCode === "f" ? properGenderCode : null;
   const isAdjective = gender !== null && entries.some((it) => it.pos?.code === "adj");
+  // an adjective with no noun entry at all ("démoniaque") - can still be
+  // the noun of a phrase when used substantivally ("d’un démoniaque")
+  const isAdjectiveOnly = !isNoun && entries.some((it) => it.pos?.code === "adj");
   // a word that Yandex also lists as a verb ("vrb") is normally treated as
   // not a noun at all, even when it has a rare noun sense too (e.g.
   // "porter", "aller") - an infinitive doesn't reliably follow an article
@@ -798,19 +998,47 @@ async function fetchGenderFromYandex(word) {
       gender: GENDER_OVERRIDES[overrideKey],
       isAdjective: false,
       isVerb: false,
+      isNoun: true,
+      isAdjectiveOnly: false,
+      properNoun: false,
+      properGender: null,
       hasCapitalizedVariant,
     };
   }
   if (isVerb) {
-    return { gender, isAdjective: false, isVerb: true, hasCapitalizedVariant };
+    return {
+      gender,
+      isAdjective: false,
+      isVerb: true,
+      isNoun,
+      isAdjectiveOnly,
+      properNoun,
+      properGender,
+      hasCapitalizedVariant,
+    };
   }
-  return { gender, isAdjective, isVerb: false, hasCapitalizedVariant };
+  return {
+    gender,
+    isAdjective,
+    isVerb: false,
+    isNoun,
+    isAdjectiveOnly,
+    properNoun,
+    properGender,
+    hasCapitalizedVariant,
+  };
 }
 
 const FETCH_CONCURRENCY = 6;
 
 async function resolveMissingGenders(unresolvedWords, cache) {
-  const toFetch = [...unresolvedWords].filter((word) => !(word in cache));
+  const toFetch = [...unresolvedWords].filter(
+    (word) =>
+      !(word in cache) ||
+      isStaleCacheEntry(cache[word]) ||
+      lacksAdjectiveInfo(cache[word]) ||
+      lacksProperInfo(cache[word]),
+  );
   let nextIndex = 0;
   async function worker() {
     while (nextIndex < toFetch.length) {
@@ -836,8 +1064,58 @@ function normalizeCacheEntry(value) {
     gender: raw.gender,
     isAdjective: raw.isAdjective ?? false,
     isVerb: raw.isVerb ?? false,
+    isNoun: raw.isNoun ?? false,
+    isAdjectiveOnly: raw.isAdjectiveOnly ?? false,
+    properNoun: raw.properNoun ?? false,
+    properGender: raw.properGender ?? null,
     hasCapitalizedVariant: raw.hasCapitalizedVariant ?? false,
   };
+}
+
+// an entry the dictionary knows a capitalized spelling for, written before
+// properNoun was tracked - re-check it when it turns up right after an
+// article (see lacksAdjectiveInfo for why this is kept separate)
+function lacksProperInfo(value) {
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    value.hasCapitalizedVariant === true &&
+    value.properNoun === undefined
+  );
+}
+
+// a genderless non-noun entry written before isAdjectiveOnly was tracked -
+// unlike isStaleCacheEntry this is NOT a reason to distrust the entry
+// elsewhere (isPureVerb etc. stay correct), only to re-check it when it is
+// the final word of a phrase
+function lacksAdjectiveInfo(value) {
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    !value.gender &&
+    value.isNoun === false &&
+    value.isAdjectiveOnly === undefined
+  );
+}
+
+// a genderless entry written before isNoun was tracked - there's no way to
+// tell whether Yandex had a (genderless) noun entry for it, so it has to be
+// looked up again the next time it turns up as a candidate
+function isStaleCacheEntry(value) {
+  if (value === null || typeof value !== "object") return true;
+  return !value.gender && value.isNoun === undefined;
+}
+
+// a noun with no gender of its own can still be used when the article
+// supplies it ("à la joue" -> feminine); with no article gender to go on
+// (plural article, elided "l'") it can't be told apart, so it's skipped.
+// Returns null when the entry doesn't fit the article
+function effectiveEntry(entry, expectedGender) {
+  if (!entry.gender) {
+    return expectedGender ? { ...entry, gender: expectedGender } : null;
+  }
+  if (expectedGender && entry.gender !== expectedGender) return null;
+  return entry;
 }
 
 function mergeGenderMap(baseMap, cache) {
@@ -845,7 +1123,7 @@ function mergeGenderMap(baseMap, cache) {
   for (const [word, value] of Object.entries(cache)) {
     if (merged.has(word)) continue;
     const entry = normalizeCacheEntry(value);
-    if (entry.gender === "m" || entry.gender === "f") {
+    if (entry.gender === "m" || entry.gender === "f" || entry.isNoun) {
       merged.set(word, entry);
     }
   }
@@ -862,9 +1140,9 @@ function mergeGenderMap(baseMap, cache) {
 // Yandex lookup via the ordinary candidate-gathering path so a later build
 // pass (once cached) can make the correct call
 function isPureVerb(word, cache) {
-  if (!(word in cache)) return false;
+  if (!(word in cache) || isStaleCacheEntry(cache[word])) return false;
   const entry = normalizeCacheEntry(cache[word]);
-  return entry.isVerb && entry.gender === null;
+  return entry.isVerb && entry.gender === null && !entry.isNoun;
 }
 
 // every noun's gender comes from a live Yandex metadata check (gender +
