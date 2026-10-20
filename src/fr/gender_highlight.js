@@ -645,7 +645,6 @@ function highlightNounGender(line, nounGender, cache) {
       expectedGender,
       candidates,
       mustBeNoun,
-      isGenderArticle,
     } = info;
 
     let matchedGender = null;
@@ -670,30 +669,6 @@ function highlightNounGender(line, nounGender, cache) {
         continue; // found at a distance - never trust it (see comment above)
       }
       const foundEntry = lookupGender(cleaned, nounGender);
-      // a proper name right after a gender article ("du Jourdain", "l’Égypte")
-      // - the dictionary only knows it capitalized, so it has no entry above,
-      // but the capital in the text plus the article settle it
-      if (
-        !foundEntry &&
-        isGenderArticle &&
-        candidate === candidates[0] &&
-        CAPITALIZED_WORD_RE.test(candidate.word) &&
-        cleaned in cache
-      ) {
-        const cached = normalizeCacheEntry(cache[cleaned]);
-        if (cached.properNoun) {
-          const properGender = expectedGender
-            ? !cached.properGender || cached.properGender === expectedGender
-              ? expectedGender
-              : null
-            : cached.properGender;
-          if (properGender) {
-            matchedGender = properGender;
-            matchedCandidate = candidate;
-            break;
-          }
-        }
-      }
       const rawEntry = foundEntry && effectiveEntry(foundEntry, expectedGender);
       if (!rawEntry) {
         continue;
@@ -861,13 +836,6 @@ function collectUnresolvedWords(line, nounGender, unresolved, cache) {
     // the adjective-only last resort in highlightNounGender needs the
     // `isAdjectiveOnly` flag, which older cache entries predate - look the
     // phrase-final word up again, but only here (not for every cached word)
-    const firstCandidate = info.candidates[0];
-    if (info.isGenderArticle && firstCandidate && CAPITALIZED_WORD_RE.test(firstCandidate.word)) {
-      const cleaned = cleanWord(firstCandidate.word);
-      if (cleaned in cache && lacksProperInfo(cache[cleaned])) {
-        unresolved.add(cleaned);
-      }
-    }
     if (info.expectedGender) {
       for (const candidate of substantivizedCandidates(info, cache)) {
         const cleaned = cleanWord(candidate.word);
@@ -889,8 +857,22 @@ function loadGenderCache() {
   }
 }
 
+// the cache is rewritten after every chapter, and on Windows an antivirus
+// scan or an editor's file watcher can briefly hold the file right after a
+// write, making the next open fail with an UNKNOWN error - a short retry is
+// enough, and failing the whole multi-minute build over it is not worth it
 function saveGenderCache(cache) {
-  fs.writeFileSync(GENDER_CACHE_PATH, JSON.stringify(cache, null, 2));
+  const json = JSON.stringify(cache, null, 2);
+  const MAX_ATTEMPTS = 10;
+  for (let attempt = 1; ; attempt++) {
+    try {
+      fs.writeFileSync(GENDER_CACHE_PATH, json);
+      return;
+    } catch (e) {
+      if (attempt >= MAX_ATTEMPTS) throw e;
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 100 * attempt);
+    }
+  }
 }
 
 async function getYandexJson(word) {
@@ -955,21 +937,6 @@ async function fetchGenderFromYandex(word) {
   const gen = noun?.gen?.code;
   const gender = gen === "m" || gen === "f" ? gen : null;
   const isNoun = noun !== undefined;
-  // a noun entry spelled with a capital ("Jourdain", "Jérusalem") - a proper
-  // name. Never used on its own (see hasCapitalizedVariant), but right after
-  // a gender article ("du Jourdain") it can only be that name, so it's
-  // highlighted there, with the gender taken from the article
-  const properEntry = regular.find((it) => {
-    if (it.pos?.code !== "nn" || !it.text) return false;
-    const textLower = it.text.toLowerCase();
-    return (
-      it.text !== textLower && (textLower === lower || singulars.includes(textLower))
-    );
-  });
-  const properNoun = properEntry !== undefined;
-  const properGenderCode = properEntry?.gen?.code;
-  const properGender =
-    properGenderCode === "m" || properGenderCode === "f" ? properGenderCode : null;
   const isAdjective = gender !== null && entries.some((it) => it.pos?.code === "adj");
   // an adjective with no noun entry at all ("démoniaque") - can still be
   // the noun of a phrase when used substantivally ("d’un démoniaque")
@@ -1000,8 +967,6 @@ async function fetchGenderFromYandex(word) {
       isVerb: false,
       isNoun: true,
       isAdjectiveOnly: false,
-      properNoun: false,
-      properGender: null,
       hasCapitalizedVariant,
     };
   }
@@ -1012,8 +977,6 @@ async function fetchGenderFromYandex(word) {
       isVerb: true,
       isNoun,
       isAdjectiveOnly,
-      properNoun,
-      properGender,
       hasCapitalizedVariant,
     };
   }
@@ -1023,8 +986,6 @@ async function fetchGenderFromYandex(word) {
     isVerb: false,
     isNoun,
     isAdjectiveOnly,
-    properNoun,
-    properGender,
     hasCapitalizedVariant,
   };
 }
@@ -1036,8 +997,7 @@ async function resolveMissingGenders(unresolvedWords, cache) {
     (word) =>
       !(word in cache) ||
       isStaleCacheEntry(cache[word]) ||
-      lacksAdjectiveInfo(cache[word]) ||
-      lacksProperInfo(cache[word]),
+      lacksAdjectiveInfo(cache[word]),
   );
   let nextIndex = 0;
   async function worker() {
@@ -1066,22 +1026,8 @@ function normalizeCacheEntry(value) {
     isVerb: raw.isVerb ?? false,
     isNoun: raw.isNoun ?? false,
     isAdjectiveOnly: raw.isAdjectiveOnly ?? false,
-    properNoun: raw.properNoun ?? false,
-    properGender: raw.properGender ?? null,
     hasCapitalizedVariant: raw.hasCapitalizedVariant ?? false,
   };
-}
-
-// an entry the dictionary knows a capitalized spelling for, written before
-// properNoun was tracked - re-check it when it turns up right after an
-// article (see lacksAdjectiveInfo for why this is kept separate)
-function lacksProperInfo(value) {
-  return (
-    value !== null &&
-    typeof value === "object" &&
-    value.hasCapitalizedVariant === true &&
-    value.properNoun === undefined
-  );
 }
 
 // a genderless non-noun entry written before isAdjectiveOnly was tracked -
