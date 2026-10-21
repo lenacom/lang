@@ -46,11 +46,35 @@ const FRENCH_NUMBER_WORDS = [
 // "un tel homme") - kept as a fallback rather than excluded outright, since
 // they are also a real noun in "chez un tel" (so-and-so). Plurals are listed
 // explicitly because this is checked against the word as written, before
-// the singular lookup
+// the singular lookup.
+// Also listed: the common adjectives that stand BEFORE their noun ("sa
+// propre salive", "une belle journée"). The dictionary often lists them as
+// nouns too ("propre", "grand"), which makes them look the same as a real
+// noun that happens to double as an adjective ("maître") - but unlike
+// those, they are the modifier whenever a word follows them in the phrase,
+// so a verb-ambiguous noun right after one ("salive", "pouvoir") is the
+// head noun (see fallbackUntagged in highlightNounGender)
 const UNTAGGED_ADJECTIVE_WORDS = new Set([
   "deuxième", "troisième", "quatrième", "cinquième", "sixième", "septième",
   "huitième", "neuvième", "dixième", "onzième", "douzième",
   "tel", "telle", "tels", "telles",
+  "haut", "haute", "hauts", "hautes",
+  "propre", "propres",
+  "beau", "bel", "belle", "beaux", "belles",
+  "grand", "grande", "grands", "grandes",
+  "petit", "petite", "petits", "petites",
+  "bon", "bonne", "bons", "bonnes",
+  "mauvais", "mauvaise", "mauvaises",
+  "vieux", "vieil", "vieille", "vieilles",
+  "jeune", "jeunes",
+  "autre", "autres",
+  "même", "mêmes",
+  "seul", "seule", "seuls", "seules",
+  "pauvre", "pauvres",
+  "saint", "sainte", "saints", "saintes",
+  "nouveau", "nouvel", "nouvelle", "nouveaux", "nouvelles",
+  "premier", "première", "premiers", "premières",
+  "dernier", "dernière", "derniers", "dernières",
 ]);
 // gender-neutral - trigger a noun search, but never reveal m/f themselves
 const PLURAL_ARTICLES = new Set([
@@ -83,6 +107,18 @@ const NOUN_GUARANTEEING_DETERMINERS = new Set([
   "sa", "son", "ses", "ma", "mon", "mes", "ta", "ton", "tes",
   "notre", "nos", "votre", "vos", "leurs",
   "cet", "cette", "ces",
+]);
+// finite forms of être/avoir/aller - the dictionary also lists some of them as
+// nouns ("est" = east, "a" = the letter), but right after a noun phrase they
+// are the verb ("le maître est ici"), so beyond the first word after the
+// article they must never be picked as the verb-ambiguous last-resort noun
+const AUXILIARY_VERB_FORMS = new Set([
+  "est", "es", "suis", "sommes", "êtes", "sont", "étais", "était", "étions",
+  "étiez", "étaient", "fut", "fus", "furent", "sera", "serai", "seras",
+  "serons", "serez", "seront", "serait", "seraient", "soit", "soient", "sois",
+  "soyons", "soyez", "ai", "as", "a", "avons", "avez", "ont", "avais",
+  "avait", "avions", "aviez", "avaient", "aura", "aurai", "auras", "aurons",
+  "aurez", "auront", "aurait", "auraient", "va", "vas", "vont",
 ]);
 // "ce" is a determiner ("ce miracle") but also the pronoun of "ce sont", "ce
 // fut", "ce n’est pas" - in those the next word is a form of être/pouvoir/
@@ -131,6 +167,12 @@ const NARROW_PREPOSITIONS = new Set([
 // Left out on purpose: "pour"/"sans"/"après"/"avant" - they take an
 // infinitive or a pronoun + infinitive ("pour porter", "sans les voir",
 // "après les avoir vus"), so what follows can be a verb and "les" a pronoun
+// ...but after those four, "le"/"la"/"les"/"l’" is still an article whenever
+// the next word does NOT look like an infinitive or a participle: the
+// pronoun can only be followed by one of those ("pour le voir"), never by a
+// conjugated verb or a noun ("pour le peuple", "sans la voie")
+const INFINITIVE_TAKING_PREPOSITIONS = new Set(["pour", "sans", "après", "avant"]);
+const INFINITIVE_LIKE_RE = /(er|ir|re|oir|ant)$/u;
 const NOUN_GUARANTEED_PREPOSITIONS = new Set([
   "à", "de", "sur", "en", "comme", "par", "avec", "dans", "depuis",
   "entre", "contre", "chez", "vers", "sous", "pendant", "parmi", "selon",
@@ -141,11 +183,13 @@ const NOUN_GUARANTEED_PREPOSITIONS = new Set([
 // fetchGenderFromYandex) - these are left here only because the metadata
 // doesn't (yet) catch them: "combien"/"ensemble"/"devant" are
 // adverb-dominant, not adjective-dominant, so the fallback-chain doesn't
-// apply to them; "haut"/"haute" is a genuine Yandex data gap - querying
-// the inflected form "haute" alone doesn't surface the "haut" adjective
-// sense it belongs with
+// apply to them. ("haut"/"haute" used to be here too - a genuine Yandex data
+// gap, querying "haute" alone doesn't surface the "haut" adjective sense -
+// but excluding them outright meant "vers le haut" never got highlighted;
+// they are now in UNTAGGED_ADJECTIVE_WORDS instead, which keeps looking for
+// a later noun ("de haute naissance") yet still falls back to "haut" itself)
 const EXCLUDED_NOUNS = new Set([
-  "combien", "ensemble", "devant", "haut", "haute", "peu", "plusieurs",
+  "combien", "ensemble", "devant", "peu", "plusieurs",
 ]);
 // case-insensitive: "L’heure" at the start of a sentence is the same
 // elided article as "l’heure" mid-sentence
@@ -195,12 +239,29 @@ const CLAUSE_BREAK_RE = /[,;:.!?…]$/u;
 // extractHighlightSpan() already peels every non-letter off the noun
 const CLOSING_BRACKET_RE = /[)\]}][^\p{L}]*$/u;
 const OPENING_BRACKET_RE = /^[^\p{L}]*[(\[{]/u;
+// a conjunction (or relative pronoun) starts a new clause, so a noun phrase
+// can never reach past it ("vers le haut et dit" - "dit" is the next
+// clause's verb, not part of "le haut"). The elided "qu’"/"lorsqu’"/
+// "puisqu’" + vowel is the same word fused with what follows, so it is
+// matched on the raw token. "si" is deliberately NOT here: besides the
+// conjunction "if" it is the adverb in "une si grande tempête", right inside
+// the noun phrase
+const CLAUSE_BREAKING_CONJUNCTIONS = new Set([
+  "et", "ou", "mais", "car", "donc", "que", "qui", "dont", "où",
+  "comme", "quand", "lorsque", "puisque", "quoique",
+]);
+const ELIDED_CONJUNCTION_RE = /^(?:qu|lorsqu|puisqu|quoiqu)['’]/iu;
 // nouns that are only trustworthy when found as the direct "l'" elision
 // remainder (tokenIndex === i) - found at a distance they are almost
 // always something else. "été" is usually the past participle of "être"
 // ("a été" = "has been"), not the noun "l'été" (summer); Yandex doesn't
 // even give it a gender as a noun, so the normal dictionary can't help
 const ELISION_ONLY_NOUNS = { été: "m" };
+// same idea, but only when a noun is guaranteed right there (a preposition
+// before "l’", or the start of a sentence): "à l’est de la ville" is the noun
+// "east" (Yandex gives it no gender), while "il ne l’est qu’un seul trait" is
+// pronoun + verb and must stay unhighlighted
+const ELISION_NOUNS_AFTER_PREPOSITION = { est: "m" };
 
 function cleanWord(token) {
   return token
@@ -329,6 +390,15 @@ function lookupGender(word, nounGender) {
   return undefined;
 }
 
+// the cleaned word that follows the article at tokens[i] - for an elided
+// "l’" that is the fused remainder of the same token
+function followingWordOf(tokens, i, elisionMatch) {
+  if (elisionMatch) return cleanWord(elisionMatch[2]);
+  let nextIdx = i + 1;
+  while (nextIdx < tokens.length && /^\s+$/.test(tokens[nextIdx])) nextIdx++;
+  return nextIdx < tokens.length ? cleanWord(tokens[nextIdx]) : "";
+}
+
 // a capitalized token that opens a sentence: first word of the line (verse
 // numbers like "25" in front of it don't count), or right after a
 // sentence-ender / colon (direct speech: "dirent: Les ...")
@@ -384,7 +454,13 @@ function findArticleInfo(tokens, i, cache) {
     if (remainderCleaned === "on") {
       return null;
     }
-    if (isPureVerb(remainderCleaned, cache) || remainderCleaned.endsWith("ant")) {
+    // an "-ant" word right after "l'" is a gerund after a pronoun ("en
+    // l’entendant") - unless the cache already knows it as a noun ("l’enfant",
+    // "l’intendant")
+    if (
+      isPureVerb(remainderCleaned, cache) ||
+      (remainderCleaned.endsWith("ant") && !isKnownNoun(remainderCleaned, cache))
+    ) {
       return null;
     }
   } else if (cleanedToken === "le" || cleanedToken === "la" || cleanedToken === "les") {
@@ -479,7 +555,10 @@ function findArticleInfo(tokens, i, cache) {
     let prevIdx = i - 1;
     while (prevIdx >= 0 && /^\s+$/.test(tokens[prevIdx])) prevIdx--;
     const prevWord = prevIdx >= 0 ? effectiveWord(tokens[prevIdx]) : "";
-    mustBeNoun = NOUN_GUARANTEED_PREPOSITIONS.has(prevWord);
+    mustBeNoun =
+      NOUN_GUARANTEED_PREPOSITIONS.has(prevWord) ||
+      (INFINITIVE_TAKING_PREPOSITIONS.has(prevWord) &&
+        !INFINITIVE_LIKE_RE.test(followingWordOf(tokens, i, elisionMatch)));
   }
   // a capitalized "Le"/"La"/"Les"/"L’" opening a sentence is an article: an
   // object pronoun can only sit before a verb inside the clause, never start
@@ -497,15 +576,7 @@ function findArticleInfo(tokens, i, cache) {
       cleanedToken === "les") &&
     isSentenceStart(tokens, i)
   ) {
-    let followingWord;
-    if (elisionMatch) {
-      followingWord = cleanWord(elisionMatch[2]);
-    } else {
-      let nextIdx = i + 1;
-      while (nextIdx < tokens.length && /^\s+$/.test(tokens[nextIdx])) nextIdx++;
-      followingWord = nextIdx < tokens.length ? cleanWord(tokens[nextIdx]) : "";
-    }
-    mustBeNoun = !followingWord.endsWith("ant");
+    mustBeNoun = !followingWordOf(tokens, i, elisionMatch).endsWith("ant");
   }
 
   const maxCandidates =
@@ -544,6 +615,12 @@ function findArticleInfo(tokens, i, cache) {
         break;
       }
       const wordCleaned = cleanWord(tokens[idx]);
+      if (
+        CLAUSE_BREAKING_CONJUNCTIONS.has(wordCleaned) ||
+        ELIDED_CONJUNCTION_RE.test(tokens[idx])
+      ) {
+        break;
+      }
       if (isFillerAfter(prevCleaned, wordCleaned)) {
         clauseBroken = true;
       } else {
@@ -582,7 +659,11 @@ function findArticleInfo(tokens, i, cache) {
     } else {
       let k = last.tokenIndex + 1;
       while (k < tokens.length && /^\s+$/.test(tokens[k])) k++;
-      phraseEnds = k >= tokens.length || OPENING_BRACKET_RE.test(tokens[k]);
+      phraseEnds =
+        k >= tokens.length ||
+        OPENING_BRACKET_RE.test(tokens[k]) ||
+        CLAUSE_BREAKING_CONJUNCTIONS.has(cleanWord(tokens[k])) ||
+        ELIDED_CONJUNCTION_RE.test(tokens[k]);
     }
   }
 
@@ -651,6 +732,7 @@ function highlightNounGender(line, nounGender, cache) {
     let matchedCandidate = null;
     let fallbackGender = null;
     let fallbackCandidate = null;
+    let fallbackUntagged = false;
     let verbFallbackGender = null;
     let verbFallbackCandidate = null;
     for (const candidate of candidates) {
@@ -667,6 +749,15 @@ function highlightNounGender(line, nounGender, cache) {
           break;
         }
         continue; // found at a distance - never trust it (see comment above)
+      }
+      if (
+        cleaned in ELISION_NOUNS_AFTER_PREPOSITION &&
+        candidate.tokenIndex === i &&
+        mustBeNoun
+      ) {
+        matchedGender = ELISION_NOUNS_AFTER_PREPOSITION[cleaned];
+        matchedCandidate = candidate;
+        break;
       }
       const foundEntry = lookupGender(cleaned, nounGender);
       const rawEntry = foundEntry && effectiveEntry(foundEntry, expectedGender);
@@ -699,7 +790,14 @@ function highlightNounGender(line, nounGender, cache) {
         // the FIRST such candidate wins: right after a determiner the head
         // noun is the word closest to it, anything further along ("ma force
         // est épuisée" -> "est", the noun "east") is something else
-        if (mustBeNoun && !verbFallbackCandidate) {
+        // ...and a form of être/avoir only counts when it is the FIRST word
+        // after the article ("à l’est"): further along it is the verb of the
+        // clause ("le maître est ici")
+        if (
+          mustBeNoun &&
+          !verbFallbackCandidate &&
+          (!AUXILIARY_VERB_FORMS.has(cleaned) || candidate === candidates[0])
+        ) {
           verbFallbackGender = entry.gender;
           verbFallbackCandidate = candidate;
         }
@@ -710,16 +808,20 @@ function highlightNounGender(line, nounGender, cache) {
       // (preferring the latest such candidate) in case nothing better turns up
       fallbackGender = entry.gender;
       fallbackCandidate = candidate;
+      fallbackUntagged = UNTAGGED_ADJECTIVE_WORDS.has(cleaned);
     }
 
-    // a verb-ambiguous word that comes AFTER an adjective-ambiguous one inside
-    // a guaranteed noun phrase ("un tel pouvoir", "sa belle salive") must be
-    // the head noun - a verb can't follow the adjective there - so it beats
-    // the adjective, which is only the right pick when nothing follows it
+    // a verb-ambiguous word that comes AFTER an untagged adjective ("un tel
+    // pouvoir") inside a guaranteed noun phrase must be the head noun - such
+    // a word is never the noun itself, and a verb can't follow the adjective
+    // there. Deliberately NOT done for a dictionary adjective that is also a
+    // real noun ("le maître garde": "maître" is the noun, "garde" the verb) -
+    // those keep the closer word, as before
     if (
       !matchedCandidate &&
       verbFallbackCandidate &&
       fallbackCandidate &&
+      fallbackUntagged &&
       verbFallbackCandidate.tokenIndex > fallbackCandidate.tokenIndex
     ) {
       matchedGender = verbFallbackGender;
@@ -1085,6 +1187,15 @@ function mergeGenderMap(baseMap, cache) {
 // proceeds as normal, and collectUnresolvedWords queues the word for a
 // Yandex lookup via the ordinary candidate-gathering path so a later build
 // pass (once cached) can make the correct call
+// true when the cache has confirmed `word` as a noun (with a gender, or a
+// genderless noun entry) - see isStaleCacheEntry for why an old entry
+// without that information can't be trusted either way
+function isKnownNoun(word, cache) {
+  if (!(word in cache) || isStaleCacheEntry(cache[word])) return false;
+  const entry = normalizeCacheEntry(cache[word]);
+  return entry.gender === "m" || entry.gender === "f" || entry.isNoun;
+}
+
 function isPureVerb(word, cache) {
   if (!(word in cache) || isStaleCacheEntry(cache[word])) return false;
   const entry = normalizeCacheEntry(cache[word]);
