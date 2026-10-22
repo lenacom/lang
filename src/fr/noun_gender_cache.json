@@ -35346,5 +35346,37 @@
     "isNoun": false,
     "isAdjectiveOnly": true,
     "hasCapitalizedVariant": false
+  },
+  "haut": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "isNoun": true,
+    "isAdjectiveOnly": false,
+    "hasCapitalizedVariant": true
+  },
+  "haute": {
+    "gender": "f",
+    "isAdjective": false,
+    "isVerb": false,
+    "isNoun": true,
+    "isAdjectiveOnly": false,
+    "hasCapitalizedVariant": false
+  },
+  "hauts": {
+    "gender": "m",
+    "isAdjective": true,
+    "isVerb": false,
+    "isNoun": true,
+    "isAdjectiveOnly": false,
+    "hasCapitalizedVariant": true
+  },
+  "croissait": {
+    "gender": null,
+    "isAdjective": false,
+    "isVerb": true,
+    "isNoun": false,
+    "isAdjectiveOnly": false,
+    "hasCapitalizedVariant": false
   }
 }

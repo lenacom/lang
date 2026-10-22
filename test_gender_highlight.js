@@ -23,6 +23,14 @@ const CASES = [
   ["ce sont ces œuvres", `ce sont ces ${f("œuvres")}`, "ce is a pronoun here, ces is still a determiner"],
   ["ma force est épuisée", `ma ${f("force")} est épuisée`, "the verb of the clause must not be taken as a noun"],
 
+  ["dans leur bouche;", `dans leur ${f("bouche")};`, "leur after a preposition is a determiner; bouche is also a verb form (boucher)"],
+  ["elles n’ont point de souffle dans leur bouche.", `elles n’ont point de ${m("souffle")} dans leur ${f("bouche")}.`, "same, inside a longer verse"],
+  ["il leur parle", "il leur parle", "leur after a subject pronoun is the indirect-object pronoun"],
+  ["de leur parler", "de leur parler", "de + leur + infinitive: pronoun, not a determiner"],
+  ["prirent des branches", `prirent des ${f("branches")}`, "des always introduces a noun; branches is also a verb form (brancher)"],
+  ["il indiquait de quelle mort", `il indiquait de quelle ${f("mort")}`, "quelle + noun that is also a past participle (mourir)"],
+  ["Quel est ton nom", `Quel est ton ${m("nom")}`, "quel + être must not take 'est' as the noun (only 'nom' is highlighted)"],
+
   // --- sentence start: Le/La/Les is an article ---
   ["Les œuvres que je fais", `Les ${f("œuvres")} que je fais`, "capitalized article at sentence start"],
   ["Le maître _est_ ici", `Le ${m("maître")} _est_ ici`, "noun+adjective word must beat the verb 'est'"],

@@ -107,7 +107,15 @@ const NOUN_GUARANTEEING_DETERMINERS = new Set([
   "sa", "son", "ses", "ma", "mon", "mes", "ta", "ton", "tes",
   "notre", "nos", "votre", "vos", "leurs",
   "cet", "cette", "ces",
+  // "des" is "de" + "les" or the indefinite plural article, "aux" is "à" +
+  // "les" - when "les" is a pronoun ("de les voir") it does not contract, so
+  // neither can ever stand in front of a verb; "quelques" is a determiner only
+  "des", "aux", "quelques",
 ]);
+// "quel"/"quelle"/"quels"/"quelles" are determiners ("de quelle mort") but,
+// like "ce", can be followed by être ("quel est ton nom") - handled together
+// with "ce" below
+const QUEL_FORMS = new Set(["quel", "quelle", "quels", "quelles"]);
 // finite forms of être/avoir/aller - the dictionary also lists some of them as
 // nouns ("est" = east, "a" = the letter), but right after a noun phrase they
 // are the verb ("le maître est ici"), so beyond the first word after the
@@ -532,7 +540,7 @@ function findArticleInfo(tokens, i, cache) {
     effectiveToken === "aucune" ||
     NOUN_GUARANTEEING_DETERMINERS.has(effectiveToken) ||
     (isPrepositionTrigger && NOUN_GUARANTEED_PREPOSITIONS.has(effectiveToken));
-  if (!mustBeNoun && effectiveToken === "ce") {
+  if (!mustBeNoun && (effectiveToken === "ce" || QUEL_FORMS.has(effectiveToken))) {
     let nextIdx = i + 1;
     while (nextIdx < tokens.length && /^\s+$/.test(tokens[nextIdx])) nextIdx++;
     const nextToken = nextIdx < tokens.length ? tokens[nextIdx] : "";
@@ -559,6 +567,20 @@ function findArticleInfo(tokens, i, cache) {
       NOUN_GUARANTEED_PREPOSITIONS.has(prevWord) ||
       (INFINITIVE_TAKING_PREPOSITIONS.has(prevWord) &&
         !INFINITIVE_LIKE_RE.test(followingWordOf(tokens, i, elisionMatch)));
+  }
+  // "leur" is a possessive determiner ("dans leur bouche") but also the
+  // invariable indirect-object pronoun ("il leur parle", "de leur parler").
+  // The word BEFORE it tells them apart: right after a preposition it is the
+  // determiner, unless an infinitive/participle follows ("de leur parler");
+  // after a subject pronoun or a verb it is left alone, as before
+  if (!mustBeNoun && effectiveToken === "leur") {
+    let prevIdx = i - 1;
+    while (prevIdx >= 0 && /^\s+$/.test(tokens[prevIdx])) prevIdx--;
+    const prevWord = prevIdx >= 0 ? effectiveWord(tokens[prevIdx]) : "";
+    mustBeNoun =
+      (NOUN_GUARANTEED_PREPOSITIONS.has(prevWord) ||
+        INFINITIVE_TAKING_PREPOSITIONS.has(prevWord)) &&
+      !INFINITIVE_LIKE_RE.test(followingWordOf(tokens, i, null));
   }
   // a capitalized "Le"/"La"/"Les"/"L’" opening a sentence is an article: an
   // object pronoun can only sit before a verb inside the clause, never start
