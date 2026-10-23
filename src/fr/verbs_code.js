@@ -13,6 +13,25 @@ function byPrefixId(value) {
   return document.getElementById(prefix(value));
 }
 
+// Sizes of the helper panel and the dialogs. Careful: mini-default.css sets
+// html{font-size:24px}, so 1rem is NOT 16px, and the stylesheet has no global
+// box-sizing, so padding and border come ON TOP of width/max-width. Anything
+// derived from the screen width therefore has to be written in CSS units
+// that account for both (this used to be "clientWidth / 16" rem, which was
+// wider than a phone screen).
+//
+// The content of a panel/dialog with `padding: 0.63rem` and a 1px border:
+// at most `maxRem`, and never wider than the screen minus the padding, the
+// border and a small gap (0.5rem) - so the OUTER width always fits the screen.
+const PANEL_INNER_MAX = "calc(100vw - 1.76rem - 2px)";
+function panelContentWidth(maxRem) {
+  return `min(${maxRem}rem, ${PANEL_INNER_MAX})`;
+}
+// max-width: none cancels the UA rule (100% - 6px - 2em) that would clamp the
+// dialog narrower than its own content
+const DIALOG_BOX_STYLE =
+  "border-radius: 0.31rem; background-color: black; color: #fff8dc; border: 1px solid #fff8dc; padding: 0.63rem; max-width: none;";
+
 function buildVerbs() {
   function getId(array, item) {
     const id = array.indexOf(item);
@@ -367,8 +386,8 @@ function initWordsToLearnUI() {
     document.body.insertAdjacentHTML(
       "beforeend",
       `<style>.${prefix("link")} { text-decoration: none; } .${prefix("link")}:hover { text-decoration: underline; }</style>
-      <dialog id="${prefix("wordsToLearnDialog")}" style="border-radius: 0.31rem; background-color: black; color: #fff8dc; border: 1px solid #fff8dc; padding: 0.63rem; max-width: ${document.documentElement.clientWidth}px;">
-        <div id="${prefix("wordsToLearnContent")}" style="display: flex; flex-direction: column; gap: 0.5rem; width: ${Math.min(document.documentElement.clientWidth / 16, 20)}rem;"></div>
+      <dialog id="${prefix("wordsToLearnDialog")}" style="${DIALOG_BOX_STYLE}">
+        <div id="${prefix("wordsToLearnContent")}" style="display: flex; flex-direction: column; gap: 0.5rem; width: ${panelContentWidth(20)};"></div>
       </dialog>`,
     );
   }
@@ -676,15 +695,15 @@ function learnDialogHTML(id, item) {
           })
           .join("");
 
-  return `<dialog id="${id}" style="border-radius: 0.31rem; background-color: black; color: #fff8dc; border: 1px solid #fff8dc; padding: 0.63rem; max-width: ${document.documentElement.clientWidth}px;">
-      <div id="${id}_warning" style="display: none; flex-direction: column; gap: 0.5rem; width: ${Math.min(document.documentElement.clientWidth / 16, 20)}rem;">
+  return `<dialog id="${id}" style="${DIALOG_BOX_STYLE}">
+      <div id="${id}_warning" style="display: none; flex-direction: column; gap: 0.5rem; width: ${panelContentWidth(20)};">
         <div id="${id}_warning_text"></div>
         <div style="display: flex; flex-direction: row; justify-content: flex-end; gap: 0.5rem;">
           <button style="margin: 0;" onClick="document.getElementById('${id}_warning').style.display = 'none'; document.getElementById('${id}_form').style.display = 'flex';">Да</button>
           <button style="margin: 0;" onClick="document.getElementById('${id}').close();">Нет</button>
         </div>
       </div>
-      <div id="${id}_form" style="display: flex; flex-direction: column; gap: 0.5rem; width: ${Math.min(document.documentElement.clientWidth / 16, 20)}rem;">
+      <div id="${id}_form" style="display: flex; flex-direction: column; gap: 0.5rem; width: ${panelContentWidth(20)};">
         <input type="text" id="${id}_part1" placeholder="Слова" value="${wordValue}" style="${inputStyle}">
         <input type="text" id="${id}_part2" placeholder="Перевод" value="${translationValue}" style="${inputStyle}"
           oninput="document.getElementById('${id}_save').disabled = !this.value.trim();">
@@ -732,9 +751,9 @@ function getTranslationHTML(data) {
           document.getElementById('${learnId}').showModal();
           document.getElementById('${learnId}_part2').focus();">Учить</button>`,
       );
-      return `<div style="display: flex; flex-wrap: wrap; flex-direction: row; align-items: baseline; gap: 0.5rem; width: max-content; max-width: ${document.documentElement.clientWidth}px;">
+      return `<div style="display: flex; flex-wrap: wrap; flex-direction: row; align-items: baseline; gap: 0.5rem; width: max-content; max-width: ${PANEL_INNER_MAX};">
       ${result.join("")}
-    </div><div style="max-width:${Math.min(document.documentElement.clientWidth / 16, 31.25)}rem">${tr.map((it) => it.text).join(", ")}</div>
+    </div><div style="max-width: ${panelContentWidth(31.25)};">${tr.map((it) => it.text).join(", ")}</div>
     ${learnDialogHTML(learnId, item)}
     `;
     })
@@ -881,9 +900,12 @@ function helperParts(text, translation, conjugation) {
   return parts;
 }
 
+// gap kept between the helper panel and the screen edge, so both borders show
+const HELPER_EDGE_GAP = 5;
+
 function keepOnScreen(pnl) {
   const { clientWidth: screenWidth } = document.documentElement;
-  const overflow = pnl.getBoundingClientRect().right + 10 - screenWidth;
+  const overflow = pnl.getBoundingClientRect().right + HELPER_EDGE_GAP - screenWidth;
   if (overflow > 0) {
     pnl.style.left = `${parseFloat(pnl.style.left) - overflow}px`;
   }
@@ -894,19 +916,24 @@ function renderHelper(helper, selection, parts) {
   const selRange = selection.getRangeAt(0);
   const selRect = selRange.getBoundingClientRect();
   const style = (left, top, position) => {
+    // border-box, so the padding and the border are INSIDE max-width (there is
+    // no global box-sizing); the gap on both sides keeps both borders visible
     return `background-color:black; color:#fff8dc; border:1px solid #fff8dc; padding:0.63rem; margin:0;
-    border-radius:0.31rem; position:${position};
-    left:${left}px; top:${top}px; max-width:${screenWidth}px;`;
+    border-radius:0.31rem; position:${position}; box-sizing:border-box;
+    left:${left}px; top:${top}px; max-width:${screenWidth - 2 * HELPER_EDGE_GAP}px;`;
   };
   const helperHTML = (style) => {
     return `<div id="${prefix("helper")}" style="${style}">${parts.join("<hr/>")}</div>`;
   };
 
-  let left = selRect.left;
+  let left = Math.max(selRect.left, HELPER_EDGE_GAP);
   let top = selRect.top + selRect.height;
   helper.innerHTML = helperHTML(style(left, top, "fixed"));
   const pnl = byPrefixId("helper");
-  while (pnl.getBoundingClientRect().right + 10 > screenWidth && left > 0) {
+  while (
+    pnl.getBoundingClientRect().right + HELPER_EDGE_GAP > screenWidth &&
+    left > HELPER_EDGE_GAP
+  ) {
     left -= 1;
     pnl.style = style(left, top, "fixed");
   }
