@@ -111,6 +111,8 @@ const NOUN_GUARANTEEING_DETERMINERS = new Set([
   // "les" - when "les" is a pronoun ("de les voir") it does not contract, so
   // neither can ever stand in front of a verb; "quelques" is a determiner only
   "des", "aux", "quelques",
+  // always a determiner ("chaque nuit")
+  "chaque",
 ]);
 // "quel"/"quelle"/"quels"/"quelles" are determiners ("de quelle mort") but,
 // like "ce", can be followed by être ("quel est ton nom") - handled together
@@ -180,7 +182,10 @@ const NARROW_PREPOSITIONS = new Set([
 // pronoun can only be followed by one of those ("pour le voir"), never by a
 // conjugated verb or a noun ("pour le peuple", "sans la voie")
 const INFINITIVE_TAKING_PREPOSITIONS = new Set(["pour", "sans", "après", "avant"]);
-const INFINITIVE_LIKE_RE = /(er|ir|re|oir|ant)$/u;
+// prepositions after which only an infinitive can be a verb (whether a word
+// IS an infinitive comes from the dictionary - see isInfinitiveLike)
+const INFINITIVE_AFTER_PREPOSITIONS = new Set(["pour", "sans", "à", "de", "par"]);
+const PAST_PARTICIPLE_ENDING_RE = /(é|ée|és|ées)$/u;
 const NOUN_GUARANTEED_PREPOSITIONS = new Set([
   "à", "de", "sur", "en", "comme", "par", "avec", "dans", "depuis",
   "entre", "contre", "chez", "vers", "sous", "pendant", "parmi", "selon",
@@ -335,7 +340,7 @@ function singularForms(word) {
 
 // true when `wordCleaned` is grammatically filler right after `prevCleaned`
 // rather than a noun, even if it has some rare noun sense in the dictionary
-function isFillerAfter(prevCleaned, wordCleaned) {
+function isFillerAfter(prevCleaned, wordCleaned, cache) {
   // "de"/"à" + infinitive (e.g. "d’aller", "à porter") is handled at the
   // source: fetchGenderFromYandex() never returns a gender for a word that
   // also has a verb sense, so such words simply aren't in the gender map
@@ -343,8 +348,19 @@ function isFillerAfter(prevCleaned, wordCleaned) {
   // object pronoun + gerund ("en les tirant" = "drawing them") - the pronoun
   // itself is already excluded as a candidate elsewhere, but without this
   // the gerund right after it can still be picked up by a search that
-  // started further back (e.g. "en" looking past "les" for a noun)
-  if ((prevCleaned === "le" || prevCleaned === "la" || prevCleaned === "les") && wordCleaned.endsWith("ant")) {
+  // started further back (e.g. "en" looking past "les" for a noun).
+  // "le"/"la" followed by a noun that merely ends in "-ant" ("le néant") is
+  // an article, though - when the cache knows the word as a noun, it is not
+  // filler (the gender check still rejects "la" + a masculine noun). "les"
+  // has no gender to check, so it keeps the cautious reading
+  if (prevCleaned === "les" && wordCleaned.endsWith("ant")) {
+    return true;
+  }
+  if (
+    (prevCleaned === "le" || prevCleaned === "la") &&
+    wordCleaned.endsWith("ant") &&
+    !isKnownNoun(wordCleaned, cache)
+  ) {
     return true;
   }
   return false;
@@ -526,6 +542,20 @@ function findArticleInfo(tokens, i, cache) {
     return null;
   }
 
+  // is the word right behind this preposition trigger guaranteed to be a noun?
+  // A fused "d’" is the preposition "de" even though effectiveToken is the
+  // whole cleaned token ("épouvante" in "d’épouvante"). After "à"/"de"/
+  // "par"/"pour"/"sans" only an INFINITIVE can be a verb ("sans force" vs
+  // "sans dire", "d’épouvante" vs "d’aller"), so a word that does not look
+  // like one is the noun
+  const prepositionGuaranteesNoun = () => {
+    const preposition = deElisionMatch ? "de" : effectiveToken;
+    if (INFINITIVE_AFTER_PREPOSITIONS.has(preposition)) {
+      return !isInfinitiveLike(followingWordOf(tokens, i, deElisionMatch), cache);
+    }
+    return NOUN_GUARANTEED_PREPOSITIONS.has(preposition);
+  };
+
   // "du"/"au" (contracted "de"/"à" + "le"), "de la"/"à la", "un"/"une", and
   // "aucun"/"aucune" always introduce a noun phrase - unlike bare
   // "le"/"la", they can never be object pronouns - so when nothing better
@@ -539,7 +569,7 @@ function findArticleInfo(tokens, i, cache) {
     effectiveToken === "aucun" ||
     effectiveToken === "aucune" ||
     NOUN_GUARANTEEING_DETERMINERS.has(effectiveToken) ||
-    (isPrepositionTrigger && NOUN_GUARANTEED_PREPOSITIONS.has(effectiveToken));
+    (isPrepositionTrigger && prepositionGuaranteesNoun());
   if (!mustBeNoun && (effectiveToken === "ce" || QUEL_FORMS.has(effectiveToken))) {
     let nextIdx = i + 1;
     while (nextIdx < tokens.length && /^\s+$/.test(tokens[nextIdx])) nextIdx++;
@@ -563,10 +593,16 @@ function findArticleInfo(tokens, i, cache) {
     let prevIdx = i - 1;
     while (prevIdx >= 0 && /^\s+$/.test(tokens[prevIdx])) prevIdx--;
     const prevWord = prevIdx >= 0 ? effectiveWord(tokens[prevIdx]) : "";
+    const following = followingWordOf(tokens, i, elisionMatch);
     mustBeNoun =
       NOUN_GUARANTEED_PREPOSITIONS.has(prevWord) ||
-      (INFINITIVE_TAKING_PREPOSITIONS.has(prevWord) &&
-        !INFINITIVE_LIKE_RE.test(followingWordOf(tokens, i, elisionMatch)));
+      (INFINITIVE_TAKING_PREPOSITIONS.has(prevWord) && !isInfinitiveLike(following, cache)) ||
+      // an object pronoun is followed by a finite verb, an infinitive or a
+      // present participle - never directly by a past participle (it goes
+      // before the auxiliary: "je l’ai assemblée"), so "l’assemblée",
+      // "la pensée" are nouns. Only the -é family: conjugated forms can end
+      // in -i/-u/-s ("je le vois", "je les reçus")
+      PAST_PARTICIPLE_ENDING_RE.test(following);
   }
   // "leur" is a possessive determiner ("dans leur bouche") but also the
   // invariable indirect-object pronoun ("il leur parle", "de leur parler").
@@ -580,7 +616,7 @@ function findArticleInfo(tokens, i, cache) {
     mustBeNoun =
       (NOUN_GUARANTEED_PREPOSITIONS.has(prevWord) ||
         INFINITIVE_TAKING_PREPOSITIONS.has(prevWord)) &&
-      !INFINITIVE_LIKE_RE.test(followingWordOf(tokens, i, null));
+      !isInfinitiveLike(followingWordOf(tokens, i, null), cache);
   }
   // a capitalized "Le"/"La"/"Les"/"L’" opening a sentence is an article: an
   // object pronoun can only sit before a verb inside the clause, never start
@@ -617,7 +653,7 @@ function findArticleInfo(tokens, i, cache) {
     // just an unrelated word to skip past - "en"/"le"/"la"/"les" governing a
     // gerund means the whole phrase is a fixed construction with no noun to
     // find), same treatment as punctuation
-    if (isFillerAfter(prevCleaned, remainderCleaned)) {
+    if (isFillerAfter(prevCleaned, remainderCleaned, cache)) {
       clauseBroken = true;
     } else {
       candidates.push({ word: articleRemainder, tokenIndex: i });
@@ -643,7 +679,7 @@ function findArticleInfo(tokens, i, cache) {
       ) {
         break;
       }
-      if (isFillerAfter(prevCleaned, wordCleaned)) {
+      if (isFillerAfter(prevCleaned, wordCleaned, cache)) {
         clauseBroken = true;
       } else {
         candidates.push({ word: tokens[idx], tokenIndex: idx });
@@ -960,6 +996,16 @@ function collectUnresolvedWords(line, nounGender, unresolved, cache) {
     // the adjective-only last resort in highlightNounGender needs the
     // `isAdjectiveOnly` flag, which older cache entries predate - look the
     // phrase-final word up again, but only here (not for every cached word)
+    // the word right after a trigger decides the infinitive checks (see
+    // isInfinitiveLike), so an old entry that doesn't say whether it is an
+    // infinitive is looked up again
+    const firstCandidate = info.candidates[0];
+    if (firstCandidate) {
+      const cleaned = cleanWord(firstCandidate.word);
+      if (cleaned in cache && lacksInfinitiveInfo(cache[cleaned])) {
+        unresolved.add(cleaned);
+      }
+    }
     if (info.expectedGender) {
       for (const candidate of substantivizedCandidates(info, cache)) {
         const cleaned = cleanWord(candidate.word);
@@ -1078,6 +1124,11 @@ async function fetchGenderFromYandex(word) {
   // would otherwise discard - that's a legitimate lemma normalization, not
   // an unrelated suggestion the way gender detection needs to guard against
   const isVerb = regular.some((it) => it.pos?.code === "vrb");
+  // the word IS an infinitive when its verb entry is the word itself ("aller"
+  // -> "aller"); a conjugated form or a noun that merely looks like one comes
+  // back under a different lemma ("livre" -> "livrer", "assemblée" ->
+  // "assembler"). Also unfiltered, for the same reason as isVerb
+  const isInfinitive = regular.some((it) => it.pos?.code === "vrb" && it.text === lower);
   // check the override against the plural too (e.g. querying "pierres"
   // still needs the "pierre" override), not just the exact word queried
   const overrideKey =
@@ -1091,6 +1142,7 @@ async function fetchGenderFromYandex(word) {
       isVerb: false,
       isNoun: true,
       isAdjectiveOnly: false,
+      isInfinitive: false,
       hasCapitalizedVariant,
     };
   }
@@ -1101,6 +1153,7 @@ async function fetchGenderFromYandex(word) {
       isVerb: true,
       isNoun,
       isAdjectiveOnly,
+      isInfinitive,
       hasCapitalizedVariant,
     };
   }
@@ -1110,6 +1163,7 @@ async function fetchGenderFromYandex(word) {
     isVerb: false,
     isNoun,
     isAdjectiveOnly,
+    isInfinitive: false,
     hasCapitalizedVariant,
   };
 }
@@ -1121,7 +1175,8 @@ async function resolveMissingGenders(unresolvedWords, cache) {
     (word) =>
       !(word in cache) ||
       isStaleCacheEntry(cache[word]) ||
-      lacksAdjectiveInfo(cache[word]),
+      lacksAdjectiveInfo(cache[word]) ||
+      lacksInfinitiveInfo(cache[word]),
   );
   let nextIndex = 0;
   async function worker() {
@@ -1150,8 +1205,22 @@ function normalizeCacheEntry(value) {
     isVerb: raw.isVerb ?? false,
     isNoun: raw.isNoun ?? false,
     isAdjectiveOnly: raw.isAdjectiveOnly ?? false,
+    isInfinitive: raw.isInfinitive ?? false,
     hasCapitalizedVariant: raw.hasCapitalizedVariant ?? false,
   };
+}
+
+// a verb entry written before isInfinitive was tracked - whether it IS the
+// infinitive is unknown, so it is looked up again when it turns up right
+// after a trigger (like lacksAdjectiveInfo, not a reason to distrust the
+// entry elsewhere). Entries with no verb sense can't be infinitives
+function lacksInfinitiveInfo(value) {
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    value.isVerb === true &&
+    value.isInfinitive === undefined
+  );
 }
 
 // a genderless non-noun entry written before isAdjectiveOnly was tracked -
@@ -1212,6 +1281,18 @@ function mergeGenderMap(baseMap, cache) {
 // true when the cache has confirmed `word` as a noun (with a gender, or a
 // genderless noun entry) - see isStaleCacheEntry for why an old entry
 // without that information can't be trusted either way
+// true when `word` is an infinitive - taken from the dictionary (the verb
+// entry Yandex returns for it is the word itself: "aller", "manger", "vivre";
+// for "livre"/"œuvre"/"épouvante" it is a different lemma: "livrer"/
+// "œuvrer"/"épouvanter") - or a present participle ("-ant"). An unknown word
+// counts as not an infinitive; collectUnresolvedWords queues the word right
+// after a trigger so a later pass knows
+function isInfinitiveLike(word, cache) {
+  if (word.endsWith("ant")) return true;
+  if (!(word in cache)) return false;
+  return normalizeCacheEntry(cache[word]).isInfinitive;
+}
+
 function isKnownNoun(word, cache) {
   if (!(word in cache) || isStaleCacheEntry(cache[word])) return false;
   const entry = normalizeCacheEntry(cache[word]);

@@ -31,6 +31,17 @@ const CASES = [
   ["il indiquait de quelle mort", `il indiquait de quelle ${f("mort")}`, "quelle + noun that is also a past participle (mourir)"],
   ["Quel est ton nom", `Quel est ton ${m("nom")}`, "quel + être must not take 'est' as the noun (only 'nom' is highlighted)"],
 
+  ["je suis sans force ;", `je suis sans ${f("force")} ;`, "after 'sans' only an infinitive can be a verb - force is the noun"],
+  ["Ils m’ont haï sans cause.", `Ils m’ont haï sans ${f("cause")}.`, "same (cause/causer)"],
+  ["sans lui faire aucun mal", `sans lui faire aucun ${m("mal")}`, "sans + pronoun + infinitive: the infinitive is not taken as a noun"],
+  ["chaque nuit ma couche est baignée", `chaque ${f("nuit")} ma ${f("couche")} est baignée`, "chaque is always a determiner; nuit is also a verb form (nuire)"],
+  ["saisis d’épouvante ;", `saisis d’${f("épouvante")} ;`, "fused d’ is the preposition de, after which only an infinitive can be a verb"],
+  ["au milieu de l’assemblée.", `au ${m("milieu")} de l’${f("assemblée")}.`, "l’ + a word in -ée can only be a noun (a participle can't follow the pronoun)"],
+  ["il enfante le néant.", `il enfante le ${m("néant")}.`, "le + a noun ending in -ant is not a gerund"],
+
+  ["de peur d’aller occuper la place", `de ${f("peur")} d’aller occuper la place`, "d’ + infinitive: 'aller' is a verb here, not the noun (only 'peur' is highlighted)"],
+  ["avoir été traité comme lui", "avoir été traité comme lui", "an infinitive-like word / participle after être is not a noun"],
+
   // --- sentence start: Le/La/Les is an article ---
   ["Les œuvres que je fais", `Les ${f("œuvres")} que je fais`, "capitalized article at sentence start"],
   ["Le maître _est_ ici", `Le ${m("maître")} _est_ ici`, "noun+adjective word must beat the verb 'est'"],
