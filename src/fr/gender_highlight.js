@@ -118,6 +118,12 @@ const NOUN_GUARANTEEING_DETERMINERS = new Set([
 // like "ce", can be followed by être ("quel est ton nom") - handled together
 // with "ce" below
 const QUEL_FORMS = new Set(["quel", "quelle", "quels", "quelles"]);
+// "tout"/"toute"/"tous"/"toutes" give the gender of a following noun ("toute
+// personne", "toutes choses"), but are just as often a floating quantifier
+// ("vous n’êtes pas tous purs") - the word after them is then a predicate
+// adjective, never the noun. So only a word that is a noun for sure counts
+// after them: no adjective fallback, and no adjective used as a noun
+const TOUT_FORMS = new Set(["tout", "toute", "tous", "toutes"]);
 // finite forms of être/avoir/aller - the dictionary also lists some of them as
 // nouns ("est" = east, "a" = the letter), but right after a noun phrase they
 // are the verb ("le maître est ici"), so beyond the first word after the
@@ -301,14 +307,17 @@ const LEADING_ELISION_CAPTURE_RE = /^((?:l|d|qu|n|s|j|m|t|c)['’])/iu;
 // token like "l’angoisse" or "jours-là!" would have its fused elided
 // article or demonstrative suffix wrapped in the span too. When there's
 // no elision/suffix to peel off, `core` is just the original token
-// (including any trailing punctuation), matching prior behavior exactly
+// (including any trailing punctuation), matching prior behavior exactly.
+// Leading non-letters (an italic "_" marker, a quote) stay outside the span
+// too, like the trailing ones
 function extractHighlightSpan(rawToken) {
-  let prefix = "";
-  let rest = rawToken;
+  const leadingPunct = rawToken.match(/^[^\p{L}]*/u)[0];
+  let prefix = leadingPunct;
+  let rest = rawToken.slice(leadingPunct.length);
   const leadMatch = rest.match(LEADING_ELISION_CAPTURE_RE);
   if (leadMatch) {
-    prefix = leadMatch[1];
-    rest = rest.slice(prefix.length);
+    prefix += leadMatch[1];
+    rest = rest.slice(leadMatch[1].length);
   }
   const trailingPunctMatch = rest.match(/[^\p{L}]*$/u);
   const trailingPunct = trailingPunctMatch ? trailingPunctMatch[0] : "";
@@ -785,6 +794,7 @@ function highlightNounGender(line, nounGender, cache) {
       candidates,
       mustBeNoun,
     } = info;
+    const isTout = TOUT_FORMS.has(cleanWord(articlePrefix));
 
     let matchedGender = null;
     let matchedCandidate = null;
@@ -864,6 +874,9 @@ function highlightNounGender(line, nounGender, cache) {
       // also usable as an adjective (e.g. "grand") - keep looking for a
       // later word that's unambiguously the noun, but remember this one
       // (preferring the latest such candidate) in case nothing better turns up
+      if (isTout) {
+        continue; // "tous purs": a predicate adjective, see TOUT_FORMS
+      }
       fallbackGender = entry.gender;
       fallbackCandidate = candidate;
       fallbackUntagged = UNTAGGED_ADJECTIVE_WORDS.has(cleaned);
@@ -897,7 +910,7 @@ function highlightNounGender(line, nounGender, cache) {
     // adjective the dictionary has no noun sense for ("d’un démoniaque;") -
     // it can only be the adjective used as a noun, and the article says which
     // gender. Never for an elided "l’"/plural article (no gender to read)
-    if (!matchedCandidate && expectedGender) {
+    if (!matchedCandidate && expectedGender && !isTout) {
       for (const candidate of substantivizedCandidates(info, cache)) {
         const cleaned = cleanWord(candidate.word);
         const cached = cleaned in cache ? normalizeCacheEntry(cache[cleaned]) : null;

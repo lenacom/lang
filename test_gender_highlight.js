@@ -42,6 +42,12 @@ const CASES = [
   ["de peur d’aller occuper la place", `de ${f("peur")} d’aller occuper la place`, "d’ + infinitive: 'aller' is a verb here, not the noun (only 'peur' is highlighted)"],
   ["avoir été traité comme lui", "avoir été traité comme lui", "an infinitive-like word / participle after être is not a noun"],
 
+  ["il dit: Vous n’êtes pas tous purs.", "il dit: Vous n’êtes pas tous purs.", "tous is a floating quantifier here, purs a predicate adjective - nothing to highlight"],
+  ["Vous n’êtes pas tous _purs_", "Vous n’êtes pas tous _purs_", "same, with italic markers"],
+  ["toutes choses ont été faites", `toutes ${f("choses")} ont été faites`, "tout* + a noun for sure still counts"],
+  ["tous les hommes", `tous les ${m("hommes")}`, "tout* + article: the article does the work"],
+  ["il prit le _pain_", `il prit le _${m("pain")}_`, "an italic _ marker stays outside the highlighted span"],
+
   // --- sentence start: Le/La/Les is an article ---
   ["Les œuvres que je fais", `Les ${f("œuvres")} que je fais`, "capitalized article at sentence start"],
   ["Le maître _est_ ici", `Le ${m("maître")} _est_ ici`, "noun+adjective word must beat the verb 'est'"],

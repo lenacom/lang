@@ -467,6 +467,7 @@ function startWordsToLearnStudy(book, chapterFilter) {
   learnedSession = { book, chapterFilter, shown: new Set() };
   pickNextWordToLearn();
   renderWordsToLearnStudy();
+  speakWordToLearnIfWordFirst();
 }
 
 let nextWordToLearnLocked = false;
@@ -480,15 +481,36 @@ function nextWordToLearn() {
 
   if (!learnedSession.revealed) {
     learnedSession.revealed = true;
-    if (getWordsToLearnAutospeak()) {
+    // "перевод - слово": the word is revealed now, so it is spoken now; in
+    // "слово - перевод" it was already spoken when it was shown
+    if (getWordsToLearnAutospeak() && !getWordsToLearnWordFirst()) {
       const { book, currentRef } = learnedSession;
       speak(stripAnnotations(getLearnedEntry(book, currentRef.chapter, currentRef.id)[0]));
     }
   } else {
     learnedSession.shown.add(learnedSession.currentRef.id);
     pickNextWordToLearn();
+    renderWordsToLearnStudy();
+    speakWordToLearnIfWordFirst();
+    return;
   }
   renderWordsToLearnStudy();
+}
+
+// "слово - перевод": the word is shown first, so that is when it is spoken
+function speakWordToLearnIfWordFirst() {
+  if (
+    !getWordsToLearnWordFirst() ||
+    !getWordsToLearnAutospeak() ||
+    !learnedSession?.currentRef
+  ) {
+    return;
+  }
+  const { book, currentRef } = learnedSession;
+  const entry = getLearnedEntry(book, currentRef.chapter, currentRef.id);
+  if (entry) {
+    speak(stripAnnotations(entry[0]));
+  }
 }
 
 function toggleWordToLearnRepeat(checked) {
@@ -520,6 +542,7 @@ function deleteWordToLearn() {
   setWordsToLearn(data);
   pickNextWordToLearn();
   renderWordsToLearnStudy();
+  speakWordToLearnIfWordFirst();
   refreshWordsToLearnLink();
 }
 
@@ -553,6 +576,18 @@ function getWordsToLearnAutospeak() {
 
 function toggleWordsToLearnAutospeak(checked) {
   localStorage.setItem("wordsToLearnAutospeak", checked);
+}
+
+// false (default): the translation is shown first, the word is revealed
+// ("перевод - слово"); true: the word is shown first, the translation is
+// revealed ("слово - перевод"). Remembered between sessions
+function getWordsToLearnWordFirst() {
+  return localStorage.getItem("wordsToLearnWordFirst") === "true";
+}
+
+function setWordsToLearnWordFirst(wordFirst) {
+  localStorage.setItem("wordsToLearnWordFirst", wordFirst);
+  renderWordsToLearnStudy();
 }
 
 function stripAnnotations(text) {
@@ -605,12 +640,29 @@ function renderWordsToLearnStudy() {
     ? `<button style="margin: 0;" onClick="showWordToLearnConjugation()">Спряжение</button>`
     : "";
 
+  const wordFirst = getWordsToLearnWordFirst();
+  // the word is visible from the start in "слово - перевод", and only once
+  // revealed in "перевод - слово"; the translation is the other way round
+  const wordVisible = wordFirst || revealed;
+  const translationVisible = !wordFirst || revealed;
+  const translationHTML = `<div style="visibility: ${translationVisible ? "visible" : "hidden"};">${translation}</div>`;
+  const wordRowHTML = `<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; min-height: 4.5rem; visibility: ${wordVisible ? "visible" : "hidden"};"><span>${wordVisible ? wordHTML : ""}</span>${speakBtnHTML(stripAnnotations(word))}${conjugationButtonHTML}</div>`;
+  const orderName = prefix("wordsToLearnOrder");
+  const orderRadioHTML = (id, label, checked, value) => `
+      <div style="display: flex; align-items: center; gap: 0.2rem;">
+        <input type="radio" id="${prefix(id)}" name="${orderName}" style="padding: 0;" ${checked ? "checked" : ""} onChange="setWordsToLearnWordFirst(${value})">
+        <label for="${prefix(id)}" style="padding: 0;">${label}</label>
+      </div>`;
+
   contentEl.innerHTML = `
     <h4 style="margin: 0; padding: 0;">${chapterFilter ?? book}</h4>
+    <div style="display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem;">
+      ${orderRadioHTML("wordsToLearnOrderTranslationFirst", "перевод - слово", !wordFirst, "false")}
+      ${orderRadioHTML("wordsToLearnOrderWordFirst", "слово - перевод", wordFirst, "true")}
+    </div>
     <div>
       <div>Осталось: ${remaining}</div>
-      <div>${translation}</div>
-      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; min-height: 4.5rem; visibility: ${revealed ? "visible" : "hidden"};"><span>${revealed ? wordHTML : ""}</span>${speakBtnHTML(stripAnnotations(word))}${conjugationButtonHTML}</div>
+      ${wordFirst ? wordRowHTML + translationHTML : translationHTML + wordRowHTML}
     </div>
     <div style="display: flex; flex-direction: row; justify-content: flex-end; padding-top: 0.5rem;">
       <button style="margin: 0;" onClick="nextWordToLearn()">Дальше</button>
