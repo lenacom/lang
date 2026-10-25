@@ -38,6 +38,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "abraham": {
@@ -141,6 +144,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "né": {
@@ -231,9 +235,12 @@
   },
   "bien": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "exposer": {
@@ -732,6 +739,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "aurez": {
@@ -1286,6 +1296,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "taille": {
@@ -1590,6 +1603,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": true,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "ouvrirent": {
@@ -1648,9 +1662,12 @@
   },
   "bien-aimé": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "jours": {
@@ -1979,6 +1996,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "ténèbres": {
@@ -1989,9 +2009,12 @@
   },
   "gentils": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "lumière": {
@@ -2054,6 +2077,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": true,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "long": {
@@ -2138,6 +2162,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "bonne": {
@@ -2145,6 +2172,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "maladie": {
@@ -2505,6 +2535,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "loi": {
@@ -2615,6 +2648,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "commandements": {
@@ -2721,6 +2755,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "réconcilier": {
@@ -2745,6 +2782,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "officier": {
@@ -2876,6 +2914,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "divorce": {
@@ -2907,6 +2946,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": true,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "répudiée": {
@@ -2940,6 +2980,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": true
   },
   "jurer": {
@@ -3042,6 +3083,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "veut": {
@@ -3201,9 +3243,12 @@
   },
   "hypocrites": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "trompette": {
@@ -3272,6 +3317,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "porte": {
@@ -3533,9 +3579,12 @@
   },
   "bon": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "état": {
@@ -3637,6 +3686,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "champs": {
@@ -3903,6 +3953,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "faux": {
@@ -4016,9 +4069,12 @@
   },
   "prudent": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "pluie": {
@@ -4280,6 +4336,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": true,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "entendu": {
@@ -4351,6 +4408,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "couchée": {
@@ -4926,6 +4986,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "sacrifices": {
@@ -5037,9 +5100,12 @@
   },
   "nouveau": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "vieilles": {
@@ -5139,6 +5205,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "bord": {
@@ -5182,6 +5251,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "eut": {
@@ -5480,6 +5550,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "perdues": {
@@ -5766,9 +5837,12 @@
   },
   "plein": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "oreille": {
@@ -5844,6 +5918,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "aura": {
@@ -6040,9 +6117,12 @@
   },
   "précieux": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "vêtu": {
@@ -6089,9 +6169,12 @@
   },
   "violents": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "emparent": {
@@ -6577,6 +6660,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "rendront": {
@@ -6816,6 +6900,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "parler": {
@@ -7385,6 +7472,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "perle": {
@@ -7409,6 +7499,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "ramassant": {
@@ -7475,6 +7566,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "anciennes": {
@@ -7680,9 +7774,12 @@
   },
   "pleins": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "compter": {
@@ -8279,6 +8376,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "éprouver": {
@@ -8531,6 +8629,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "échange": {
@@ -8619,6 +8718,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "nuée": {
@@ -9335,6 +9435,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "possèdes": {
@@ -9347,9 +9450,12 @@
   },
   "riche": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "grands": {
@@ -9478,6 +9584,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "accord": {
@@ -9998,6 +10107,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "figuier": {
@@ -10267,9 +10379,12 @@
   },
   "misérables": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "donneront": {
@@ -10515,6 +10630,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "élus": {
@@ -10833,6 +10949,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "doigt": {
@@ -10917,6 +11034,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "jure": {
@@ -11712,9 +11830,12 @@
   },
   "fidèle": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "convenable": {
@@ -11766,6 +11887,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "mettra": {
@@ -12024,6 +12148,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": true,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "répondra": {
@@ -12170,6 +12295,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "livrerai": {
@@ -12395,6 +12521,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "soient": {
@@ -12622,6 +12749,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "gouverneur": {
@@ -13062,6 +13190,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "courut": {
@@ -13400,9 +13531,12 @@
   },
   "grosse": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "somme": {
@@ -14233,6 +14367,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "sème": {
@@ -14349,6 +14484,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "vagues": {
@@ -14555,6 +14691,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "raconte-leur": {
@@ -15143,6 +15280,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "cupidités": {
@@ -15663,6 +15801,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": true,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "ver": {
@@ -15900,6 +16039,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "détachèrent": {
@@ -15929,6 +16069,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "craignaient": {
@@ -16041,6 +16184,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "insultèrent": {
@@ -16167,6 +16311,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "tronc": {
@@ -16186,9 +16333,12 @@
   },
   "riches": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "pauvre": {
@@ -16222,16 +16372,22 @@
   },
   "superflu": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "nécessaire": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "vivre": {
@@ -16241,6 +16397,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": true,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "saurons-nous": {
@@ -16890,6 +17047,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "composer": {
@@ -16914,6 +17074,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "recherches": {
@@ -17150,6 +17311,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": true,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "opprobre": {
@@ -17263,9 +17425,12 @@
   },
   "puissant": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "diront": {
@@ -17308,9 +17473,12 @@
   },
   "puissants": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "humbles": {
@@ -17328,6 +17496,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "voisins": {
@@ -17483,6 +17652,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "emmaillota": {
@@ -19100,6 +19272,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "maritime": {
@@ -19372,6 +19545,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "suivant": {
@@ -19381,6 +19555,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "achoppement": {
@@ -20178,6 +20353,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "domestiques": {
@@ -22789,6 +22965,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "décision": {
@@ -23019,6 +23196,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "luit": {
@@ -23043,6 +23221,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "agneau": {
@@ -23500,9 +23679,12 @@
   },
   "vrais": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "adorateurs": {
@@ -23883,9 +24065,12 @@
   },
   "vrai": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "attire": {
@@ -24137,6 +24322,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "entende": {
@@ -25019,6 +25205,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "voudrez": {
@@ -25066,6 +25255,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": true,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "réjouira": {
@@ -25156,6 +25346,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": true
   },
   "lanternes": {
@@ -25181,6 +25372,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "flambeaux": {
@@ -25201,6 +25395,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "portière": {
@@ -25449,6 +25646,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "mélange": {
@@ -25674,9 +25872,12 @@
   },
   "moqueurs": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "compagnie": {
@@ -26257,9 +26458,12 @@
   },
   "vindicatif": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "confondre": {
@@ -26649,6 +26853,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "fondements": {
@@ -26781,9 +26986,12 @@
   },
   "fidèles": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "double": {
@@ -26967,6 +27175,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "délicieux": {
@@ -26994,6 +27203,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "souverain": {
@@ -27153,6 +27365,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "réveil": {
@@ -27605,6 +27820,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "héros": {
@@ -28029,9 +28245,12 @@
   },
   "misérable": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "célébreront": {
@@ -28495,6 +28714,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "méritent": {
@@ -28655,6 +28875,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "soupirs": {
@@ -28721,6 +28942,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "audace": {
@@ -29907,6 +30129,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "hochements": {
@@ -30002,9 +30225,12 @@
   },
   "merveilleux": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "exploits": {
@@ -30083,6 +30309,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "hommages": {
@@ -30750,6 +30979,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "néant": {
@@ -30961,9 +31191,12 @@
   },
   "enchanteurs": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "taisant": {
@@ -31163,6 +31396,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "étourdissement": {
@@ -31386,6 +31620,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "célèbrent": {
@@ -31431,6 +31666,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "tendre": {
@@ -31440,6 +31676,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": true,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "cachette": {
@@ -31611,6 +31848,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "sèche": {
@@ -33122,6 +33360,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "dirigea": {
@@ -33146,9 +33387,12 @@
   },
   "trompeur": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "couvrit": {
@@ -33528,9 +33772,12 @@
   },
   "faible": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "hagaréniens": {
@@ -33578,6 +33825,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "oreb": {
@@ -33825,6 +34075,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "bontés": {
@@ -34093,6 +34344,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "célébrer": {
@@ -34190,9 +34444,12 @@
   },
   "superbes": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "vengeances": {
@@ -34836,6 +35093,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "recueillent": {
@@ -34879,6 +35137,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "oints": {
@@ -35442,6 +35703,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "sauterelle": {
@@ -35551,6 +35813,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "exerce": {
@@ -35844,9 +36109,12 @@
   },
   "indécis": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "écartent": {
@@ -36500,6 +36768,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "existât": {
@@ -36922,6 +37191,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "vus": {
@@ -36931,6 +37201,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "glorifiés": {
@@ -36949,6 +37220,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "facile": {
@@ -37006,9 +37278,12 @@
   },
   "doux": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "cruellement": {
@@ -37026,6 +37301,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "chassée": {
@@ -37069,6 +37345,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "troublés": {
@@ -37105,6 +37382,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "divisée": {
@@ -37123,6 +37401,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "auparavant": {
@@ -37373,6 +37652,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "entré": {
@@ -37397,6 +37679,9 @@
     "isAdjective": false,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "revêtu": {
@@ -37604,6 +37889,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "éprouvée": {
@@ -37721,9 +38007,12 @@
   },
   "impuissant": {
     "gender": null,
-    "isAdjective": false,
+    "isAdjective": true,
     "isVerb": false,
     "isNoun": true,
+    "isAdjectiveOnly": false,
+    "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "compatissant": {
@@ -37776,6 +38065,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "abattue": {
@@ -37853,6 +38143,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "chargé": {
@@ -37947,6 +38238,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "frappé": {
@@ -37974,6 +38266,7 @@
     "isNoun": true,
     "isAdjectiveOnly": false,
     "isInfinitive": false,
+    "isAdjectiveChecked": true,
     "hasCapitalizedVariant": false
   },
   "brisée": {

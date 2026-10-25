@@ -195,6 +195,7 @@ const PAST_PARTICIPLE_ENDING_RE = /(é|ée|és|ées)$/u;
 const NOUN_GUARANTEED_PREPOSITIONS = new Set([
   "à", "de", "sur", "en", "comme", "par", "avec", "dans", "depuis",
   "entre", "contre", "chez", "vers", "sous", "pendant", "parmi", "selon",
+  "dès", "durant", "envers", "hors", "sauf",
   "malgré",
 ]);
 // most noun/verb and noun/adjective ambiguity (e.g. "grand", "porter") is
@@ -984,6 +985,13 @@ function collectUnresolvedWords(line, nounGender, unresolved, cache) {
       }
       const foundEntry = lookupGender(cleaned, nounGender);
       if (foundEntry) {
+        // an old genderless noun entry doesn't say whether it is also an
+        // adjective - re-check it (the word itself, or its singular)
+        for (const key of [cleaned, ...singularForms(cleaned)]) {
+          if (key in cache && lacksGenderlessAdjectiveInfo(cache[key])) {
+            unresolved.add(key);
+          }
+        }
         const rawEntry = effectiveEntry(foundEntry, info.expectedGender);
         if (!rawEntry) {
           continue; // found but doesn't fit the article - not a dictionary gap
@@ -1120,7 +1128,11 @@ async function fetchGenderFromYandex(word) {
   const gen = noun?.gen?.code;
   const gender = gen === "m" || gen === "f" ? gen : null;
   const isNoun = noun !== undefined;
-  const isAdjective = gender !== null && entries.some((it) => it.pos?.code === "adj");
+  // also for a noun entry WITHOUT a gender ("vrai": adj + adv + nn with no
+  // "gen"): it is used with the gender of the article, so it must still
+  // count as ambiguous - otherwise "le vrai cep" stops at "vrai" and never
+  // reaches the real noun
+  const isAdjective = isNoun && entries.some((it) => it.pos?.code === "adj");
   // an adjective with no noun entry at all ("démoniaque") - can still be
   // the noun of a phrase when used substantivally ("d’un démoniaque")
   const isAdjectiveOnly = !isNoun && entries.some((it) => it.pos?.code === "adj");
@@ -1156,6 +1168,7 @@ async function fetchGenderFromYandex(word) {
       isNoun: true,
       isAdjectiveOnly: false,
       isInfinitive: false,
+      isAdjectiveChecked: true,
       hasCapitalizedVariant,
     };
   }
@@ -1167,6 +1180,7 @@ async function fetchGenderFromYandex(word) {
       isNoun,
       isAdjectiveOnly,
       isInfinitive,
+      isAdjectiveChecked: true,
       hasCapitalizedVariant,
     };
   }
@@ -1177,8 +1191,23 @@ async function fetchGenderFromYandex(word) {
     isNoun,
     isAdjectiveOnly,
     isInfinitive: false,
+    isAdjectiveChecked: true,
     hasCapitalizedVariant,
   };
+}
+
+// a genderless noun entry written before the adjective sense was checked for
+// such entries ("vrai"): whether it is also an adjective is unknown, so it is
+// looked up again when it turns up as a candidate (not a reason to distrust
+// the entry elsewhere)
+function lacksGenderlessAdjectiveInfo(value) {
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    !value.gender &&
+    value.isNoun === true &&
+    value.isAdjectiveChecked === undefined
+  );
 }
 
 const FETCH_CONCURRENCY = 6;
@@ -1189,7 +1218,8 @@ async function resolveMissingGenders(unresolvedWords, cache) {
       !(word in cache) ||
       isStaleCacheEntry(cache[word]) ||
       lacksAdjectiveInfo(cache[word]) ||
-      lacksInfinitiveInfo(cache[word]),
+      lacksInfinitiveInfo(cache[word]) ||
+      lacksGenderlessAdjectiveInfo(cache[word]),
   );
   let nextIndex = 0;
   async function worker() {

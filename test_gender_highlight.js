@@ -48,6 +48,11 @@ const CASES = [
   ["tous les hommes", `tous les ${m("hommes")}`, "tout* + article: the article does the work"],
   ["il prit le _pain_", `il prit le _${m("pain")}_`, "an italic _ marker stays outside the highlighted span"],
 
+  ["Je suis le vrai cep", `Je suis le vrai ${m("cep")}`, "vrai: adj + noun without gender - ambiguous, so the real noun after it wins"],
+  ["Je suis le _vrai_ cep", `Je suis le _vrai_ ${m("cep")}`, "same, with italic markers"],
+  ["vous êtes avec moi dès le commencement.", `vous êtes avec moi dès le ${m("commencement")}.`, "dès + le + verb-ambiguous noun: after a preposition the noun is guaranteed"],
+  ["Jésus savait dès le commencement qui étaient ceux", `Jésus savait dès le ${m("commencement")} qui étaient ceux`, "same, in the middle of a verse"],
+
   // --- sentence start: Le/La/Les is an article ---
   ["Les œuvres que je fais", `Les ${f("œuvres")} que je fais`, "capitalized article at sentence start"],
   ["Le maître _est_ ici", `Le ${m("maître")} _est_ ici`, "noun+adjective word must beat the verb 'est'"],
