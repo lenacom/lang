@@ -42,6 +42,52 @@ function saveConfig(name, data) {
   }
 }
 
+// Config in localStorage: about 5 MB instead of a cookie's 4 KB, and it is not
+// sent to the server with every request. Values that still sit in the old
+// cookie are taken over the first time they are read (and the cookie is
+// removed, so there is a single source of truth). If localStorage is not
+// usable (blocked, private mode, full), it quietly falls back to the cookie.
+function localConfigKey(name) {
+  return `config_${name}`;
+}
+
+function getLocalConfig(name) {
+  try {
+    const raw = localStorage.getItem(localConfigKey(name));
+    if (raw !== null) {
+      return JSON.parse(raw);
+    }
+  } catch (e) {
+    console.error(`getLocalConfig: cannot read "${name}": ${e.message}`);
+  }
+  let old = {};
+  try {
+    old = getConfig(name);
+  } catch (e) {
+    old = {};
+  }
+  if (old && Object.keys(old).length > 0 && saveLocalConfig(name, old)) {
+    deleteCookie(name);
+  }
+  return old;
+}
+
+// returns true when the data went to localStorage
+function saveLocalConfig(name, data) {
+  try {
+    localStorage.setItem(localConfigKey(name), JSON.stringify(data));
+    return true;
+  } catch (e) {
+    console.error(`saveLocalConfig: "${name}" not stored in localStorage (${e.message}), using the cookie`);
+    saveConfig(name, data);
+    return false;
+  }
+}
+
+function deleteCookie(name) {
+  document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+}
+
 function setCookie(name, value, days = 90) {
   let expires = "";
   if (days) {

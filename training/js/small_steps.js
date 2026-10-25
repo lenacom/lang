@@ -4,7 +4,7 @@ function SmallSteps(configName, containerId, items, sectionSize = 50, restartOnE
   const partSize = 5;
   let config;
   try {
-    config = getConfig(configName);
+    config = getLocalConfig(configName);
   } catch (e) {
     config = {};
   }
@@ -58,7 +58,7 @@ function SmallSteps(configName, containerId, items, sectionSize = 50, restartOnE
       order,
       countPartPasses,
     };
-    saveConfig(configName, config);
+    saveLocalConfig(configName, config);
   }
 
   function fillRandomly(toArray, fromArray, limit) {
@@ -140,8 +140,11 @@ function SmallSteps(configName, containerId, items, sectionSize = 50, restartOnE
   function initSection() {
     part = getSectionItems(section);
     const sectionConfig = config.sections?.[section];
-    limit = sectionConfig?.limit ?? 2 * partSize;
-    errors = sectionConfig?.errors ?? [];
+    // saved progress may be older than the list: when the list gets shorter
+    // (or the parts merge into one), a saved limit/error index can point past
+    // its end, and the test would then pick an item that does not exist
+    limit = Math.min(sectionConfig?.limit ?? 2 * partSize, part.length);
+    errors = (sectionConfig?.errors ?? []).filter(([index]) => index < part.length);
     order = sectionConfig?.order ?? "direct";
     countPartPasses = sectionConfig?.countPartPasses ?? 0;
     if (order === "reverse") {

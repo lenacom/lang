@@ -19,6 +19,7 @@
     <div id="verb" style="display: flex; gap: 1rem"></div>
     <div id="form" style="display: flex; flex-wrap: wrap; gap: 1rem"></div>
     <div id="error" class="error"></div>
+    <div id="also"></div>
     <script>
       const LANG = "fr-FR";
       initSpeak(LANG);
@@ -42,10 +43,109 @@
       let error = false;
       const pronouns = ["je", "tu", "il", "nous", "vous", "ils"];
 
+      function commonPrefixLength(a, b) {
+        let i = 0;
+        while (i < a.length && i < b.length && a[i] === b[i]) i++;
+        return i;
+      }
+
+      // How a verb conjugates in a tense, as the way each form is made from
+      // the infinitive: which end of the infinitive is cut off and what is
+      // added instead. tenir/retenir/venir all give "enir>iens" in the
+      // present, every -er verb gives "er>e", so verbs with the same pattern
+      // conjugate the same way. (A reflexive "se"/"s'" is not part of the
+      // forms, so it is not part of the infinitive here either.)
+      function infinitiveOf(verb) {
+        return verb.replace(/^se /, "").replace(/^s['’]/, "");
+      }
+
+      function conjugationPattern(verb, __forms) {
+        const infinitive = infinitiveOf(verb);
+        return JSON.stringify(
+          __forms.map((form) => {
+            if (form === "") {
+              return "-";
+            }
+            const common = commonPrefixLength(infinitive, form);
+            return `${infinitive.slice(common)}>${form.slice(common)}`;
+          }),
+        );
+      }
+
+      // A group of verbs with the same pattern can be huge (162 verbs make
+      // their futur simple the same way), so it is cut by the end of the
+      // infinitive: always by the last two letters (-ir, -er, -re), and a part
+      // that is still bigger than MAX_GROUP_SIZE by a longer tail (-dre, then
+      // -ndre, -endre...), until the parts are small enough.
+      const MAX_GROUP_SIZE = 20;
+
+      function splitByEnding(group, length = 2) {
+        const parts = new Map();
+        for (const item of group) {
+          const ending = infinitiveOf(item[0]).slice(-length);
+          if (!parts.has(ending)) {
+            parts.set(ending, []);
+          }
+          parts.get(ending).push(item);
+        }
+        return [...parts.values()].flatMap((part) =>
+          part.length > MAX_GROUP_SIZE && length < 12
+            ? splitByEnding(part, length + 1)
+            : [part],
+        );
+      }
+
+      // The test list for a tense, [verb, translation, also]:
+      // - only verbs that HAVE this tense (defective verbs like paître, clore,
+      //   gésir have none in some tenses);
+      // - of all verbs that conjugate the same way in it (same pattern and the
+      //   same ending of the infinitive) only the one with the best rank is
+      //   asked; the others are `also`: [[verb, translation]], best rank
+      //   first, shown under the buttons.
+      // The order is that of the `verbs` list (the first verb of a group
+      // decides where the group stands).
+      function verbsWithTense(__tenseName) {
+        const groups = new Map();
+        for (const item of verbs) {
+          const __forms = tenses[__tenseName]?.[item[0]];
+          if (!Array.isArray(__forms)) {
+            continue;
+          }
+          const key = conjugationPattern(item[0], __forms);
+          if (!groups.has(key)) {
+            groups.set(key, []);
+          }
+          groups.get(key).push(item);
+        }
+        // item = [verb, translation, rank]: the place of the verb among the
+        // verbs of French by frequency (1 = the most frequent; see
+        // compute_verb_rank.js). The verb with the lowest rank leads a group.
+        return [...groups.values()]
+          .flatMap((group) => splitByEnding(group))
+          .map((group) => {
+            // sort is stable: with equal ranks the earlier verb wins
+            const [first, ...others] = [...group].sort((a, b) => a[2] - b[2]);
+            return [
+              first[0],
+              first[1],
+              others.map(([verb, translation]) => [verb, translation]),
+            ];
+          });
+      }
+
       function setTenseName(__tenseName) {
         tenseName = __tenseName;
         setCookie("fr_verbs_tense", tenseName);
-        smallSteps = SmallSteps(`fr_verbs_${tenseName}`, "smallStepsSection", verbs, 30, false);
+        // the list is short now (one verb per group of verbs that conjugate the
+        // same way), so it is learnt as a whole, not in parts of 30
+        const testVerbs = verbsWithTense(tenseName);
+        smallSteps = SmallSteps(
+          `fr_verbs_${tenseName}`,
+          "smallStepsSection",
+          testVerbs,
+          Math.max(testVerbs.length, 1),
+          false,
+        );
         setVerb();
       }
 
@@ -60,10 +160,16 @@
 
       function setVerb() {
         const { limit, part, item, countPartPasses } = smallSteps.getState();
+        byId("also").innerHTML = alsoHTML(item[2] ?? []);
         byId("test").innerHTML = `Диапазон: ${limit} из ${part.length}. Проход ${countPartPasses + 1}.`;
         byId("verb").innerHTML =
           `${withSpeakButtonHTML(item[0], LANG)}<span>${item[1]}<span>`;
-        const verbTenses = tenses[item[0]];
+        // tenses[tense][verb]: collect all the tenses of this verb
+        const verbTenses = Object.fromEntries(
+          Object.entries(tenses)
+            .filter(([, byVerb]) => item[0] in byVerb)
+            .map(([__tenseName, byVerb]) => [__tenseName, byVerb[item[0]]]),
+        );
         forms = verbTenses[tenseName];
         formVariants = createFormVariants(verbTenses);
         formIndex = 0;
@@ -109,6 +215,23 @@
           formIndex++;
           setForm();
         }
+      }
+
+      // under the buttons with the form variants: the verbs that conjugate the
+      // same way in this tense, with their translation
+      function alsoHTML(also) {
+        if (also.length === 0) {
+          return "";
+        }
+        const verbsHTML = also
+          .map(
+            ([verb, translation]) =>
+              `<span><b>${verb}</b> — ${translation}</span>`,
+          )
+          .join("");
+        return `
+          <div style="margin-top: 1rem">Так же спрягаются в этом времени:</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; max-height: 40vh; overflow-y: auto">${verbsHTML}</div>`;
       }
 
       function createFormVariants(verbTenses) {
