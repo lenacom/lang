@@ -24,8 +24,22 @@ function getConfig(name) {
   return json ? JSON.parse(json) : {};
 }
 
+let configSaveWarningShown = false;
+
 function saveConfig(name, data) {
-  setCookie(name, JSON.stringify(data));
+  const json = JSON.stringify(data);
+  setCookie(name, json);
+  // a browser silently drops a cookie that is too big (about 4 KB, and every
+  // non-ASCII character counts three times once URL-encoded) - the old value
+  // then stays and nothing saves any more, with no sign of it. Read it back
+  // and say so
+  if (getCookie(name) !== json) {
+    console.error(`saveConfig: "${name}" was not saved (${json.length} chars)`);
+    if (!configSaveWarningShown) {
+      configSaveWarningShown = true;
+      alert("Не удалось сохранить настройки: слишком большой объём данных.");
+    }
+  }
 }
 
 function setCookie(name, value, days = 90) {

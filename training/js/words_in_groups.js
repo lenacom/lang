@@ -3,6 +3,12 @@
 function WordsInGroups(id, items, lang) {
   const config = getConfig(id);
   const repeatOftener = config.repeatOftener ?? {};
+  // earlier versions appended the same index again on every un-tick, so
+  // the saved lists may contain duplicates - collapse them (this also keeps
+  // the cookie small)
+  for (const name of Object.keys(repeatOftener)) {
+    repeatOftener[name] = [...new Set(repeatOftener[name])];
+  }
   let wordFirst = config.wordFirst ?? false;
 
   let indexHtml = "";
@@ -36,14 +42,14 @@ function WordsInGroups(id, items, lang) {
     saveConfig(id, { repeatOftener, wordFirst });
   });
   document.addEventListener("repeatOftener", ({ detail }) => {
+    const list = repeatOftener[detail.partName] ?? [];
     if (detail.value) {
-      if (!repeatOftener[detail.partName]) {
-        repeatOftener[detail.partName] = [];
+      if (!list.includes(detail.index)) {
+        list.push(detail.index);
       }
-      repeatOftener[detail.partName].push(detail.index);
+      repeatOftener[detail.partName] = list;
     } else {
-      const index = repeatOftener[detail.partName].indexOf(detail.index);
-      repeatOftener[detail.partName].splice(index, 1);
+      repeatOftener[detail.partName] = list.filter((it) => it !== detail.index);
     }
     saveConfig(id, { repeatOftener, wordFirst });
   });
@@ -95,11 +101,14 @@ function WordsInGroups(id, items, lang) {
       (repeatOftener[partName] ?? []).find((it) => it === item[0]) !==
       undefined;
     const addition = item[3] ? `<div class="small">${item[3]}</div>` : "";
+    // the value must be read from the checkbox at click time (this.checked):
+    // the page is not re-rendered between clicks, so a value baked into the
+    // HTML here would be stale on the second click (un-ticking would re-add)
     return `${addition}
         <div class="valign">
           <label for="repeatOftener">Повторять чаще</label>
           <input type="checkbox" ${checked ? "checked" : ""} id="repeatOftener"
-            onClick="document.dispatchEvent(new CustomEvent('repeatOftener', { detail: { partName: '${partName}', index: ${item[0]}, value: ${!checked} } }))"/>
+            onClick="document.dispatchEvent(new CustomEvent('repeatOftener', { detail: { partName: '${partName}', index: ${item[0]}, value: this.checked } }))"/>
         <div>`;
   }
 
