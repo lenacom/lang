@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="js/common.js"></script>
     <link rel="stylesheet" href="css/common.css" />
+    <style>
+      .pill.m,
+      .pill.f {
+        color: black;
+      }
+      .pill.m {
+        background-color: #87cefa;
+      }
+      .pill.f {
+        background-color: #f08080;
+      }
+    </style>
     <script>
       const langs = {
         ru: "Русский",
@@ -52,7 +64,15 @@
         function itemHTML(item) {
           const { text, gen, ts } = item;
           const href = `?text=${encodeURIComponent(text)}&lang_from=${lang}`;
-          const extended = `<a href="${href}"><span class="pill">${text}</span></a>${ts ? ` [${ts}]` : ""}${gen?.code ? ` ${gen?.code}` : ""}`;
+          // the gender of a French noun is shown by colour, as in fr_noun_gen
+          const genderClass =
+            lang === "fr" && (gen?.code === "m" || gen?.code === "f")
+              ? gen.code
+              : "";
+          const genHTML = gen?.code
+            ? ` <span class="${genderClass}">${gen.code}</span>`
+            : "";
+          const extended = `<a href="${href}"><span class="pill ${genderClass}">${text}</span></a>${ts ? ` [${ts}]` : ""}${genHTML}`;
           return withSpeakButtonHTML(extended, lang, text);
         }
 
