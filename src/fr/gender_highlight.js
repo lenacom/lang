@@ -283,6 +283,12 @@ const ELISION_ONLY_NOUNS = { été: "m" };
 // pronoun + verb and must stay unhighlighted
 const ELISION_NOUNS_AFTER_PREPOSITION = { est: "m" };
 
+// a capitalized occurrence, also when the name is fused to an elided "d’"/"l’"
+// ("d’Israël" - the apostrophe prefix is lowercase but the name is not)
+function isCapitalizedOccurrence(word) {
+  return CAPITALIZED_WORD_RE.test(word.replace(/^[^\p{L}]*(?:l|d|qu|n|s|j|m|t|c)['’]/iu, ""));
+}
+
 function cleanWord(token) {
   return token
     .toLowerCase()
@@ -833,6 +839,15 @@ function highlightNounGender(line, nounGender, cache) {
       if (!rawEntry) {
         continue;
       }
+      // the dictionary spells this word only with a capital ("Égypte"): it is
+      // a name, and only an occurrence that is itself capitalized is that name
+      // (a single letter is an abbreviation - "par M. Kœhler" - not a noun)
+      if (
+        rawEntry.capitalizedOnly &&
+        (cleaned.length < 2 || !isCapitalizedOccurrence(candidate.word))
+      ) {
+        continue;
+      }
       // this exact occurrence is capitalized, and the dictionary also
       // recognizes a capitalized sense for the word (a name) - can't tell
       // from the text alone which sense is meant here, so skip it
@@ -983,6 +998,16 @@ function collectUnresolvedWords(line, nounGender, unresolved, cache) {
         if (candidate.tokenIndex === i) break; // resolved - see ELISION_ONLY_NOUNS
         continue; // found at a distance - never trust it
       }
+      // a name that an older build cached as "not a noun" (before the
+      // capital-only entries were read, see fetchGenderFromYandex) is dropped
+      // from the cache so it is looked up again
+      if (
+        cleaned in cache &&
+        isCapitalizedOccurrence(candidate.word) &&
+        lacksCapitalizedInfo(cache[cleaned])
+      ) {
+        delete cache[cleaned];
+      }
       const foundEntry = lookupGender(cleaned, nounGender);
       if (foundEntry) {
         // an old genderless noun entry doesn't say whether it is also an
@@ -1107,10 +1132,26 @@ async function fetchGenderFromYandex(word) {
   // means there is no common-noun sense to report at all
   const lower = word.toLowerCase();
   const singulars = singularForms(lower);
-  const entries = regular.filter((it) => {
+  const lowerEntries = regular.filter((it) => {
     const text = it.text;
     return text === lower || singulars.includes(text);
   });
+  // a word the dictionary spells ONLY with a capital ("Égypte", "Israël",
+  // "France" queried lowercase) is a name, and a name that Yandex tags as a
+  // noun is a noun for sure - so those entries are used when there is no
+  // lowercase one. Highlighting is limited to capitalized occurrences
+  // (capitalizedOnly), and a name Yandex doesn't know at all ("Judée") stays
+  // unhighlighted: nothing says it is a noun
+  const capitalOnlyEntries =
+    lowerEntries.length > 0
+      ? []
+      : regular.filter((it) => {
+          if (!it.text) return false;
+          const textLower = it.text.toLowerCase();
+          return textLower !== it.text && (textLower === lower || singulars.includes(textLower));
+        });
+  const capitalizedOnly = capitalOnlyEntries.length > 0;
+  const entries = capitalizedOnly ? capitalOnlyEntries : lowerEntries;
   // a capitalized instance in the source text (e.g. "Pierre"/"Jean"/"Lot")
   // is only ever highlighted as the common noun when the dictionary has NO
   // separate capitalized entry at all - if it does (even alongside a
@@ -1118,12 +1159,21 @@ async function fetchGenderFromYandex(word) {
   // confirms the word is also a recognized name, and there is no way to
   // tell from the text alone which sense this particular capitalized
   // instance means, so it's left unhighlighted rather than guessed at
-  const hasCapitalizedVariant = regular.some((it) => {
-    if (!it.text) return false;
-    const textLower = it.text.toLowerCase();
-    const matchesWord = textLower === lower || singulars.includes(textLower);
-    return matchesWord && it.text !== textLower;
-  });
+  // (a capital-only word is the exception: the name IS the only sense there)
+  const hasCapitalizedVariant =
+    !capitalizedOnly &&
+    regular.some((it) => {
+      if (!it.text) return false;
+      const textLower = it.text.toLowerCase();
+      const matchesWord = textLower === lower || singulars.includes(textLower);
+      return matchesWord && it.text !== textLower;
+    });
+  // what a cache entry says about capital-only spelling; the flag also marks
+  // the entry as written after capital-only entries were read (see
+  // lacksCapitalizedInfo)
+  const capitalInfo = capitalizedOnly
+    ? { capitalizedOnly: true, isCapitalizedChecked: true }
+    : { isCapitalizedChecked: true };
   const noun = entries.find((it) => it.pos?.code === "nn");
   const gen = noun?.gen?.code;
   const gender = gen === "m" || gen === "f" ? gen : null;
@@ -1135,7 +1185,8 @@ async function fetchGenderFromYandex(word) {
   const isAdjective = isNoun && entries.some((it) => it.pos?.code === "adj");
   // an adjective with no noun entry at all ("démoniaque") - can still be
   // the noun of a phrase when used substantivally ("d’un démoniaque")
-  const isAdjectiveOnly = !isNoun && entries.some((it) => it.pos?.code === "adj");
+  const isAdjectiveOnly =
+    !capitalizedOnly && !isNoun && entries.some((it) => it.pos?.code === "adj");
   // a word that Yandex also lists as a verb ("vrb") is normally treated as
   // not a noun at all, even when it has a rare noun sense too (e.g.
   // "porter", "aller") - an infinitive doesn't reliably follow an article
@@ -1170,6 +1221,7 @@ async function fetchGenderFromYandex(word) {
       isInfinitive: false,
       isAdjectiveChecked: true,
       hasCapitalizedVariant,
+      ...capitalInfo,
     };
   }
   if (isVerb) {
@@ -1182,6 +1234,7 @@ async function fetchGenderFromYandex(word) {
       isInfinitive,
       isAdjectiveChecked: true,
       hasCapitalizedVariant,
+      ...capitalInfo,
     };
   }
   return {
@@ -1193,7 +1246,23 @@ async function fetchGenderFromYandex(word) {
     isInfinitive: false,
     isAdjectiveChecked: true,
     hasCapitalizedVariant,
+    ...capitalInfo,
   };
+}
+
+// a genderless non-noun entry written before capital-only entries were read
+// ("égypte" cached as "not a noun" because Yandex only spells it "Égypte"):
+// whether it is such a name is unknown, so it is looked up again when it turns
+// up capitalized (see collectUnresolvedWords). Not a reason to distrust the
+// entry for lowercase occurrences
+function lacksCapitalizedInfo(value) {
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    !value.gender &&
+    value.isNoun === false &&
+    value.isCapitalizedChecked === undefined
+  );
 }
 
 // a genderless noun entry written before the adjective sense was checked for
@@ -1250,6 +1319,7 @@ function normalizeCacheEntry(value) {
     isAdjectiveOnly: raw.isAdjectiveOnly ?? false,
     isInfinitive: raw.isInfinitive ?? false,
     hasCapitalizedVariant: raw.hasCapitalizedVariant ?? false,
+    capitalizedOnly: raw.capitalizedOnly ?? false,
   };
 }
 

@@ -39,6 +39,22 @@ const CASES = [
   ["au milieu de l’assemblée.", `au ${m("milieu")} de l’${f("assemblée")}.`, "l’ + a word in -ée can only be a noun (a participle can't follow the pronoun)"],
   ["il enfante le néant.", `il enfante le ${m("néant")}.`, "le + a noun ending in -ant is not a gerund"],
 
+  ["dans son antre", `dans son ${m("antre")}`, "possessive + a noun that only entered the cache after the book was built"],
+
+  // --- geographic names ---
+  // Yandex spells these only with a capital and tags them as nouns, so they count
+  ["d’Israël", `d’${m("Israël")}`, "name Yandex has only capitalized, fused to an elided d’"],
+  ["en Égypte", `en ${f("Égypte")}`, "capital-only Yandex entry after en (no article to read the gender from)"],
+  ["le pays d’Égypte", `le ${m("pays")} d’${f("Égypte")}`, "the common noun and the name each get their own span"],
+  ["la France", `la ${f("France")}`, "capital-only Yandex entry after an article"],
+  ["en égypte", "en égypte", "a capital-only entry is a name only when the occurrence is capitalized"],
+  ["résumé par M. Kœhler", "résumé par M. Kœhler", "a capital-only single letter is the abbreviation M. (Monsieur), not a noun"],
+  // Yandex doesn't know these at all, so nothing says they are nouns: left alone
+  ["la Judée", "la Judée", "unknown to Yandex - not highlighted just because an article precedes it"],
+  ["de la Galilée", "de la Galilée", "same"],
+  ["dans la Zorbanie", "dans la Zorbanie", "a made-up capitalized word is never highlighted"],
+  ["le Très Haut", "le Très Haut", "the adverb Très must not be taken as a name after the article"],
+
   ["de peur d’aller occuper la place", `de ${f("peur")} d’aller occuper la place`, "d’ + infinitive: 'aller' is a verb here, not the noun (only 'peur' is highlighted)"],
   ["avoir été traité comme lui", "avoir été traité comme lui", "an infinitive-like word / participle after être is not a noun"],
 
