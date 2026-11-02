@@ -112,7 +112,7 @@ async function main() {
     const langSrcDir = `${booksSrcDir}/${lang}`;
     const langDestDir = `${DEST}/${lang}`;
     fs.mkdirSync(langDestDir);
-    for (const book of ["mf", "mk", "lk", "jn", "psaumes"]) {
+    for (const book of ["mf", "mk", "lk", "jn", "psaumes", "conte"]) {
       const bookDir = `${langSrcDir}/${book}`;
       const metadata = JSON.parse(fs.readFileSync(`${bookDir}/metadata.json`));
       const text = fs.readFileSync(`${bookDir}/${metadata.code}.txt`, "utf8");
