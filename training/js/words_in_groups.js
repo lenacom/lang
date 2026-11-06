@@ -77,13 +77,74 @@ function WordsInGroups(id, items, lang) {
     return partRepeatOftener.length ? partRepeatOftener : part;
   }
 
+  // gender given by the article before a word (du = de le, au = à le)
+  const ARTICLE_GENDER = {
+    un: "m",
+    le: "m",
+    du: "m",
+    au: "m",
+    une: "f",
+    la: "f",
+  };
+
+  // a standalone "m" / "f" marks only the word right before it; an article
+  // marks the word right after it. Where the two overlap (an article, its
+  // word and the marker) they become one span, and the marker's gender wins.
+  function highlightGender(source) {
+    const tokens = source.split(" ");
+    // "m" / "f", possibly with punctuation stuck to it ("f,", "m)")
+    const markerOf = (token) => token.match(/^([mf])[^\p{L}\d_'’]*$/u)?.[1];
+    const groups = [];
+    tokens.forEach((token, i) => {
+      const marker = markerOf(token);
+      if (marker) {
+        if (i > 0) groups.push({ from: i - 1, to: i, gender: marker });
+        return;
+      }
+      const gender = ARTICLE_GENDER[token.toLowerCase()];
+      if (
+        gender &&
+        i + 1 < tokens.length &&
+        !markerOf(tokens[i + 1]) &&
+        /\p{L}/u.test(tokens[i + 1])
+      ) {
+        groups.push({ from: i, to: i + 1, gender, article: true });
+      }
+    });
+
+    const merged = [];
+    for (const group of groups.sort((a, b) => a.from - b.from)) {
+      const last = merged[merged.length - 1];
+      if (last && group.from <= last.to) {
+        last.to = Math.max(last.to, group.to);
+        if (!group.article) last.gender = group.gender;
+      } else {
+        merged.push({ ...group });
+      }
+    }
+
+    const parts = [];
+    let i = 0;
+    for (const group of merged) {
+      while (i < group.from) parts.push(tokens[i++]);
+      const words = tokens.slice(group.from, group.to + 1);
+      // punctuation stuck to the last word (a comma, a bracket) stays outside
+      const punctuation = words[words.length - 1].match(/[^\p{L}\d]*$/u)[0];
+      words[words.length - 1] = words[words.length - 1].slice(
+        0,
+        words[words.length - 1].length - punctuation.length,
+      );
+      parts.push(
+        `<span class="${group.gender}">${words.join(" ")}</span>${punctuation}`,
+      );
+      i = group.to + 1;
+    }
+    while (i < tokens.length) parts.push(tokens[i++]);
+    return parts.join(" ");
+  }
+
   function formatWord(item) {
-    let text = item[2].replace(
-      /(.*?)(?<![\p{L}\d_'’])([mf])(?![\p{L}\d_'’])/gu,
-      '<span class="$2">$1$2</span>',
-    );
-    text = text.replace(/\b(une|la)\s+(\S+)/gi, '<span class="f">$1 $2</span>');
-    text = text.replace(/\b(un|le)\s+(\S+)/gi, '<span class="m">$1 $2</span>');
+    const text = highlightGender(item[2]);
     const speakText = item[2]
       .split(" ")
       .filter(
