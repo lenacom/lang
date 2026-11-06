@@ -64,10 +64,19 @@ async function buildChapters(lang, book, text, metadata, genderCache) {
   // "Psaume de David. A l'occasion de sa fuite..."), wrongly splitting that
   // line into a new chapter and leaving the real chapter empty
   const chapterHeadingRe = new RegExp(`^${metadata.chapter} [0-9]+$`);
+  // a line written entirely in capitals is also a heading (e.g. the tale
+  // titles of "conte"); it needs at least one letter, so "[p. 29]" or a bare
+  // number never counts
+  const isUpperCaseHeading = (line) =>
+    /\p{L}/u.test(line) && line === line.toUpperCase();
   const chapterLines = [];
+  const chapterTitles = [];
   for (const line of lines) {
-    if (chapterHeadingRe.test(line.trim())) {
+    if (chapterHeadingRe.test(line.trim()) || isUpperCaseHeading(line.trim())) {
       chapterLines.push([]);
+      // the chapter number is shown by the page itself; only a heading that
+      // carries a name of its own (a tale title) is kept, under the number
+      chapterTitles.push(chapterHeadingRe.test(line.trim()) ? "" : line.trim());
     } else if (line.trim().length > 0) {
       chapterLines[chapterLines.length - 1].push(line);
     }
@@ -91,8 +100,12 @@ async function buildChapters(lang, book, text, metadata, genderCache) {
       );
     }
 
+    const title = chapterTitles[idx]
+      ? `<h3 class="chapter-title">${chapterTitles[idx]}</h3>`
+      : "";
     chapters.push(
-      processedLines
+      title +
+        processedLines
         .map(
           (line) => `<div>${line.replace(/([0-9]+)\s/, "<sup>$1</sup> ")}</div>`,
         )
