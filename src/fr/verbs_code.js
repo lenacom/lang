@@ -997,8 +997,15 @@ function renderHelper(helper, selection, parts) {
   );
 }
 
+// a selection often drags punctuation, quotes, a verse number or an italic
+// "_" along with the word ("fente.", «Si, 12 ") - only the edges are cut, so
+// what is inside stays intact ("aujourd'hui", "peut-être", several words)
+function trimToLetters(text) {
+  return text.replace(/^[^\p{L}\p{M}]+|[^\p{L}\p{M}]+$/gu, "");
+}
+
 async function showHelper(selection) {
-  const text = selection.toString().trim().toLowerCase();
+  const text = trimToLetters(selection.toString()).toLowerCase();
   const helper = document.getElementById("fr-helper"); //TODO
 
   if (text && helper.getAttribute("text") === text) {

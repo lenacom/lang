@@ -248,7 +248,11 @@ const TRAILING_CI_LA_RE = /-(ci|là)$/iu;
 // means the noun phrase is over (e.g. "un conseiller, nommé Joseph" - the
 // article's reach stops at "conseiller", so "nommé" must never be scanned
 // as a candidate)
-const CLAUSE_BREAK_RE = /[,;:.!?…]$/u;
+const CLAUSE_BREAK_RE = /[,;:.!?…—–]$/u;
+// a dash is its own token: a dialogue dash is often glued to the word before
+// it ("dans cette fente.—Si je te délivre"), and "fente.—Si" is no word the
+// dictionary knows. It also ends the noun phrase (CLAUSE_BREAK_RE above)
+const TOKEN_SPLIT_RE = /(\s+|[—–])/u;
 // brackets end the noun phrase too: a closing one right after a lookahead
 // token ("de Siloé)" - the token itself is still a candidate, same as with a
 // comma), and an opening one right before it ("de Siloé _(nom_ qui signifie
@@ -695,6 +699,13 @@ function findArticleInfo(tokens, i, cache) {
       ) {
         break;
       }
+      // right after a trigger that guarantees a noun phrase, the next word is
+      // an adjective or the noun - never the clause's verb - so a verb form
+      // that is also an adjective ("de sombres nuages") must not end the search
+      const cannotBeVerb =
+        mustBeNoun &&
+        candidates.length === 0 &&
+        isVerbFormAndAdjective(wordCleaned, cache);
       if (isFillerAfter(prevCleaned, wordCleaned, cache)) {
         clauseBroken = true;
       } else {
@@ -705,7 +716,7 @@ function findArticleInfo(tokens, i, cache) {
         CLAUSE_BREAK_RE.test(tokens[idx]) ||
         CLOSING_BRACKET_RE.test(tokens[idx]) ||
         isTriggerWord(wordCleaned) ||
-        isPureVerb(wordCleaned, cache)
+        (isPureVerb(wordCleaned, cache) && !cannotBeVerb)
       ) {
         clauseBroken = true;
       }
@@ -780,7 +791,7 @@ function substantivizedCandidates(info, cache) {
 }
 
 function highlightNounGender(line, nounGender, cache) {
-  const tokens = line.split(/(\s+)/);
+  const tokens = line.split(TOKEN_SPLIT_RE);
   const result = [];
   let i = 0;
   while (i < tokens.length) {
@@ -835,6 +846,12 @@ function highlightNounGender(line, nounGender, cache) {
         break;
       }
       const foundEntry = lookupGender(cleaned, nounGender);
+      // "tout" is also an adverb/pronoun, so the gender it seems to give is not
+      // reliable: a noun with no gender of its own in the dictionary cannot
+      // take it from "tout" ("tout autour" = all around, not a noun phrase)
+      if (isTout && foundEntry && !foundEntry.gender) {
+        continue;
+      }
       const rawEntry = foundEntry && effectiveEntry(foundEntry, expectedGender);
       if (!rawEntry) {
         continue;
@@ -884,6 +901,12 @@ function highlightNounGender(line, nounGender, cache) {
         ) {
           verbFallbackGender = entry.gender;
           verbFallbackCandidate = candidate;
+          // a determiner that guarantees a noun is followed by adjectives and
+          // then the noun itself, never a verb - so the first word that can be
+          // the noun IS the head, and whatever comes after it is outside the
+          // phrase: it must not take over the highlight ("sa tente autour de
+          // lui": "autour" is a dictionary noun too, but "tente" comes first)
+          break;
         }
         continue;
       }
@@ -984,7 +1007,7 @@ function highlightNounGender(line, nounGender, cache) {
 }
 
 function collectUnresolvedWords(line, nounGender, unresolved, cache) {
-  const tokens = line.split(/(\s+)/);
+  const tokens = line.split(TOKEN_SPLIT_RE);
   for (let i = 0; i < tokens.length; i++) {
     const info = findArticleInfo(tokens, i, cache);
     if (!info) continue;
@@ -1416,6 +1439,13 @@ function isPureVerb(word, cache) {
   if (!(word in cache) || isStaleCacheEntry(cache[word])) return false;
   const entry = normalizeCacheEntry(cache[word]);
   return entry.isVerb && entry.gender === null && !entry.isNoun;
+}
+
+// a word that is both a verb form and an adjective ("sombres" - sombrer,
+// "dit", "amène"); whether it is the adjective is decided by its position
+function isVerbFormAndAdjective(word, cache) {
+  if (!(word in cache) || isStaleCacheEntry(cache[word])) return false;
+  return normalizeCacheEntry(cache[word]).isAdjectiveOnly;
 }
 
 // every noun's gender comes from a live Yandex metadata check (gender +

@@ -107,6 +107,14 @@ const CASES = [
   // --- gerund / pronoun guards must keep working ---
   ["en l’entendant", "en l’entendant", "l’ + gerund is a pronoun"],
   ["ce qui sort de la bouche", `ce qui sort de la ${f("bouche")}`, "a verb after 'ce qui' is not a noun"],
+
+  // --- the first possible noun after a noun-guaranteeing determiner is the head ---
+  ["sa tente autour de lui,", `sa ${f("tente")} autour de lui,`, "sa + tente (also a verb form): a later dictionary noun (autour) must not take over"],
+  ["sa tente _autour_ de lui", `sa ${f("tente")} _autour_ de lui`, "same, with italic markers"],
+  ["il était enveloppé des eaux obscures et de sombres nuages.", `il était enveloppé des ${f("eaux")} obscures et de sombres ${m("nuages")}.`, "sombres is also a verb form (sombrer) but an adjective here: it must not end the phrase"],
+  ["m'a pris la patte dans cette fente.—Si je te délivre, que lui feras-tu?", `m'a pris la ${f("patte")} dans cette ${f("fente")}.—Si je te délivre, que lui feras-tu?`, "a dialogue dash glued to the word before it is a separate token"],
+  ["sa grande tente autour de lui",`sa grande ${f("tente")} autour de lui`, "same, with a prenominal adjective in between"],
+  ["tout autour de Jérusalem,", `tout autour de ${m("Jérusalem")},`, "tout + autour: a noun with no gender of its own cannot take it from the quantifier tout (only the noun after 'de' is highlighted)"],
 ];
 
 const cache = loadGenderCache();
