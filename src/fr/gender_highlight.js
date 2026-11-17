@@ -211,6 +211,16 @@ const NOUN_GUARANTEED_PREPOSITIONS = new Set([
 const EXCLUDED_NOUNS = new Set([
   "combien", "ensemble", "devant", "peu", "plusieurs",
 ]);
+// degree adverbs that modify the adjective after them ("la plus belle chose",
+// "un très grand homme", "de moins bonnes raisons"). The dictionary lists some
+// of them as nouns too ("le plus", "le bien", "le mieux"), but with a word
+// following inside the same phrase they are the adverb of "adverb + adjective
+// + noun": the noun is further on. Only when nothing follows them in the
+// phrase ("un plus.") may they still be the noun
+const DEGREE_ADVERBS = new Set([
+  "plus", "moins", "mieux", "bien", "très", "trop", "si", "aussi", "tant",
+  "autant", "assez", "tellement",
+]);
 // case-insensitive: "L’heure" at the start of a sentence is the same
 // elided article as "l’heure" mid-sentence
 const ELISION_RE = /^(l['’])(\p{L}.*)$/iu;
@@ -826,6 +836,19 @@ function highlightNounGender(line, nounGender, cache) {
       // a determiner or other closed-class word can't itself be the noun -
       // skip it so an unrelated search can't swallow it as a false match
       if (isExcludedCandidate(cleaned)) {
+        continue;
+      }
+      // "la plus belle chose": a degree adverb with more words behind it in
+      // the phrase modifies the next word - the noun comes later (see
+      // DEGREE_ADVERBS)
+      // (a lone punctuation mark behind it - "pour ton bien ;" - is not a word)
+      if (
+        DEGREE_ADVERBS.has(cleaned) &&
+        candidates.some(
+          (later) =>
+            later.tokenIndex > candidate.tokenIndex && cleanWord(later.word) !== "",
+        )
+      ) {
         continue;
       }
       if (cleaned in ELISION_ONLY_NOUNS) {

@@ -115,6 +115,16 @@ const CASES = [
   ["m'a pris la patte dans cette fente.—Si je te délivre, que lui feras-tu?", `m'a pris la ${f("patte")} dans cette ${f("fente")}.—Si je te délivre, que lui feras-tu?`, "a dialogue dash glued to the word before it is a separate token"],
   ["sa grande tente autour de lui",`sa grande ${f("tente")} autour de lui`, "same, with a prenominal adjective in between"],
   ["tout autour de Jérusalem,", `tout autour de ${m("Jérusalem")},`, "tout + autour: a noun with no gender of its own cannot take it from the quantifier tout (only the noun after 'de' is highlighted)"],
+
+  // --- degree adverbs (plus, moins, très...) before an adjective: never the noun ---
+  // (her report: "la plus belle chose" - exact phrase not remembered, so these are invented from her description)
+  ["C'est la plus belle chose du monde.", `C'est la plus belle ${f("chose")} du ${m("monde")}.`, "la + plus + adjective + noun (invented)"],
+  ["de la plus belle chose", `de la plus belle ${f("chose")}`, "after de la the noun is guaranteed, but plus is still the adverb (invented)"],
+  ["un plus grand bonheur", `un plus grand ${m("bonheur")}`, "un guarantees a noun, plus (also a noun) must not be taken (invented)"],
+  ["du plus bel homme", `du plus bel ${m("homme")}`, "same with du (invented)"],
+  ["de moins bonnes raisons", `de moins bonnes ${f("raisons")}`, "moins, same rule (invented)"],
+  ["un bien grand malheur", `un bien grand ${m("malheur")}`, "bien is a noun too (le bien), but here an adverb (invented)"],
+  ["un plus.", `un ${m("plus")}.`, "nothing follows plus in the phrase: it may still be the noun (invented)"],
 ];
 
 const cache = loadGenderCache();
