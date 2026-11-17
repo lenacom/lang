@@ -98,8 +98,51 @@ function reflowParagraphs(lines, isHeading) {
   return result.map((p) => p.replace(/(\p{Ll}{2,})- (\p{Ll})/gu, "$1$2"));
 }
 
+// Section titles written in capitals (the tales of a collection). A line counts
+// as a title when it is all capitals, short, does not end like a sentence and
+// stands alone between blank lines. Such lines are only trusted as titles if
+// they really divide the book: at least 3 of them, with sections that are long
+// compared to a title (so a lone author's name on the first line, or a few
+// shouted words inside the story, never cut the text).
+const MIN_CAPS_TITLES = 3;
+const MIN_MEDIAN_SECTION = 1500;
+// a title that opens the back matter: the book ends there
+const BACK_MATTER_RE = /^(TABLE DES MATI[ÈE]RES|SOMMAIRE|TABLE)$/;
+// note marks of a printed edition ("houle[1]") are not part of the text
+const NOTE_MARK_RE = /\[\d+\]/g;
+
+function detectCapsTitles(lines) {
+  const blank = (i) => i < 0 || i >= lines.length || lines[i].trim() === "";
+  const found = [];
+  lines.forEach((raw, i) => {
+    const s = raw.replace(NOTE_MARK_RE, "").trim();
+    if (
+      /\p{L}.*\p{L}.*\p{L}/u.test(s) &&
+      s === s.toUpperCase() &&
+      s.length <= 80 &&
+      !/[.,;:]$/.test(s) &&
+      blank(i - 1) &&
+      blank(i + 1)
+    ) {
+      found.push(i);
+    }
+  });
+  if (found.length < MIN_CAPS_TITLES) return new Set();
+  const sizes = found.map((start, k) => {
+    const end = k + 1 < found.length ? found[k + 1] : lines.length;
+    return lines.slice(start + 1, end).join("").length;
+  });
+  sizes.sort((a, b) => a - b);
+  if (sizes[Math.floor(sizes.length / 2)] < MIN_MEDIAN_SECTION) return new Set();
+  return new Set(found.map((i) => lines[i].replace(NOTE_MARK_RE, "").trim()));
+}
+
 async function buildChapters(lang, book, text, metadata, genderCache) {
   let lines = text.split(/\r?\n/);
+  const capsTitles = metadata.singleFile ? detectCapsTitles(lines) : new Set();
+  if (metadata.singleFile) {
+    lines = lines.map((line) => line.replace(NOTE_MARK_RE, ""));
+  }
   // a chapter heading is the chapter word followed by ONLY its number (e.g.
   // "Psaume 3") - matching on startsWith alone would also catch a psalm's own
   // superscription line when it happens to begin with the same word (e.g.
@@ -112,17 +155,25 @@ async function buildChapters(lang, book, text, metadata, genderCache) {
   const isUpperCaseHeading = (line) =>
     /\p{L}/u.test(line) && line === line.toUpperCase();
   // a single-file book has no metadata.json to say how it is organised, so
-  // only the plain "Chapitre N" headings count there: an all-capitals line such
-  // as the author's name on the first line must not become a chapter
-  const useUpperCaseHeadings = !metadata.singleFile;
+  // an all-capitals line is a heading there only if detectCapsTitles found that
+  // such lines divide the whole book: an author's name on the first line must
+  // not become a chapter
+  const isTitle = (line) =>
+    metadata.singleFile
+      ? capsTitles.has(line.trim())
+      : isUpperCaseHeading(line.trim());
   if (metadata.singleFile) {
-    lines = reflowParagraphs(lines, (line) => chapterHeadingRe.test(line));
+    lines = reflowParagraphs(
+      lines,
+      (line) => chapterHeadingRe.test(line) || capsTitles.has(line),
+    );
   }
   const chapterLines = [];
   const chapterTitles = [];
   for (const line of lines) {
     const isNumbered = chapterHeadingRe.test(line.trim());
-    if (isNumbered || (useUpperCaseHeadings && isUpperCaseHeading(line.trim()))) {
+    if (isTitle(line) && BACK_MATTER_RE.test(line.trim())) break;
+    if (isNumbered || isTitle(line)) {
       chapterLines.push([]);
       // the chapter number is shown by the page itself; only a heading that
       // carries a name of its own (a tale title) is kept, under the number
