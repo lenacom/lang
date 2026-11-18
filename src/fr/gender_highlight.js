@@ -208,9 +208,25 @@ const NOUN_GUARANTEED_PREPOSITIONS = new Set([
 // but excluding them outright meant "vers le haut" never got highlighted;
 // they are now in UNTAGGED_ADJECTIVE_WORDS instead, which keeps looking for
 // a later noun ("de haute naissance") yet still falls back to "haut" itself)
+// "grand" is an adjective in practically every use ("une grande maison", "le
+// plus grand"); as a noun ("les grands", the nobles) it is rare enough that
+// never highlighting it is the better trade - and "plus" is practically never
+// a noun either ("le plus" is the adverb of a superlative)
+const ALMOST_ALWAYS_ADJECTIVES = ["grand", "grande", "grands", "grandes"];
 const EXCLUDED_NOUNS = new Set([
   "combien", "ensemble", "devant", "peu", "plusieurs",
+  "plus",
+  ...ALMOST_ALWAYS_ADJECTIVES,
 ]);
+// "le/la/les plus ...", "du/des/au/aux plus ..." (= de/à + le/les): a
+// superlative. What follows "plus" is an adjective ("la plus grande qui est
+// venue", "le plus beau de tous"), and a noun does not have to come after it
+// at all - so only a word that is certainly a noun counts there, never an
+// adjective standing in as the fallback noun
+const SUPERLATIVE_DETERMINERS = new Set([
+  "le", "la", "les", "du", "des", "au", "aux",
+]);
+const SUPERLATIVE_MARKERS = new Set(["plus", "moins", "mieux"]);
 // degree adverbs that modify the adjective after them ("la plus belle chose",
 // "un très grand homme", "de moins bonnes raisons"). The dictionary lists some
 // of them as nouns too ("le plus", "le bien", "le mieux"), but with a word
@@ -823,6 +839,13 @@ function highlightNounGender(line, nounGender, cache) {
       mustBeNoun,
     } = info;
     const isTout = TOUT_FORMS.has(cleanWord(articlePrefix));
+    const isSuperlative =
+      articleRemainder === null &&
+      SUPERLATIVE_DETERMINERS.has(cleanWord(articlePrefix)) &&
+      SUPERLATIVE_MARKERS.has(followingWordOf(tokens, i, null));
+    // a modifier word was already passed in the superlative phrase: a word
+    // after it that is also ambiguous can then be the noun it modifies
+    let sawModifier = false;
 
     let matchedGender = null;
     let matchedCandidate = null;
@@ -836,6 +859,7 @@ function highlightNounGender(line, nounGender, cache) {
       // a determiner or other closed-class word can't itself be the noun -
       // skip it so an unrelated search can't swallow it as a false match
       if (isExcludedCandidate(cleaned)) {
+        if (ALMOST_ALWAYS_ADJECTIVES.includes(cleaned)) sawModifier = true;
         continue;
       }
       // "la plus belle chose": a degree adverb with more words behind it in
@@ -906,6 +930,13 @@ function highlightNounGender(line, nounGender, cache) {
         matchedCandidate = candidate;
         break;
       }
+      // superlative: an adjective ("la plus belle qui soit") is not the noun,
+      // and nothing is the noun by default - an ambiguous word only counts
+      // when a modifier stands in front of it ("la plus grande force")
+      if (isSuperlative && !sawModifier) {
+        sawModifier = true;
+        continue;
+      }
       if (entry.isVerb) {
         // normally an infinitive doesn't reliably follow an article, so
         // this is untrustworthy - except right after "du"/"au"/"de la"/
@@ -972,7 +1003,7 @@ function highlightNounGender(line, nounGender, cache) {
     // adjective the dictionary has no noun sense for ("d’un démoniaque;") -
     // it can only be the adjective used as a noun, and the article says which
     // gender. Never for an elided "l’"/plural article (no gender to read)
-    if (!matchedCandidate && expectedGender && !isTout) {
+    if (!matchedCandidate && expectedGender && !isTout && !isSuperlative) {
       for (const candidate of substantivizedCandidates(info, cache)) {
         const cleaned = cleanWord(candidate.word);
         const cached = cleaned in cache ? normalizeCacheEntry(cache[cleaned]) : null;

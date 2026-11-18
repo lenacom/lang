@@ -3,7 +3,31 @@ const formToInfinitives = {};
 const endingToVerbType = {};
 const endingToTenses = {};
 
-const LANG = "fr-ru";
+// language of the translations (the second half of the Yandex dictionary pair
+// "fr-ru" / "fr-en"), chosen with the ru/en switch in the top right corner and
+// remembered in localStorage; Russian until the user switches
+const TRANSLATION_LANG_KEY = "translationLang";
+const TRANSLATION_LANGS = ["ru", "en"];
+
+// used only when localStorage is unavailable (blocked, private window): the
+// choice then lasts until the page is closed instead of being lost at once
+let sessionTranslationLang = null;
+
+function getTranslationLang() {
+  try {
+    const saved = localStorage.getItem(TRANSLATION_LANG_KEY);
+    if (TRANSLATION_LANGS.includes(saved)) {
+      return saved;
+    }
+  } catch (e) {
+    // fall through to the session value
+  }
+  return sessionTranslationLang ?? "ru";
+}
+
+function dictionaryPair() {
+  return `fr-${getTranslationLang()}`;
+}
 
 function prefix(value) {
   return `frh__${value}`;
@@ -247,13 +271,13 @@ function getConjugation(form) {
   }
 }
 
-function getYandexTranslationURL(text) {
+function getYandexTranslationURL(text, pair) {
   const url = new URL(
     "https://dictionary.yandex.net/dicservice.json/lookupMultiple",
   );
   url.searchParams.set("ui", "ru");
-  url.searchParams.set("lang", LANG);
-  url.searchParams.set("dict", LANG + ".regular");
+  url.searchParams.set("lang", pair);
+  url.searchParams.set("dict", pair + ".regular");
   url.searchParams.set("type", "regular");
   url.searchParams.set("flags", "15783");
   url.searchParams.set("srv", "tr-text");
@@ -262,11 +286,14 @@ function getYandexTranslationURL(text) {
 }
 
 async function getTranslation(text) {
+  // the pair is read once: switching the language while a request is in
+  // flight must not make the answer be looked up under the other pair's key
+  const pair = dictionaryPair();
   try {
-    const response = await fetch(getYandexTranslationURL(text));
+    const response = await fetch(getYandexTranslationURL(text, pair));
     const json = await response.json();
 
-    const regular = json[LANG]["regular"];
+    const regular = json[pair]["regular"];
     if (!regular || regular.length === 0) {
       return undefined;
     }
@@ -1080,8 +1107,76 @@ async function showHelper(selection) {
 
 function isInsideHelper(node) {
   const helper = document.getElementById("fr-helper");
-  return !!(helper && node && helper.contains(node));
+  const langSwitch = byPrefixId("langSwitch");
+  return !!(
+    node &&
+    ((helper && helper.contains(node)) ||
+      (langSwitch && langSwitch.contains(node)))
+  );
 }
+
+// the ru/en switch in the top right corner: two buttons, the active one filled
+function langSwitchButtonsHTML() {
+  const current = getTranslationLang();
+  const base =
+    "margin: 0; padding: 0 0.5rem; height: 2rem; box-sizing: border-box; border: 1px solid CanvasText; font-size: 0.75rem;";
+  return TRANSLATION_LANGS.map((lang, index) => {
+    const active = lang === current;
+    const radius =
+      index === 0
+        ? "border-radius: 0.31rem 0 0 0.31rem;"
+        : "border-radius: 0 0.31rem 0.31rem 0; border-left: 0;";
+    const colors = active
+      ? "background: CanvasText; color: Canvas; font-weight: bold;"
+      : "background: Canvas; color: CanvasText;";
+    return `<button type="button" data-lang="${lang}" style="${base} ${radius} ${colors}">${lang}</button>`;
+  }).join("");
+}
+
+function renderTranslationLangSwitch() {
+  let langSwitch = byPrefixId("langSwitch");
+  if (!langSwitch) {
+    langSwitch = document.createElement("div");
+    langSwitch.id = prefix("langSwitch");
+    langSwitch.style.cssText =
+      "position: fixed; top: 5px; right: 5px; z-index: 10; display: flex;";
+    // pressing the switch must not drop the text the user has selected,
+    // otherwise there would be nothing left to translate in the other language
+    langSwitch.addEventListener("pointerdown", (event) => event.preventDefault());
+    langSwitch.addEventListener("mousedown", (event) => event.preventDefault());
+    langSwitch.addEventListener("click", (event) => {
+      const lang = event.target.closest("button[data-lang]")?.dataset.lang;
+      if (lang) setTranslationLang(lang);
+    });
+    document.body.appendChild(langSwitch);
+  }
+  langSwitch.innerHTML = langSwitchButtonsHTML();
+}
+
+function setTranslationLang(lang) {
+  if (!TRANSLATION_LANGS.includes(lang) || lang === getTranslationLang()) {
+    return;
+  }
+  sessionTranslationLang = lang;
+  try {
+    localStorage.setItem(TRANSLATION_LANG_KEY, lang);
+  } catch (e) {
+    // not remembered between visits, but still applies until the page is closed
+  }
+  renderTranslationLangSwitch();
+  // translate the word that is open in the helper again, in the new language
+  const helper = document.getElementById("fr-helper");
+  if (helper?.getAttribute("text")) {
+    helper.removeAttribute("text");
+    showHelper(document.getSelection());
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.getElementById("fr-helper")) {
+    renderTranslationLangSwitch();
+  }
+});
 
 function isInsideDialog(node) {
   const elm = node instanceof Element ? node : node?.parentElement;

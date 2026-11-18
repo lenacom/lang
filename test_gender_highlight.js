@@ -124,7 +124,18 @@ const CASES = [
   ["du plus bel homme", `du plus bel ${m("homme")}`, "same with du (invented)"],
   ["de moins bonnes raisons", `de moins bonnes ${f("raisons")}`, "moins, same rule (invented)"],
   ["un bien grand malheur", `un bien grand ${m("malheur")}`, "bien is a noun too (le bien), but here an adverb (invented)"],
-  ["un plus.", `un ${m("plus")}.`, "nothing follows plus in the phrase: it may still be the noun (invented)"],
+  ["un plus.", "un plus.", "plus is practically never a noun, even with nothing behind it (her statement, 2026-11-18)"],
+
+  // --- superlative "le/la/les plus + adjective": the adjective is never the noun ---
+  // (her report: "la plus grande qui..." - a noun does not have to follow the adjective; the continuations below are invented)
+  ["C'est la plus grande qui est venue.", "C'est la plus grande qui est venue.", "la plus grande qui: grande is an adjective, no noun follows (invented continuation)"],
+  ["Il aime le plus grand de tous.", "Il aime le plus grand de tous.", "le plus grand: adjective, not the noun (invented)"],
+  ["les plus grands qui sont là", "les plus grands qui sont là", "same, plural (invented)"],
+  ["la plus belle qui soit", "la plus belle qui soit", "belle is both noun and adjective: in a superlative with no noun after it, not highlighted (invented)"],
+  ["la plus grande maison du village", `la plus grande ${f("maison")} du ${m("village")}`, "the certain noun after the adjective is still found (invented)"],
+  ["des plus grandes douleurs", `des plus grandes ${f("douleurs")}`, "des + plus: superlative, noun after the adjective (invented)"],
+  ["le plus beau jour de ma vie", `le plus beau ${m("jour")} de ma ${f("vie")}`, "same (invented)"],
+  ["une grande qui chante", "une grande qui chante", "grande is practically never a noun (her statement, 2026-11-18)"],
 ];
 
 const cache = loadGenderCache();
