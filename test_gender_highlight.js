@@ -25,6 +25,8 @@ const CASES = [
 
   ["dans leur bouche;", `dans leur ${f("bouche")};`, "leur after a preposition is a determiner; bouche is also a verb form (boucher)"],
   ["elles n’ont point de souffle dans leur bouche.", `elles n’ont point de ${m("souffle")} dans leur ${f("bouche")}.`, "same, inside a longer verse"],
+  ["toute leur armée", `toute leur ${f("armée")}`, "after toute/tout/tous/toutes, leur is the possessive determiner; armée is also a past participle"],
+  ["ils perdirent toute leur armée.", `ils perdirent toute leur ${f("armée")}.`, "same, inside a sentence"],
   ["il leur parle", "il leur parle", "leur after a subject pronoun is the indirect-object pronoun"],
   ["de leur parler", "de leur parler", "de + leur + infinitive: pronoun, not a determiner"],
   ["prirent des branches", `prirent des ${f("branches")}`, "des always introduces a noun; branches is also a verb form (brancher)"],

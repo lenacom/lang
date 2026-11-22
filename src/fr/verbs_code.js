@@ -329,9 +329,31 @@ function migrateWordsToLearnStorage() {
   localStorage.removeItem("learnedWords");
 }
 
+// the hidden search key of a saved word: the word without the gender,
+// transcription, irregular mark etc., so a duplicate check is a plain string
+// comparison. Stored as the 5th item of every entry
+// [word, translation, repeat, id, key]
+function wordToLearnKey(word) {
+  return stripAnnotations(word).trim().toLowerCase();
+}
+
 function getWordsToLearn() {
   migrateWordsToLearnStorage();
-  return JSON.parse(localStorage.getItem(WORD_TO_LEARN_KEY) ?? "{}");
+  const data = JSON.parse(localStorage.getItem(WORD_TO_LEARN_KEY) ?? "{}");
+  // entries saved before the key existed get it once, here
+  let changed = false;
+  for (const chapters of Object.values(data)) {
+    for (const entries of Object.values(chapters)) {
+      for (const entry of entries) {
+        if (entry[4] === undefined) {
+          entry[4] = wordToLearnKey(entry[0]);
+          changed = true;
+        }
+      }
+    }
+  }
+  if (changed) setWordsToLearn(data);
+  return data;
 }
 
 function setWordsToLearn(data) {
@@ -342,7 +364,125 @@ function generateWordToLearnId() {
   return `${Date.now()}_${Math.random().toString(36).slice(2)}`;
 }
 
-function saveWordToLearn(word, translation) {
+function escHtml(text) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+// the sentence the word was saved from, with the word (or phrase) in bold.
+// `forms` are tried in order (the word as it is now written, then the form as
+// it stood in the text); a sentence that contains none of them - the word was
+// corrected after saving - gives "" and is not shown
+function sentenceWithBold(sentence, forms) {
+  if (!sentence) return "";
+  for (const form of forms) {
+    if (!form) continue;
+    const pattern = form
+      .replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+      .replace(/['’]/g, "['’]")
+      .replace(/\s+/g, "\\s+");
+    const re = new RegExp(`(?<![\\p{L}\\d_])${pattern}(?![\\p{L}\\d_])`, "iu");
+    const match = re.exec(sentence);
+    if (match) {
+      const end = match.index + match[0].length;
+      return `${escHtml(sentence.slice(0, match.index))}<b>${escHtml(match[0])}</b>${escHtml(sentence.slice(end))}`;
+    }
+  }
+  return "";
+}
+
+// the sentence around the selected text, from the block it sits in
+function sentenceAroundSelection(selection) {
+  if (!selection || selection.rangeCount === 0) return "";
+  const range = selection.getRangeAt(0);
+  const startNode =
+    range.startContainer instanceof Element
+      ? range.startContainer
+      : range.startContainer.parentElement;
+  const block = startNode?.closest("p, li, blockquote, div");
+  if (!block) return "";
+  const before = document.createRange();
+  before.setStart(block, 0);
+  before.setEnd(range.startContainer, range.startOffset);
+  const start = before.toString().length;
+  const end = start + range.toString().length;
+  const full = block.textContent;
+  // sentence ends: . ! ? … (with closing quotes) followed by a space
+  const enders = /[.!?…]+["»”’)]*\s/g;
+  let sentenceStart = 0;
+  let sentenceEnd = full.length;
+  let m;
+  while ((m = enders.exec(full)) !== null) {
+    const after = m.index + m[0].length;
+    if (after <= start) sentenceStart = after;
+    else if (m.index + m[0].trimEnd().length >= end) {
+      sentenceEnd = m.index + m[0].trimEnd().length;
+      break;
+    }
+  }
+  const raw = full.slice(sentenceStart, sentenceEnd);
+  const normalized = raw.replace(/\s+/g, " ");
+  const leading = normalized.length - normalized.trimStart().length;
+  const wordStart = Math.max(
+    0,
+    raw.slice(0, start - sentenceStart).replace(/\s+/g, " ").length - leading,
+  );
+  return cropAroundWord(normalized.trim(), wordStart, end - start);
+}
+
+const MAX_SENTENCE_LENGTH = 400;
+
+// a sentence longer than the limit is cut to a window with the word as close
+// to the middle as possible, the cuts snapped to word boundaries and marked
+// with "…"
+function cropAroundWord(sentence, wordStart, wordLength) {
+  if (sentence.length <= MAX_SENTENCE_LENGTH) return sentence;
+  if (wordLength > MAX_SENTENCE_LENGTH / 2) return "";
+  const middle = wordStart + wordLength / 2;
+  let from = Math.max(0, Math.round(middle - MAX_SENTENCE_LENGTH / 2));
+  let to = Math.min(sentence.length, from + MAX_SENTENCE_LENGTH);
+  from = Math.max(0, to - MAX_SENTENCE_LENGTH);
+  if (from > 0) {
+    const space = sentence.indexOf(" ", from);
+    if (space !== -1 && space < wordStart) from = space + 1;
+  }
+  if (to < sentence.length) {
+    const space = sentence.lastIndexOf(" ", to);
+    if (space > wordStart + wordLength) to = space;
+  }
+  return `${from > 0 ? "… " : ""}${sentence.slice(from, to).trim()}${to < sentence.length ? " …" : ""}`;
+}
+
+let currentHelperSentence = "";
+let currentHelperForm = "";
+
+// shows (or hides) the sentence in the "Учить" dialog; called when the dialog
+// opens and whenever the word field is corrected
+function updateLearnSentence(id) {
+  const el = document.getElementById(`${id}_sentence`);
+  if (!el) return;
+  const word = document.getElementById(`${id}_part1`)?.value ?? "";
+  const html = sentenceWithBold(el.dataset.sentence, [
+    wordToLearnKey(word),
+    el.dataset.form,
+  ]);
+  el.innerHTML = html;
+  el.style.display = html ? "block" : "none";
+}
+
+function saveWordToLearnFromDialog(id) {
+  const word = document.getElementById(`${id}_part1`).value;
+  const translation = document.getElementById(`${id}_part2`).value;
+  const el = document.getElementById(`${id}_sentence`);
+  const shown = el && el.style.display !== "none" && el.innerHTML;
+  saveWordToLearn(word, translation, shown ? el.dataset.sentence : "", shown ? el.dataset.form : "");
+  document.getElementById(id).close();
+}
+
+function saveWordToLearn(word, translation, sentence = "", form = "") {
   const book = document.querySelector(".title")?.textContent ?? "";
   const chapter = document.querySelector(".chapter")?.textContent ?? "";
   const data = getWordsToLearn();
@@ -352,7 +492,22 @@ function saveWordToLearn(word, translation) {
   if (!data[book][chapter]) {
     data[book][chapter] = [];
   }
-  data[book][chapter].push([word, translation, false, generateWordToLearnId()]);
+  // the same word saved earlier (anywhere) is replaced: the previous place is
+  // removed, the word goes to the current chapter
+  const key = wordToLearnKey(word);
+  for (const [otherBook, chapters] of Object.entries(data)) {
+    for (const [otherChapter, entries] of Object.entries(chapters)) {
+      chapters[otherChapter] = entries.filter((entry) => entry[4] !== key);
+      if (chapters[otherChapter].length === 0 && otherChapter !== chapter) {
+        delete chapters[otherChapter];
+      }
+    }
+    if (Object.keys(chapters).length === 0 && otherBook !== book) {
+      delete data[otherBook];
+    }
+  }
+  // [word, translation, repeat, id, key, sentence, form as in the text]
+  data[book][chapter].push([word, translation, false, generateWordToLearnId(), key, sentence, form]);
   setWordsToLearn(data);
   refreshWordsToLearnLink();
 }
@@ -363,11 +518,11 @@ function getLearnedEntry(book, chapter, id) {
 }
 
 function findWordToLearnLocation(word) {
-  const normalized = stripAnnotations(word);
+  const key = wordToLearnKey(word);
   const data = getWordsToLearn();
   for (const [book, chapters] of Object.entries(data)) {
     for (const [chapter, entries] of Object.entries(chapters)) {
-      if (entries.some((entry) => stripAnnotations(entry[0]) === normalized)) {
+      if (entries.some((entry) => entry[4] === key)) {
         return { book, chapter };
       }
     }
@@ -652,7 +807,10 @@ function renderWordsToLearnStudy() {
 
   const { book, chapterFilter, currentRef, revealed } = learnedSession;
   const entry = getLearnedEntry(book, currentRef.chapter, currentRef.id);
-  const [word, translation, repeatOften] = entry;
+  const [word, translation, repeatOften, , key, sentence, form] = entry;
+  // the sentence would give away the word in "перевод - слово", so it appears
+  // together with the word
+  const sentenceHTML = sentenceWithBold(sentence, [key, form]);
   const remaining = collectWordsToLearnSessionRefs().length;
   const conjugation = findInfinitiveTenses(stripAnnotations(word).trim());
   const transcriptionMatch = word.match(/\s*\[[^\]]*\]\s*$/);
@@ -690,6 +848,7 @@ function renderWordsToLearnStudy() {
     <div>
       <div>Осталось: ${remaining}</div>
       ${wordFirst ? wordRowHTML + translationHTML : translationHTML + wordRowHTML}
+      ${sentenceHTML && wordVisible ? `<div style="font-style: italic; padding-top: 0.5rem;">${sentenceHTML}</div>` : ""}
     </div>
     <div style="display: flex; flex-direction: row; justify-content: flex-end; padding-top: 0.5rem;">
       <button style="margin: 0;" onClick="nextWordToLearn()">Дальше</button>
@@ -783,15 +942,14 @@ function learnDialogHTML(id, item) {
         </div>
       </div>
       <div id="${id}_form" style="display: flex; flex-direction: column; gap: 0.5rem; width: ${panelContentWidth(20)};">
-        <input type="text" id="${id}_part1" placeholder="Слова" value="${wordValue}" style="${inputStyle}">
+        <input type="text" id="${id}_part1" placeholder="Слова" value="${wordValue}" style="${inputStyle}" oninput="updateLearnSentence('${id}')">
+        <div id="${id}_sentence" data-sentence="${escHtml(currentHelperSentence)}" data-form="${escHtml(currentHelperForm)}" style="display: none; font-style: italic;"></div>
         <input type="text" id="${id}_part2" placeholder="Перевод" value="${translationValue}" style="${inputStyle}"
           oninput="document.getElementById('${id}_save').disabled = !this.value.trim();">
         <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 0.5rem;">${links}</div>
         <div style="display: flex; flex-direction: row; justify-content: space-between; gap: 0.5rem; margin-top: 0.5rem;">
           <button id="${id}_save" style="margin: 0;" ${translationValue.trim() ? "" : "disabled"}
-            onClick="const word = document.getElementById('${id}_part1').value; const translation = document.getElementById('${id}_part2').value;
-            saveWordToLearn(word, translation);
-            document.getElementById('${id}').close();">Сохранить</button>
+            onClick="saveWordToLearnFromDialog('${id}')">Сохранить</button>
           <button style="margin: 0;" onClick="document.getElementById('${id}').close();">Закрыть</button>
         </div>
       </div>
@@ -820,13 +978,14 @@ function getTranslationHTML(data) {
         `<button style="margin: 0; padding: 0 0.5rem; height: 2rem; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center;"
           onClick="const existing = findWordToLearnLocation('${escJs(text)}');
           if (existing) {
-            document.getElementById('${learnId}_warning_text').textContent = 'Слово уже сохранено в книге ' + existing.book + ', глава ' + existing.chapter + '. Сохранить ещё раз?';
+            document.getElementById('${learnId}_warning_text').textContent = 'Слово уже сохранено в книге ' + existing.book + ', глава ' + existing.chapter + '. Добавить его сюда, удалив предыдущее?';
             document.getElementById('${learnId}_warning').style.display = 'flex';
             document.getElementById('${learnId}_form').style.display = 'none';
           } else {
             document.getElementById('${learnId}_warning').style.display = 'none';
             document.getElementById('${learnId}_form').style.display = 'flex';
           }
+          updateLearnSentence('${learnId}');
           document.getElementById('${learnId}').showModal();
           document.getElementById('${learnId}_part2').focus();">Учить</button>`,
       );
@@ -1002,7 +1161,8 @@ function renderHelper(helper, selection, parts) {
     left:${left}px; top:${top}px; max-width:${screenWidth - 2 * HELPER_EDGE_GAP}px;`;
   };
   const helperHTML = (style) => {
-    return `<div id="${prefix("helper")}" style="${style}">${parts.join("<hr/>")}</div>`;
+    // the ru/en switch floats in the top right corner of the panel itself
+    return `<div id="${prefix("helper")}" style="${style}"><div id="${prefix("langSwitch")}" style="float: right; display: flex; margin: 0 0 0.3rem 0.63rem;">${langSwitchButtonsHTML()}</div>${parts.join("<hr/>")}</div>`;
   };
 
   let left = Math.max(selRect.left, HELPER_EDGE_GAP);
@@ -1046,6 +1206,8 @@ async function showHelper(selection) {
   }
 
   helper.setAttribute("text", text);
+  currentHelperSentence = sentenceAroundSelection(selection);
+  currentHelperForm = text;
 
   const conjugation = getConjugation(text);
   const dataPromise = getHelperData(text);
@@ -1115,11 +1277,12 @@ function isInsideHelper(node) {
   );
 }
 
-// the ru/en switch in the top right corner: two buttons, the active one filled
+// the ru/en switch in the top right corner of the helper panel (black panel,
+// cream text): two buttons, the active one filled
 function langSwitchButtonsHTML() {
   const current = getTranslationLang();
   const base =
-    "margin: 0; padding: 0 0.5rem; height: 2rem; box-sizing: border-box; border: 1px solid CanvasText; font-size: 0.75rem;";
+    "margin: 0; padding: 0 0.5rem; height: 1.6rem; box-sizing: border-box; border: 1px solid #fff8dc; font-size: 0.75rem;";
   return TRANSLATION_LANGS.map((lang, index) => {
     const active = lang === current;
     const radius =
@@ -1127,31 +1290,32 @@ function langSwitchButtonsHTML() {
         ? "border-radius: 0.31rem 0 0 0.31rem;"
         : "border-radius: 0 0.31rem 0.31rem 0; border-left: 0;";
     const colors = active
-      ? "background: CanvasText; color: Canvas; font-weight: bold;"
-      : "background: Canvas; color: CanvasText;";
+      ? "background: #fff8dc; color: black; font-weight: bold;"
+      : "background: black; color: #fff8dc;";
     return `<button type="button" data-lang="${lang}" style="${base} ${radius} ${colors}">${lang}</button>`;
   }).join("");
 }
 
 function renderTranslationLangSwitch() {
-  let langSwitch = byPrefixId("langSwitch");
-  if (!langSwitch) {
-    langSwitch = document.createElement("div");
-    langSwitch.id = prefix("langSwitch");
-    langSwitch.style.cssText =
-      "position: fixed; top: 5px; right: 5px; z-index: 10; display: flex;";
-    // pressing the switch must not drop the text the user has selected,
-    // otherwise there would be nothing left to translate in the other language
-    langSwitch.addEventListener("pointerdown", (event) => event.preventDefault());
-    langSwitch.addEventListener("mousedown", (event) => event.preventDefault());
-    langSwitch.addEventListener("click", (event) => {
-      const lang = event.target.closest("button[data-lang]")?.dataset.lang;
-      if (lang) setTranslationLang(lang);
-    });
-    document.body.appendChild(langSwitch);
-  }
-  langSwitch.innerHTML = langSwitchButtonsHTML();
+  const langSwitch = byPrefixId("langSwitch");
+  if (langSwitch) langSwitch.innerHTML = langSwitchButtonsHTML();
 }
+
+// the switch lives inside the helper panel, which is rebuilt on every render,
+// so its events are delegated from the document. Pressing it must not drop the
+// text the user has selected, otherwise there would be nothing left to
+// translate in the other language
+const isLangSwitchTarget = (event) => !!event.target.closest?.(`#${prefix("langSwitch")}`);
+["pointerdown", "mousedown"].forEach((type) =>
+  document.addEventListener(type, (event) => {
+    if (isLangSwitchTarget(event)) event.preventDefault();
+  }),
+);
+document.addEventListener("click", (event) => {
+  if (!isLangSwitchTarget(event)) return;
+  const lang = event.target.closest("button[data-lang]")?.dataset.lang;
+  if (lang) setTranslationLang(lang);
+});
 
 function setTranslationLang(lang) {
   if (!TRANSLATION_LANGS.includes(lang) || lang === getTranslationLang()) {
@@ -1171,12 +1335,6 @@ function setTranslationLang(lang) {
     showHelper(document.getSelection());
   }
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  if (document.getElementById("fr-helper")) {
-    renderTranslationLangSwitch();
-  }
-});
 
 function isInsideDialog(node) {
   const elm = node instanceof Element ? node : node?.parentElement;

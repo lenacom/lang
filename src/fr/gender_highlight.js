@@ -661,7 +661,10 @@ function findArticleInfo(tokens, i, cache) {
     const prevWord = prevIdx >= 0 ? effectiveWord(tokens[prevIdx]) : "";
     mustBeNoun =
       (NOUN_GUARANTEED_PREPOSITIONS.has(prevWord) ||
-        INFINITIVE_TAKING_PREPOSITIONS.has(prevWord)) &&
+        INFINITIVE_TAKING_PREPOSITIONS.has(prevWord) ||
+        // "toute leur armée", "tous leur biens": after tout/toute/tous/toutes
+        // "leur" is the possessive determiner, not a pronoun
+        TOUT_FORMS.has(prevWord)) &&
       !isInfinitiveLike(followingWordOf(tokens, i, null), cache);
   }
   // a capitalized "Le"/"La"/"Les"/"L’" opening a sentence is an article: an
