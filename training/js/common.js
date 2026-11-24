@@ -127,19 +127,75 @@ function normilizedLang(lang) {
   return lang;
 }
 
+// the voice for `lang` among `voices`: a voice of the device is preferred - a
+// network one has to be fetched and is slow to start. Android names the
+// language "fr_FR" (underscore), so the comparison ignores that and the case; a
+// language without a region ("ru") matches any region
+function pickVoice(voices, lang) {
+  const wanted = lang.toLowerCase();
+  const name = (it) => it.lang.replace("_", "-").toLowerCase();
+  const sameLang = voices.filter(
+    (it) =>
+      name(it) === wanted ||
+      (!wanted.includes("-") && name(it).startsWith(`${wanted}-`)),
+  );
+  return sameLang.find((it) => it.localService) ?? sameLang[0];
+}
+
+// The first utterance wakes the speech engine up, and on a phone that can take
+// a long time. It is said silently (volume 0) on the first touch of the page
+// so the engine is ready by the time a word is wanted. While it is going on
+// nothing is cancelled (cancelling it can start the waking up over): a word
+// asked for meanwhile waits, and only the latest one is said when the engine is
+// ready, so taps made during the wait do not pile up.
+let warmingUpCount = 0;
+let waitingSpeech = null;
+// if the engine never reports the end of the silent utterance
+const WARM_UP_LIMIT_MS = 120000;
+
+function warmUpSpeech(lang) {
+  lang = normilizedLang(lang);
+  globalThis[`${lang}__started`] = true;
+  const utterance = new SpeechSynthesisUtterance("a");
+  utterance.lang = lang;
+  utterance.volume = 0;
+  if (globalThis[`${lang}__voice`]) {
+    utterance.voice = globalThis[`${lang}__voice`];
+  }
+  warmingUpCount++;
+  let finished = false;
+  const done = () => {
+    if (finished) return;
+    finished = true;
+    warmingUpCount--;
+    if (warmingUpCount === 0 && waitingSpeech) {
+      const next = waitingSpeech;
+      waitingSpeech = null;
+      speak(next.text, next.lang, next.onend);
+    }
+  };
+  utterance.onend = done;
+  utterance.onerror = done;
+  setTimeout(done, WARM_UP_LIMIT_MS);
+  window.speechSynthesis.speak(utterance);
+}
+
 function initSpeak(lang) {
   lang = normilizedLang(lang);
   globalThis[`${lang}__started`] = false;
   globalThis[`${lang}__voice`] = false;
 
   document.addEventListener("pointerdown", (event) => {
-    if (!globalThis[`${lang}__started`]) speak(" ", lang);
+    if (!globalThis[`${lang}__started`]) warmUpSpeech(lang);
   });
 
-  speechSynthesis.addEventListener("voiceschanged", () => {
-    const voices = window.speechSynthesis.getVoices();
-    globalThis[`${lang}__voice`] = voices.find((voice) => voice.lang === lang);
-  });
+  const loadVoice = () => {
+    globalThis[`${lang}__voice`] =
+      pickVoice(window.speechSynthesis?.getVoices?.() ?? [], lang) ?? false;
+  };
+  // asking for the list at once makes the browser start loading the voices
+  loadVoice();
+  speechSynthesis.addEventListener("voiceschanged", loadVoice);
 }
 
 function autospeakHTML() {
@@ -154,11 +210,20 @@ function autospeakHTML() {
 
 function speak(text, lang, onend) {
   lang = normilizedLang(lang);
-  window.speechSynthesis.cancel();
+  if (warmingUpCount > 0) {
+    waitingSpeech = { text, lang, onend };
+    return;
+  }
+  const synth = window.speechSynthesis;
+  // cancel() right before speak() is only needed to interrupt a phrase that is
+  // still playing; on Android it can delay or swallow the next phrase
+  if (synth.speaking || synth.pending) {
+    synth.cancel();
+  }
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = normilizedLang(lang);
   utterance.rate = 0.8;
-  utterance.volume = globalThis[`${lang}__started`] && text !== " " ? 1 : 0;
+  utterance.volume = globalThis[`${lang}__started`] ? 1 : 0;
   if (globalThis[`${lang}__voice`]) {
     utterance.voice = globalThis[`${lang}__voice`];
   }

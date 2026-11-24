@@ -372,12 +372,13 @@ function escHtml(text) {
     .replace(/"/g, "&quot;");
 }
 
-// the sentence the word was saved from, with the word (or phrase) in bold.
-// `forms` are tried in order (the word as it is now written, then the form as
-// it stood in the text); a sentence that contains none of them - the word was
-// corrected after saving - gives "" and is not shown
-function sentenceWithBold(sentence, forms) {
-  if (!sentence) return "";
+// where the word (or phrase) stands in the sentence it was saved from:
+// { index, length } or null. `forms` are tried in order (the word as it is now
+// written, then the form as it stood in the text - it can differ from the
+// word: "parlait" for "parler"); a sentence that contains none of them - the
+// word was corrected after saving - gives null
+function findFormInSentence(sentence, forms) {
+  if (!sentence) return null;
   for (const form of forms) {
     if (!form) continue;
     const pattern = form
@@ -387,28 +388,45 @@ function sentenceWithBold(sentence, forms) {
     const re = new RegExp(`(?<![\\p{L}\\d_])${pattern}(?![\\p{L}\\d_])`, "iu");
     const match = re.exec(sentence);
     if (match) {
-      const end = match.index + match[0].length;
-      return `${escHtml(sentence.slice(0, match.index))}<b>${escHtml(match[0])}</b>${escHtml(sentence.slice(end))}`;
+      return { index: match.index, length: match[0].length };
     }
   }
-  return "";
+  return null;
 }
 
-// the sentence around the selected text, from the block it sits in
-function sentenceAroundSelection(selection) {
-  if (!selection || selection.rangeCount === 0) return "";
+// the sentence the word was saved from, with the word (or phrase) underlined;
+// "" when the word is not in it (then the sentence is not shown)
+function sentenceWithUnderline(sentence, forms) {
+  const found = findFormInSentence(sentence, forms);
+  if (!found) return "";
+  const end = found.index + found.length;
+  return `${escHtml(sentence.slice(0, found.index))}<u>${escHtml(sentence.slice(found.index, end))}</u>${escHtml(sentence.slice(end))}`;
+}
+
+// the block of text the selection starts in and where the selection lies in
+// the text of that block: { block, start, end } (offsets in block.textContent)
+function selectionInBlock(selection) {
+  if (!selection || selection.rangeCount === 0) return null;
   const range = selection.getRangeAt(0);
   const startNode =
     range.startContainer instanceof Element
       ? range.startContainer
       : range.startContainer.parentElement;
   const block = startNode?.closest("p, li, blockquote, div");
-  if (!block) return "";
+  if (!block) return null;
   const before = document.createRange();
   before.setStart(block, 0);
   before.setEnd(range.startContainer, range.startOffset);
   const start = before.toString().length;
   const end = start + range.toString().length;
+  return { block, start, end };
+}
+
+// the sentence around the selected text, from the block it sits in
+function sentenceAroundSelection(selection) {
+  const inBlock = selectionInBlock(selection);
+  if (!inBlock) return "";
+  const { block, start, end } = inBlock;
   const full = block.textContent;
   // sentence ends: . ! ? … (with closing quotes) followed by a space
   const enders = /[.!?…]+["»”’)]*\s/g;
@@ -459,13 +477,14 @@ function cropAroundWord(sentence, wordStart, wordLength) {
 let currentHelperSentence = "";
 let currentHelperForm = "";
 
-// shows (or hides) the sentence in the "Учить" dialog; called when the dialog
+// shows (or hides) the sentence, the word underlined, in the "Учить" dialog;
+// called when the dialog
 // opens and whenever the word field is corrected
 function updateLearnSentence(id) {
   const el = document.getElementById(`${id}_sentence`);
   if (!el) return;
   const word = document.getElementById(`${id}_part1`)?.value ?? "";
-  const html = sentenceWithBold(el.dataset.sentence, [
+  const html = sentenceWithUnderline(el.dataset.sentence, [
     wordToLearnKey(word),
     el.dataset.form,
   ]);
@@ -510,6 +529,7 @@ function saveWordToLearn(word, translation, sentence = "", form = "") {
   data[book][chapter].push([word, translation, false, generateWordToLearnId(), key, sentence, form]);
   setWordsToLearn(data);
   refreshWordsToLearnLink();
+  refreshSavedWordHighlights();
 }
 
 function getLearnedEntry(book, chapter, id) {
@@ -533,6 +553,263 @@ function findWordToLearnLocation(word) {
 function escJs(text) {
   return text.replace(/'/g, "\\'");
 }
+
+// ---- saved words underlined in the text of the chapter ----
+//
+// A saved entry remembers the sentence it came from and the form of the word
+// as it stood in the text. On a chapter page that sentence is looked up in the
+// text, the form inside it is underlined (CSS Custom Highlight API: nothing in
+// the page is changed, so the selection, the gender colours and the helper
+// panel are not disturbed) and the selection of an underlined word turns the
+// "Учить" buttons of the helper into one "Удалить".
+
+// the sentence as it stood in the text, without the "…" that marks a cut
+function sentenceCore(sentence) {
+  return sentence.replace(/^…\s+/, "").replace(/\s+…$/, "");
+}
+
+// runs of white space become one space (as in sentenceAroundSelection);
+// map[i] is where the i-th character of `text` stands in `raw`
+function normalizeSpaces(raw) {
+  let text = "";
+  const map = [];
+  for (let i = 0; i < raw.length; i++) {
+    if (/\s/.test(raw[i])) {
+      if (text.endsWith(" ")) continue;
+      text += " ";
+    } else {
+      text += raw[i];
+    }
+    map.push(i);
+  }
+  map.push(raw.length);
+  return { text, map };
+}
+
+// { start, end } - where, in the text of a block, the form saved from
+// `sentence` stands (offsets in the raw text); null if the sentence is not
+// in this block
+function locateSavedForm(blockText, sentence, forms) {
+  const core = sentenceCore(sentence ?? "");
+  if (!core) return null;
+  const { text, map } = normalizeSpaces(blockText);
+  const at = text.indexOf(core);
+  if (at === -1) return null;
+  const found = findFormInSentence(core, forms);
+  if (!found) return null;
+  const first = at + found.index;
+  const last = first + found.length - 1;
+  return { start: map[first], end: map[last] + 1 };
+}
+
+// every place in a block where the word stands as a whole word - for the
+// entries saved without a sentence, so there is no way to tell which one it was
+function locateAllForms(blockText, forms) {
+  const places = [];
+  for (const form of forms) {
+    if (!form) continue;
+    const pattern = form
+      .replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+      .replace(/['’]/g, "['’]")
+      .replace(/\s+/g, "\\s+");
+    const re = new RegExp(`(?<![\\p{L}\\d_])${pattern}(?![\\p{L}\\d_])`, "giu");
+    for (const match of blockText.matchAll(re)) {
+      places.push({ start: match.index, end: match.index + match[0].length });
+    }
+    if (places.length) break;
+  }
+  return places;
+}
+
+// the selection with the punctuation, quotes and spaces cut off its edges
+// (as trimToLetters does for its text)
+function trimOffsetsToLetters(text, start, end) {
+  const isLetter = (ch) => /[\p{L}\p{M}]/u.test(ch);
+  while (start < end && !isLetter(text[start])) start++;
+  while (end > start && !isLetter(text[end - 1])) end--;
+  return { start, end };
+}
+
+// { block, start, end } of the selection with the edges trimmed to letters
+function trimmedSelectionPlace(at) {
+  if (!at) return null;
+  const { start, end } = trimOffsetsToLetters(at.block.textContent, at.start, at.end);
+  return { block: at.block, start, end };
+}
+
+function sameSelectionPlace(a, b) {
+  if (!a || !b) return a === b;
+  return a.block === b.block && a.start === b.start && a.end === b.end;
+}
+
+// the selection is "the saved word" when it lies inside the underlined text
+// or covers all of it
+function selectionMatchesSaved(start, end, saved) {
+  return (
+    (start >= saved.start && end <= saved.end) ||
+    (start <= saved.start && end >= saved.end)
+  );
+}
+
+// the text nodes of a block have these lengths; where do the offsets
+// start..end of the block text fall: { startIndex, startOffset, endIndex,
+// endOffset } (a node index and an offset in that node), or null
+function offsetsToNodePositions(lengths, start, end) {
+  let pos = 0;
+  let result = null;
+  for (let i = 0; i < lengths.length; i++) {
+    if (!result && start < pos + lengths[i]) {
+      result = { startIndex: i, startOffset: start - pos };
+    }
+    if (result && end <= pos + lengths[i]) {
+      return { ...result, endIndex: i, endOffset: end - pos };
+    }
+    pos += lengths[i];
+  }
+  return null;
+}
+
+// the blocks of the chapter text: the lines (the innermost blocks), not the
+// links, the helper panel or the dialogs
+function chapterTextBlocks() {
+  return Array.from(
+    document.querySelectorAll("main p, main li, main blockquote, main div"),
+  ).filter(
+    (el) =>
+      !el.querySelector("p, li, blockquote, div") &&
+      !el.closest("#fr-helper, dialog, .chapter-links"),
+  );
+}
+
+function rangeForBlockOffsets(block, start, end) {
+  const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+    nodes.push(node);
+  }
+  const at = offsetsToNodePositions(
+    nodes.map((node) => node.nodeValue.length),
+    start,
+    end,
+  );
+  if (!at) return null;
+  const range = document.createRange();
+  range.setStart(nodes[at.startIndex], at.startOffset);
+  range.setEnd(nodes[at.endIndex], at.endOffset);
+  return range;
+}
+
+// the underlined places of the page: { id, block, start, end, range }
+let savedWordPlaces = [];
+
+function canHighlightSavedWords() {
+  return typeof Highlight !== "undefined" && !!window.CSS?.highlights;
+}
+
+function refreshSavedWordHighlights() {
+  savedWordPlaces = [];
+  if (canHighlightSavedWords()) CSS.highlights.delete(prefix("saved"));
+  const book = document.querySelector(".title")?.textContent;
+  const chapter = document.querySelector(".chapter")?.textContent;
+  if (!book || !chapter) return;
+  const entries = getWordsToLearn()[book]?.[chapter] ?? [];
+  if (entries.length === 0) {
+    updateHelperSavedState();
+    return;
+  }
+  const blocks = chapterTextBlocks().map((block) => ({ block, text: block.textContent }));
+  for (const [, , , id, key, sentence, form] of entries) {
+    const forms = [key, form];
+    const places = [];
+    if (sentence) {
+      for (const { block, text } of blocks) {
+        const place = locateSavedForm(text, sentence, forms);
+        if (place) {
+          places.push({ block, ...place });
+          break;
+        }
+      }
+    } else {
+      for (const { block, text } of blocks) {
+        for (const place of locateAllForms(text, forms)) {
+          places.push({ block, ...place });
+        }
+      }
+    }
+    for (const place of places) {
+      const range = rangeForBlockOffsets(place.block, place.start, place.end);
+      if (range) savedWordPlaces.push({ id, ...place, range });
+    }
+  }
+  if (canHighlightSavedWords()) {
+    CSS.highlights.set(
+      prefix("saved"),
+      new Highlight(...savedWordPlaces.map((place) => place.range)),
+    );
+  }
+  updateHelperSavedState();
+}
+
+// the saved word the selected text is (the selection of an underlined word),
+// or null; `at` is { block, start, end } from selectionInBlock; the underlined
+// places of one entry are all offered, the one under the selection is found
+function savedPlaceForSelection(at) {
+  const place = trimmedSelectionPlace(at);
+  if (!place || place.start >= place.end) return null;
+  return (
+    savedWordPlaces.find(
+      (saved) =>
+        saved.block === place.block &&
+        selectionMatchesSaved(place.start, place.end, saved),
+    ) ?? null
+  );
+}
+
+// where the text now shown in the helper lies; kept so the helper can follow
+// the word being saved or deleted without the selection (which the dialog and
+// the buttons may move)
+let currentHelperAt = null;
+
+// one "Удалить" instead of the "Учить" buttons while the word of the helper is
+// a saved one; both kinds of buttons are in the panel, the attribute chooses
+function updateHelperSavedState() {
+  const helper = document.getElementById("fr-helper");
+  if (!helper) return;
+  if (savedPlaceForSelection(currentHelperAt)) {
+    helper.dataset.saved = "1";
+  } else {
+    delete helper.dataset.saved;
+  }
+}
+
+function deleteSavedWordUnderHelper() {
+  const place = savedPlaceForSelection(currentHelperAt);
+  if (!place) return;
+  const book = document.querySelector(".title")?.textContent ?? "";
+  const chapter = document.querySelector(".chapter")?.textContent ?? "";
+  const data = getWordsToLearn();
+  const list = data[book]?.[chapter];
+  if (list) {
+    const index = list.findIndex((entry) => entry[3] === place.id);
+    if (index !== -1) list.splice(index, 1);
+  }
+  setWordsToLearn(data);
+  refreshWordsToLearnLink();
+  refreshSavedWordHighlights();
+}
+
+function initSavedWordsUI() {
+  document.head.insertAdjacentHTML(
+    "beforeend",
+    `<style>
+      ::highlight(${prefix("saved")}) { text-decoration: underline; }
+      #fr-helper[data-saved="1"] .${prefix("learnBtn")} { display: none !important; }
+      #fr-helper:not([data-saved="1"]) .${prefix("deleteBtn")} { display: none !important; }
+    </style>`,
+  );
+  refreshSavedWordHighlights();
+}
+document.addEventListener("DOMContentLoaded", initSavedWordsUI);
 
 function refreshWordsToLearnLink() {
   const book = document.querySelector(".title")?.textContent ?? "";
@@ -726,6 +1003,7 @@ function deleteWordToLearn() {
   renderWordsToLearnStudy();
   speakWordToLearnIfWordFirst();
   refreshWordsToLearnLink();
+  refreshSavedWordHighlights();
 }
 
 function deleteChapterWordsFromChooser(book, chapter) {
@@ -739,6 +1017,7 @@ function deleteChapterWordsFromChooser(book, chapter) {
   setWordsToLearn(data);
   openWordsToLearnChooser();
   refreshWordsToLearnLink();
+  refreshSavedWordHighlights();
 }
 
 function deleteBookWordsFromChooser(book) {
@@ -750,6 +1029,7 @@ function deleteBookWordsFromChooser(book) {
   setWordsToLearn(data);
   openWordsToLearnChooser();
   refreshWordsToLearnLink();
+  refreshSavedWordHighlights();
 }
 
 function getWordsToLearnAutospeak() {
@@ -810,7 +1090,7 @@ function renderWordsToLearnStudy() {
   const [word, translation, repeatOften, , key, sentence, form] = entry;
   // the sentence would give away the word in "перевод - слово", so it appears
   // together with the word
-  const sentenceHTML = sentenceWithBold(sentence, [key, form]);
+  const sentenceHTML = sentenceWithUnderline(sentence, [key, form]);
   const remaining = collectWordsToLearnSessionRefs().length;
   const conjugation = findInfinitiveTenses(stripAnnotations(word).trim());
   const transcriptionMatch = word.match(/\s*\[[^\]]*\]\s*$/);
@@ -974,8 +1254,17 @@ function getTranslationHTML(data) {
         .map((it) => `<div>${it}</div>`);
       result.push(speakBtnHTML(text));
       const learnId = prefix(`learn${index}`);
+      // a word already saved from this place gets one "Удалить" (on the first
+      // variant only) instead of the "Учить" buttons - the panel's data-saved
+      // attribute decides which are visible
+      if (index === 0) {
+        result.push(
+          `<button class="${prefix("deleteBtn")}" style="margin: 0; padding: 0 0.5rem; height: 2rem; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center;"
+            onClick="deleteSavedWordUnderHelper()">Удалить</button>`,
+        );
+      }
       result.push(
-        `<button style="margin: 0; padding: 0 0.5rem; height: 2rem; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center;"
+        `<button class="${prefix("learnBtn")}" style="margin: 0; padding: 0 0.5rem; height: 2rem; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center;"
           onClick="const existing = findWordToLearnLocation('${escJs(text)}');
           if (existing) {
             document.getElementById('${learnId}_warning_text').textContent = 'Слово уже сохранено в книге ' + existing.book + ', глава ' + existing.chapter + '. Добавить его сюда, удалив предыдущее?';
@@ -1013,30 +1302,76 @@ function speakBtnHTML(text) {
 let started = false;
 let voice;
 
+// The first utterance wakes the speech engine up, and on a phone that can take
+// a long time. It is said silently (volume 0) on the first touch of the page
+// so the engine is ready by the time a word is wanted. While it is going on
+// nothing is cancelled (cancelling it can start the waking up over): a word
+// asked for meanwhile waits, and only the latest one is said when the engine is
+// ready, so taps made during the wait do not pile up.
+let warmingUp = false;
+let waitingText = null;
+// if the engine never reports the end of the silent utterance
+const WARM_UP_LIMIT_MS = 120000;
+
 document.addEventListener("pointerdown", (event) => {
-  if (!started) speak(" ");
+  if (!started) speak("a");
 });
 
 function speak(text) {
-  window.speechSynthesis.cancel();
+  if (warmingUp) {
+    waitingText = text;
+    return;
+  }
+  const synth = window.speechSynthesis;
+  // cancel() right before speak() is only needed to interrupt a phrase that is
+  // still playing; on Android it can delay or swallow the next phrase
+  if (synth.speaking || synth.pending) {
+    synth.cancel();
+  }
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "fr-FR";
   utterance.rate = 0.8;
-  utterance.volume = started ? 1 : 0;
+  const warmUp = !started;
+  utterance.volume = warmUp ? 0 : 1;
   if (voice) {
     utterance.voice = voice;
   }
   started = true;
-  window.speechSynthesis.speak(utterance);
+  if (warmUp) {
+    warmingUp = true;
+    const done = () => {
+      if (!warmingUp) return;
+      warmingUp = false;
+      if (waitingText !== null) {
+        const next = waitingText;
+        waitingText = null;
+        speak(next);
+      }
+    };
+    utterance.onend = done;
+    utterance.onerror = done;
+    setTimeout(done, WARM_UP_LIMIT_MS);
+  }
+  synth.speak(utterance);
+}
+
+// the voice for `lang` among `voices`: a voice of the device is preferred - a
+// network one has to be fetched and is slow to start. Android names the
+// language "fr_FR" (underscore), so the comparison ignores that and the case
+function pickVoice(voices, lang) {
+  const wanted = lang.toLowerCase();
+  const sameLang = voices.filter(
+    (it) => it.lang.replace("_", "-").toLowerCase() === wanted,
+  );
+  return sameLang.find((it) => it.localService) ?? sameLang[0];
 }
 
 function loadVoices() {
-  const voices = window.speechSynthesis.getVoices();
-  voice = voices.find(
-    (voice) => voice.lang === "fr-FR" /* && voice.localService*/,
-  );
+  voice = pickVoice(window.speechSynthesis?.getVoices?.() ?? [], "fr-FR");
 }
 
+// asking for the list at once makes the browser start loading the voices
+loadVoices();
 speechSynthesis.addEventListener("voiceschanged", loadVoices);
 
 function startsWithVowel(text) {
@@ -1195,19 +1530,30 @@ async function showHelper(selection) {
   const text = trimToLetters(selection.toString()).toLowerCase();
   const helper = document.getElementById("fr-helper"); //TODO
 
-  if (text && helper.getAttribute("text") === text) {
+  // the same word selected in another place of the text is a new selection:
+  // its sentence and its being saved or not are different
+  const at = trimmedSelectionPlace(selectionInBlock(selection));
+  if (
+    text &&
+    helper.getAttribute("text") === text &&
+    sameSelectionPlace(at, currentHelperAt)
+  ) {
     return;
   }
 
   if (!text) {
     helper.removeAttribute("text");
     helper.innerHTML = ""; // TODO
+    currentHelperAt = null;
+    updateHelperSavedState();
     return;
   }
 
   helper.setAttribute("text", text);
   currentHelperSentence = sentenceAroundSelection(selection);
   currentHelperForm = text;
+  currentHelperAt = at;
+  updateHelperSavedState();
 
   const conjugation = getConjugation(text);
   const dataPromise = getHelperData(text);
