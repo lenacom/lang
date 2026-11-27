@@ -138,6 +138,9 @@ const CASES = [
   ["des plus grandes douleurs", `des plus grandes ${f("douleurs")}`, "des + plus: superlative, noun after the adjective (invented)"],
   ["le plus beau jour de ma vie", `le plus beau ${m("jour")} de ma ${f("vie")}`, "same (invented)"],
   ["une grande qui chante", "une grande qui chante", "grande is practically never a noun (her statement, 2026-11-18)"],
+  ["au long cours", `au long ${m("cours")}`, "long is practically always an adjective: the noun is cours (her report, 2026-11-26)"],
+  ["une longue histoire", `une longue ${f("histoire")}`, "same, feminine"],
+  ["de longs voyages", `de longs ${m("voyages")}`, "same, plural"],
 ];
 
 const cache = loadGenderCache();

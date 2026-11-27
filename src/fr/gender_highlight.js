@@ -212,7 +212,12 @@ const NOUN_GUARANTEED_PREPOSITIONS = new Set([
 // plus grand"); as a noun ("les grands", the nobles) it is rare enough that
 // never highlighting it is the better trade - and "plus" is practically never
 // a noun either ("le plus" is the adverb of a superlative)
-const ALMOST_ALWAYS_ADJECTIVES = ["grand", "grande", "grands", "grandes"];
+// "long" is the same ("au long cours": "long" is the adjective, "cours" the
+// noun; the noun "le long de" is a preposition-like phrase worth no colour)
+const ALMOST_ALWAYS_ADJECTIVES = [
+  "grand", "grande", "grands", "grandes",
+  "long", "longue", "longs", "longues",
+];
 const EXCLUDED_NOUNS = new Set([
   "combien", "ensemble", "devant", "peu", "plusieurs",
   "plus",

@@ -22,7 +22,34 @@ function regularVerbBases(fileContent) {
   );
 }
 
+// the gender of the nouns that begin with a vowel, for "mon"/"ton"/"son" (they
+// stand in for "ma"/"ta"/"sa" before a vowel: "mon égard" m, "mon idée" f).
+// Only these words are needed in the browser, so the table is small
+function vowelNounGenders() {
+  const vowelStart = /^[aeiouyâàéèêëîïôöûüùœæh]/i;
+  const table = {};
+  const add = (word, gender) => {
+    const key = word.toLowerCase();
+    if ((gender === "m" || gender === "f") && vowelStart.test(key) && !(key in table)) {
+      table[key] = gender;
+    }
+  };
+  const cache = JSON.parse(
+    fs.readFileSync(`${SRC}/fr/noun_gender_cache.json`, "utf8"),
+  );
+  for (const [word, entry] of Object.entries(cache)) {
+    if (entry && !entry.isAdjective && !entry.isVerb) add(word, entry.gender);
+  }
+  const allNouns = new Function(
+    `${fs.readFileSync(`${SRC}/fr/all_nouns.js`, "utf8")}; return all_nouns;`,
+  )();
+  for (const [word, , gender] of allNouns) add(word, gender);
+  return table;
+}
+
 let content = `const irregularVerbs = ${JSON.stringify(irregularVerbs)};`;
+content += "\r\n";
+content += `const vowelNounGenders = ${JSON.stringify(vowelNounGenders())};`;
 content += "\r\n";
 content += `const regularVerbs = ${JSON.stringify(regularVerbs)};`;
 content += "\r\n";

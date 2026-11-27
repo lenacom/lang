@@ -476,6 +476,8 @@ function cropAroundWord(sentence, wordStart, wordLength) {
 
 let currentHelperSentence = "";
 let currentHelperForm = "";
+// { text, n, r }: the selected words and the gender the chapter shows in them
+let currentHelperGenders = null;
 
 // shows (or hides) the sentence, the word underlined, in the "Учить" dialog;
 // called when the dialog
@@ -497,11 +499,22 @@ function saveWordToLearnFromDialog(id) {
   const translation = document.getElementById(`${id}_part2`).value;
   const el = document.getElementById(`${id}_sentence`);
   const shown = el && el.style.display !== "none" && el.innerHTML;
-  saveWordToLearn(word, translation, shown ? el.dataset.sentence : "", shown ? el.dataset.form : "");
+  // the gender the chapter coloured in the selected words: kept only while the
+  // word is still exactly what was selected
+  let genders = null;
+  try {
+    const stored = el?.dataset.genders ? JSON.parse(el.dataset.genders) : null;
+    if (stored && stored.text.toLowerCase() === word.trim().toLowerCase()) {
+      genders = { n: word.trim().length, r: stored.r };
+    }
+  } catch (e) {
+    genders = null;
+  }
+  saveWordToLearn(word.trim(), translation, shown ? el.dataset.sentence : "", shown ? el.dataset.form : "", genders);
   document.getElementById(id).close();
 }
 
-function saveWordToLearn(word, translation, sentence = "", form = "") {
+function saveWordToLearn(word, translation, sentence = "", form = "", genders = null) {
   const book = document.querySelector(".title")?.textContent ?? "";
   const chapter = document.querySelector(".chapter")?.textContent ?? "";
   const data = getWordsToLearn();
@@ -525,8 +538,11 @@ function saveWordToLearn(word, translation, sentence = "", form = "") {
       delete data[otherBook];
     }
   }
-  // [word, translation, repeat, id, key, sentence, form as in the text]
-  data[book][chapter].push([word, translation, false, generateWordToLearnId(), key, sentence, form]);
+  // [word, translation, repeat, id, key, sentence, form as in the text, genders
+  // the chapter showed in the words ({ n, r }, only when there were any)]
+  const entry = [word, translation, false, generateWordToLearnId(), key, sentence, form];
+  if (genders) entry.push(genders);
+  data[book][chapter].push(entry);
   setWordsToLearn(data);
   refreshWordsToLearnLink();
   refreshSavedWordHighlights();
@@ -1065,15 +1081,167 @@ function stripAnnotations(text) {
     .join(" ");
 }
 
-function highlightGender(text) {
-  text = text.replace(
-    /(.*?)(?<![\p{L}\d_'’])([mf])(?![\p{L}\d_'’])/gu,
-    (_match, before, marker) =>
-      `<span class="${marker === "m" ? "m" : "f"}">${before}${marker}</span>`,
-  );
-  text = text.replace(/\b(une|la)\s+(\S+)/gi, '<span class="f">$1 $2</span>');
-  text = text.replace(/\b(un|le)\s+(\S+)/gi, '<span class="m">$1 $2</span>');
-  return text;
+// determiners that give the gender of the noun after them. "mon"/"ton"/"son"
+// stand in for "ma"/"ta"/"sa" before a vowel ("mon amie"), so for those the
+// noun itself has to be looked up (see vowelNounGender below)
+const GENDER_DETERMINERS = {
+  un: "m", une: "f", le: "m", la: "f", du: "m", au: "m",
+  ce: "m", cet: "m", cette: "f", aucun: "m", aucune: "f",
+  ma: "f", ta: "f", sa: "f", mon: "m", ton: "m", son: "m",
+};
+const EUPHONY_POSSESSIVES = new Set(["mon", "ton", "son"]);
+// a noun phrase ends before one of these: prepositions, conjunctions, pronouns,
+// other determiners and the forms of être/avoir
+const NOUN_PHRASE_ENDERS = new Set(
+  `à de d en sur sous dans par pour avec sans chez vers entre contre depuis
+  pendant avant après selon malgré parmi durant et ou mais donc car que qu qui
+  dont où si comme quand lorsque puisque je tu il elle on nous vous ils elles
+  me te se lui leur y ne ni le la les l un une des du au aux mon ma mes ton
+  ta tes son sa ses ce cet cette ces notre nos votre vos leurs aucun aucune
+  est sont était étaient sera ont a avait avaient fut ai as avons avez suis es
+  sommes êtes`.split(/\s+/),
+);
+// "d'", "l'", "qu'" ...: an elided word of that kind starts a new phrase
+const ELIDED_ENDERS = /^(?:d|l|qu|n|s|j|m|t|c|jusqu|lorsqu|puisqu)['’]/iu;
+const MAX_WORDS_AFTER_DETERMINER = 3;
+
+// { gender, prefix } for a determiner word, where `prefix` is an elided part
+// stuck to it ("d'" in "d'une"); null for any other word
+function genderDeterminerOf(word) {
+  const match = /^((?:d|qu|jusqu)['’])?(\p{L}+)$/iu.exec(word);
+  if (!match) return null;
+  const determiner = match[2].toLowerCase();
+  if (match[1] && !["un", "une", "aucun", "aucune"].includes(determiner)) {
+    return null;
+  }
+  const gender = GENDER_DETERMINERS[determiner];
+  return gender ? { gender, prefix: match[1] ?? "", determiner } : null;
+}
+
+// the gender of a noun that begins with a vowel: only the ones the possessives
+// "mon"/"ton"/"son" need to be told apart ("mon égard" m, "mon idée" f); a
+// table made when the page is built, absent when it was not
+function vowelNounGender(word) {
+  const table = typeof vowelNounGenders === "undefined" ? null : vowelNounGenders;
+  return table?.[word.toLowerCase()];
+}
+
+// Every noun phrase that begins with a determiner gets the colour of its
+// gender, as a whole: "une bonne action à mon égard" - "une bonne action" is
+// feminine, "mon égard" masculine. The phrase runs over the words after the
+// determiner (at most three) and stops before a preposition, a conjunction, a
+// pronoun, another determiner, a form of être/avoir or a punctuation mark
+function highlightGenderByDeterminers(text) {
+  const tokens = text.match(/[\p{L}\p{M}'’-]+|[^\p{L}\p{M}'’-]+/gu) ?? [];
+  const isWord = (token) => /^[\p{L}\p{M}]/u.test(token);
+  let result = "";
+  let i = 0;
+  while (i < tokens.length) {
+    const found = isWord(tokens[i]) ? genderDeterminerOf(tokens[i]) : null;
+    if (!found) {
+      result += escHtml(tokens[i]);
+      i++;
+      continue;
+    }
+    const words = [];
+    let end = i;
+    let next = i + 1;
+    while (
+      words.length < MAX_WORDS_AFTER_DETERMINER &&
+      next + 1 < tokens.length &&
+      /^\s+$/.test(tokens[next]) &&
+      isWord(tokens[next + 1])
+    ) {
+      const word = tokens[next + 1];
+      if (NOUN_PHRASE_ENDERS.has(word.toLowerCase()) || ELIDED_ENDERS.test(word)) {
+        break;
+      }
+      words.push(word);
+      end = next + 1;
+      next += 2;
+    }
+    let gender = found.gender;
+    if (EUPHONY_POSSESSIVES.has(found.determiner) && /^[aeiouyâàéèêëîïôöûüùœæh]/iu.test(words[0] ?? "")) {
+      gender = words.map(vowelNounGender).find((it) => it);
+    }
+    if (!gender || words.length === 0) {
+      result += escHtml(tokens.slice(i, end + 1).join(""));
+    } else {
+      result += `${escHtml(found.prefix)}<span class="${gender}">${escHtml(
+        tokens.slice(i, end + 1).join("").slice(found.prefix.length),
+      )}</span>`;
+    }
+    i = end + 1;
+  }
+  return result;
+}
+
+// Where the text of the chapter colours the gender inside a selection (it does
+// so for the nouns, <span class="m|f">): { n, r } - n is the length of the
+// selected text (trimmed to letters, `selected`), r is [[start, end, "m"|"f"],
+// ...] in it. null when nothing in the selection is coloured, or when the
+// text cannot be matched to the selection. This is the gender the book itself
+// shows, so it is saved with the word and used instead of a guess
+function genderRangesOfSelection(selection, selected) {
+  if (!selection || selection.rangeCount === 0 || !selected) return null;
+  const range = selection.getRangeAt(0);
+  const container = range.commonAncestorContainer;
+  const root = container.nodeType === 1 ? container : container.parentNode;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  let raw = "";
+  const pieces = [];
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+    if (!range.intersectsNode(node)) continue;
+    const from = node === range.startContainer ? range.startOffset : 0;
+    const to = node === range.endContainer ? range.endOffset : node.nodeValue.length;
+    if (to <= from) continue;
+    const coloured = node.parentElement?.closest("span.m, span.f");
+    const gender = coloured?.classList.contains("m") ? "m" : coloured ? "f" : null;
+    pieces.push({ start: raw.length, end: raw.length + (to - from), gender });
+    raw += node.nodeValue.slice(from, to);
+  }
+  const lead = raw.length - raw.replace(/^[^\p{L}\p{M}]+/u, "").length;
+  if (raw.slice(lead, lead + selected.length) !== selected) return null;
+  const ranges = [];
+  for (const { start, end, gender } of pieces) {
+    const from = Math.max(start - lead, 0);
+    const to = Math.min(end - lead, selected.length);
+    if (!gender || to <= from) continue;
+    const last = ranges[ranges.length - 1];
+    if (last && last[2] === gender && last[1] === from) {
+      last[1] = to;
+    } else {
+      ranges.push([from, to, gender]);
+    }
+  }
+  return ranges.length ? { n: selected.length, r: ranges } : null;
+}
+
+// the text with the saved gender ranges painted, or null when the ranges do
+// not fit this text (the word was corrected after it was saved)
+function paintGenderRanges(text, genders) {
+  if (!genders || genders.n !== text.length) return null;
+  let result = "";
+  let pos = 0;
+  for (const [start, end, gender] of genders.r) {
+    if (start < pos || end > text.length) return null;
+    result += `${escHtml(text.slice(pos, start))}<span class="${gender}">${escHtml(text.slice(start, end))}</span>`;
+    pos = end;
+  }
+  return result + escHtml(text.slice(pos));
+}
+
+function highlightGender(text, genders = null) {
+  // an explicit m/f after the word (from the dictionary) is the most reliable
+  if (/(?<![\p{L}\d_'’])[mf](?![\p{L}\d_'’])/u.test(text)) {
+    return text.replace(
+      /(.*?)(?<![\p{L}\d_'’])([mf])(?![\p{L}\d_'’])/gu,
+      (_match, before, marker) =>
+        `<span class="${marker === "m" ? "m" : "f"}">${before}${marker}</span>`,
+    );
+  }
+  // then the gender the chapter itself showed when the word was saved
+  return paintGenderRanges(text, genders) ?? highlightGenderByDeterminers(text);
 }
 
 function renderWordsToLearnStudy() {
@@ -1087,7 +1255,7 @@ function renderWordsToLearnStudy() {
 
   const { book, chapterFilter, currentRef, revealed } = learnedSession;
   const entry = getLearnedEntry(book, currentRef.chapter, currentRef.id);
-  const [word, translation, repeatOften, , key, sentence, form] = entry;
+  const [word, translation, repeatOften, , key, sentence, form, genders] = entry;
   // the sentence would give away the word in "перевод - слово", so it appears
   // together with the word
   const sentenceHTML = sentenceWithUnderline(sentence, [key, form]);
@@ -1099,6 +1267,7 @@ function renderWordsToLearnStudy() {
     transcriptionMatch
       ? word.slice(0, word.length - transcriptionMatch[0].length)
       : word,
+    genders,
   );
   const wordHTML = wordCore + transcription;
   const conjugationButtonHTML = conjugation
@@ -1223,7 +1392,7 @@ function learnDialogHTML(id, item) {
       </div>
       <div id="${id}_form" style="display: flex; flex-direction: column; gap: 0.5rem; width: ${panelContentWidth(20)};">
         <input type="text" id="${id}_part1" placeholder="Слова" value="${wordValue}" style="${inputStyle}" oninput="updateLearnSentence('${id}')">
-        <div id="${id}_sentence" data-sentence="${escHtml(currentHelperSentence)}" data-form="${escHtml(currentHelperForm)}" style="display: none; font-style: italic;"></div>
+        <div id="${id}_sentence" data-sentence="${escHtml(currentHelperSentence)}" data-form="${escHtml(currentHelperForm)}" data-genders="${escHtml(currentHelperGenders ? JSON.stringify(currentHelperGenders) : "")}" style="display: none; font-style: italic;"></div>
         <input type="text" id="${id}_part2" placeholder="Перевод" value="${translationValue}" style="${inputStyle}"
           oninput="document.getElementById('${id}_save').disabled = !this.value.trim();">
         <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 0.5rem;">${links}</div>
@@ -1240,6 +1409,8 @@ function getTranslationHTML(data) {
   return data
     .map((item, index) => {
       const { text, ts, tr, gen, pos } = item;
+      // all the translations of the variant, one speak button for them (English only)
+      const translationText = tr.map((it) => it.text).join(", ");
       const genderClass =
         gen?.code === "m" ? "m" : gen?.code === "f" ? "f" : null;
       const irregular = pos?.code === "vrb" && isIrregularVerb(text);
@@ -1280,19 +1451,22 @@ function getTranslationHTML(data) {
       );
       return `<div style="display: flex; flex-wrap: wrap; flex-direction: row; align-items: baseline; gap: 0.5rem; width: max-content; max-width: ${PANEL_INNER_MAX};">
       ${result.join("")}
-    </div><div style="max-width: ${panelContentWidth(31.25)};">${tr.map((it) => it.text).join(", ")}</div>
+    </div><div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; max-width: ${panelContentWidth(31.25)};"><span>${translationText}</span>${translationSpeakBtnHTML(translationText)}</div>
     ${learnDialogHTML(learnId, item)}
     `;
     })
     .join("");
 }
 
-function speakBtnHTML(text) {
+// the speak button; `lang` is the language the text is said in (French unless
+// it is the translation)
+function speakBtnHTML(text, lang = "fr-FR") {
   if (!window.speechSynthesis) {
     return "";
   }
+  const langArgument = lang === "fr-FR" ? "" : `, '${lang}'`;
   return `
-    <button style="font-size:0; margin: 0; padding: 0 0.5rem; height: 2rem; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center;" onClick="speak('${text.replace("'", "\\'")}')">
+    <button style="font-size:0; margin: 0; padding: 0 0.5rem; height: 2rem; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center;" onClick="speak('${escHtml(escJs(text))}'${langArgument})">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20px" height="20px">
         <path fill="currentColor" d="M48 352l48 0 134.1 119.2c6.4 5.7 14.6 8.8 23.1 8.8 19.2 0 34.8-15.6 34.8-34.8l0-378.4c0-19.2-15.6-34.8-34.8-34.8-8.5 0-16.7 3.1-23.1 8.8L96 160 48 160c-26.5 0-48 21.5-48 48l0 96c0 26.5 21.5 48 48 48zM441.1 107c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C443.3 170.7 464 210.9 464 256s-20.7 85.3-53.2 111.8c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5c43.2-35.2 70.9-88.9 70.9-149s-27.7-113.8-70.9-149zm-60.5 74.5c-10.3-8.4-25.4-6.8-33.8 3.5s-6.8 25.4 3.5 33.8C361.1 227.6 368 241 368 256s-6.9 28.4-17.7 37.3c-10.3 8.4-11.8 23.5-3.5 33.8s23.5 11.8 33.8 3.5C402.1 312.9 416 286.1 416 256s-13.9-56.9-35.5-74.5z"/>
       </svg>
@@ -1301,6 +1475,20 @@ function speakBtnHTML(text) {
 
 let started = false;
 let voice;
+let englishVoice;
+
+// the translation is spoken only when it is English: a text with Latin letters
+// and no Cyrillic ones (Russian is not spoken)
+function isEnglishText(text) {
+  return /\p{Script=Latin}/u.test(text) && !/\p{Script=Cyrillic}/u.test(text);
+}
+
+// the button that says the whole translation (all its words, one after
+// another) in English; nothing for a Russian translation
+function translationSpeakBtnHTML(translation) {
+  const text = translation.replace(/<[^>]*>/g, "").trim();
+  return isEnglishText(text) ? speakBtnHTML(text, "en-US") : "";
+}
 
 // The first utterance wakes the speech engine up, and on a phone that can take
 // a long time. It is said silently (volume 0) on the first touch of the page
@@ -1309,7 +1497,7 @@ let voice;
 // asked for meanwhile waits, and only the latest one is said when the engine is
 // ready, so taps made during the wait do not pile up.
 let warmingUp = false;
-let waitingText = null;
+let waitingSpeech = null;
 // if the engine never reports the end of the silent utterance
 const WARM_UP_LIMIT_MS = 120000;
 
@@ -1317,9 +1505,9 @@ document.addEventListener("pointerdown", (event) => {
   if (!started) speak("a");
 });
 
-function speak(text) {
+function speak(text, lang = "fr-FR") {
   if (warmingUp) {
-    waitingText = text;
+    waitingSpeech = { text, lang };
     return;
   }
   const synth = window.speechSynthesis;
@@ -1329,12 +1517,13 @@ function speak(text) {
     synth.cancel();
   }
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "fr-FR";
+  utterance.lang = lang;
   utterance.rate = 0.8;
   const warmUp = !started;
   utterance.volume = warmUp ? 0 : 1;
-  if (voice) {
-    utterance.voice = voice;
+  const wantedVoice = lang === "fr-FR" ? voice : englishVoice;
+  if (wantedVoice) {
+    utterance.voice = wantedVoice;
   }
   started = true;
   if (warmUp) {
@@ -1342,10 +1531,10 @@ function speak(text) {
     const done = () => {
       if (!warmingUp) return;
       warmingUp = false;
-      if (waitingText !== null) {
-        const next = waitingText;
-        waitingText = null;
-        speak(next);
+      if (waitingSpeech !== null) {
+        const next = waitingSpeech;
+        waitingSpeech = null;
+        speak(next.text, next.lang);
       }
     };
     utterance.onend = done;
@@ -1367,7 +1556,12 @@ function pickVoice(voices, lang) {
 }
 
 function loadVoices() {
-  voice = pickVoice(window.speechSynthesis?.getVoices?.() ?? [], "fr-FR");
+  const voices = window.speechSynthesis?.getVoices?.() ?? [];
+  voice = pickVoice(voices, "fr-FR");
+  englishVoice =
+    pickVoice(voices, "en-US") ??
+    pickVoice(voices, "en-GB") ??
+    voices.find((it) => /^en[-_]/i.test(it.lang));
 }
 
 // asking for the list at once makes the browser start loading the voices
@@ -1463,9 +1657,11 @@ function translationSlotHTML(text, translation) {
   return getTranslationHTML(translation ?? [{ text, tr: [] }]);
 }
 
-function helperParts(text, translation, conjugation) {
+// `shown` is the text as it is displayed and saved (the names keep their
+// capitals); `text` is the lowercased one the conjugation is looked up by
+function helperParts(text, translation, conjugation, shown = text) {
   const parts = [
-    `<div id="${prefix("translation")}">${translationSlotHTML(text, translation)}</div>`,
+    `<div id="${prefix("translation")}">${translationSlotHTML(shown, translation)}</div>`,
   ];
   if (conjugation) {
     parts.push(`<div>${getConjugationHTML(text, conjugation)}</div>`);
@@ -1526,13 +1722,62 @@ function trimToLetters(text) {
   return text.replace(/^[^\p{L}\p{M}]+|[^\p{L}\p{M}]+$/gu, "");
 }
 
+// words that are never a name: a capital on one of them is only the start of a
+// sentence (the first part of an elided "L'homme" is checked the same way)
+const CLOSED_CLASS_WORDS = new Set(
+  `il elle ils elles je tu nous vous on ce cet cette ces cela ça ceci celui
+  celle ceux le la les un une des du de au aux en et ou mais donc or ni car
+  que qui quoi dont où si quand comme lorsque puisque parce pendant avant
+  après dans sur sous avec sans pour par chez vers entre contre depuis malgré
+  selon ne pas plus mon ma mes ton ta tes son sa ses notre nos votre vos leur
+  leurs tout tous toute toutes y aucun chaque quel quelle quelques puis alors
+  ainsi enfin aussi encore déjà jamais toujours bien très trop peu rien
+  personne cependant pourtant toutefois voici voilà
+  l d j n m t s c qu jusqu lorsqu puisqu quoiqu`.split(/\s+/),
+);
+
+// a word that starts a sentence has a capital only because of that, so it is
+// lowercased; a capital in the middle of a sentence, or on any other word that
+// could be a name, is kept. Only the words that are never a name are checked:
+// a verb form would do harm ("Marie" is also a form of "marier")
+function isOnlySentenceCapital(word) {
+  const head = word.toLowerCase().split(/['’]/)[0];
+  return CLOSED_CLASS_WORDS.has(head);
+}
+
+// The selected phrase as it is shown and saved. A single word is lowercased (a
+// dictionary headword). In a phrase the names keep their capitals
+// ("Pierre se souvint de la parole"), only a capital that merely starts a
+// sentence goes away. `before` is the text of the block before the selection.
+function phraseDisplayText(selected, before = "") {
+  if (!/\s/.test(selected)) return selected.toLowerCase();
+  const startsSentence = (preceding) =>
+    /(^|[.!?…:;]["»”’)]*\s*|[«“"—–-]\s*)$/u.test(preceding);
+  let result = "";
+  let preceding = before;
+  for (const part of selected.split(/(\s+)/)) {
+    let word = part;
+    if (/^\p{Lu}/u.test(part) && startsSentence(preceding) && isOnlySentenceCapital(part)) {
+      word = part.toLowerCase();
+    }
+    result += word;
+    preceding += part;
+  }
+  return result;
+}
+
 async function showHelper(selection) {
-  const text = trimToLetters(selection.toString()).toLowerCase();
+  const selected = trimToLetters(selection.toString());
+  const text = selected.toLowerCase();
   const helper = document.getElementById("fr-helper"); //TODO
 
   // the same word selected in another place of the text is a new selection:
   // its sentence and its being saved or not are different
   const at = trimmedSelectionPlace(selectionInBlock(selection));
+  const shown = phraseDisplayText(
+    selected,
+    at ? at.block.textContent.slice(0, at.start) : "",
+  );
   if (
     text &&
     helper.getAttribute("text") === text &&
@@ -1545,6 +1790,7 @@ async function showHelper(selection) {
     helper.removeAttribute("text");
     helper.innerHTML = ""; // TODO
     currentHelperAt = null;
+    currentHelperGenders = null;
     updateHelperSavedState();
     return;
   }
@@ -1552,6 +1798,8 @@ async function showHelper(selection) {
   helper.setAttribute("text", text);
   currentHelperSentence = sentenceAroundSelection(selection);
   currentHelperForm = text;
+  const chapterGenders = genderRangesOfSelection(selection, selected);
+  currentHelperGenders = chapterGenders ? { text: selected, ...chapterGenders } : null;
   currentHelperAt = at;
   updateHelperSavedState();
 
@@ -1575,7 +1823,7 @@ async function showHelper(selection) {
     renderHelper(
       helper,
       selection,
-      helperParts(text, raceResult.translation, raceResult.conjugation),
+      helperParts(text, raceResult.translation, raceResult.conjugation, shown),
     );
     return;
   }
@@ -1601,14 +1849,14 @@ async function showHelper(selection) {
     renderHelper(
       helper,
       selection,
-      helperParts(text, data.translation, data.conjugation),
+      helperParts(text, data.translation, data.conjugation, shown),
     );
     return;
   }
 
   const elm = byPrefixId("translation");
   if (elm) {
-    elm.innerHTML = translationSlotHTML(text, data.translation);
+    elm.innerHTML = translationSlotHTML(shown, data.translation);
     keepOnScreen(byPrefixId("helper"));
   }
 }
